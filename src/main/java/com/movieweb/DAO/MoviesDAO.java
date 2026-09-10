@@ -30,6 +30,7 @@ public class MoviesDAO
                 movie.setAvailable_until(rs.getString("available_until"));
                 movie.setPoster_path(rs.getString("poster_path"));
                 movie.setTrailer_path(rs.getString("trailer_path"));
+                movie.setTrailer_link(rs.getString("trailer_link"));
                 movie.setActive(rs.getBoolean("isActive"));
                 movie.setDeleted_at(rs.getString("deleted_at"));               
                 return movie;

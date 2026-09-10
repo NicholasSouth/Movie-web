@@ -11,6 +11,7 @@ public class Movies {
 	private String available_until;
 	private String poster_path;
 	private String trailer_path;
+	private String trailer_link;
 	private boolean isActive;
 	private String deleted_at;
 	//
@@ -75,6 +76,12 @@ public class Movies {
     }
     public void setTrailer_path(String trailer_path) {
         this.trailer_path = trailer_path;
+    }
+    public String getTrailer_link() {
+        return trailer_link;
+    }
+    public void setTrailer_link(String trailer_link) {
+        this.trailer_link = trailer_link;
     }
     public boolean isActive() {
         return isActive;

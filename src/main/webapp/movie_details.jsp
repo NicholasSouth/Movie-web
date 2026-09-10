@@ -178,13 +178,13 @@
             <div class="trailer-container">
                 <div class="trailer-placeholder">
                     <a
-                        href="<%= movie.getTrailer_path() %>"
+                        href="<%= movie.getTrailer_link() %>"
                         class="trailer-link"
                         target="_blank">
-                        <img
-                            src="${pageContext.request.contextPath}/test_movie_details/maxresdefault.jpg"
-                            alt="Movie Trailer"
-                            class="trailer-image">
+                        <img 
+                        	src="${pageContext.request.contextPath}/<%= movie.getTrailer_path() %>" 
+                        	alt="<%= movie.getMovie_name() %> Trailer" 
+                        	class="trailer-image">
                     </a>
                 </div>
             </div>
