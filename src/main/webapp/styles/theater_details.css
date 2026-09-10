@@ -1,0 +1,214 @@
+/*Theater Details*/
+.theater-details {
+    display: block;
+    padding: 25px;
+    background-color: var(--surface);
+    border-radius: 12px;
+}
+
+/*Theater Image*/
+.theater-details-image img {
+    width: 100%;
+    height: 350px;
+    display: block;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/*Theater Information*/
+.theater-details-information {
+    margin-top: 25px;
+}
+.theater-details-information h1 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    font-size: 32px;
+}
+.theater-details-information p {
+    margin: 12px 0;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+.theater-details-information strong {
+    color: var(--text-primary);
+}
+
+/*Theater Actions*/
+.theater-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+.theater-actions button,
+.theater-actions a {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+}
+
+/*View Location*/
+.location-button {
+    background-color: #2C2C2C;
+    color: var(--text-primary);
+}
+.location-button:hover {
+    background-color: #3A3A3A;
+}
+
+/*Find Showtimes*/
+.booking-button {
+    background-color: var(--accent);
+    color: var(--text-primary);
+}
+.booking-button:hover {
+    opacity: 0.85;
+}
+
+/*Theater Sections*/
+.theater-section {
+    margin-top: 20px;
+    padding: 25px;
+    background-color: var(--surface);
+    border-radius: 12px;
+}
+.theater-section h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+.theater-section > p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/*Available Rooms*/
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+.room-card {
+    padding: 18px;
+    background-color: var(--background);
+    border-radius: 10px;
+}
+.room-card h3 {
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+}
+.room-card p {
+    margin: 0;
+    color: var(--accent);
+}
+
+/*Currently Showing*/
+.movie-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.showing-movie {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 20px;
+    padding: 15px;
+    background-color: var(--background);
+    border-radius: 10px;
+}
+.showing-movie img {
+    width: 120px;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.showing-movie-content h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+.showing-movie-content p {
+    margin: 8px 0;
+    color: var(--text-secondary);
+}
+
+/*Movie Button*/
+.movie-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 9px 14px;
+    background-color: var(--accent);
+    color: var(--text-primary);
+    border-radius: 7px;
+    text-decoration: none;
+}
+.movie-button:hover {
+    opacity: 0.85;
+}
+
+/*Upcoming Movies*/
+.upcoming-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.upcoming-movie {
+    padding: 15px 18px;
+    background-color: var(--background);
+    border-radius: 8px;
+}
+.upcoming-movie h3 {
+    margin: 0 0 5px 0;
+    color: var(--text-primary);
+}
+.upcoming-movie p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+/*No Data*/
+.no-data {
+    color: var(--text-secondary);
+}
+
+/*Tablet*/
+@media (max-width: 900px) {
+    .room-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/*Mobile*/
+@media (max-width: 700px) {
+    .theater-details {
+        padding: 20px;
+    }
+    .theater-details-image img {
+        height: 250px;
+    }
+    .theater-details-information h1 {
+        font-size: 26px;
+    }
+    .theater-actions {
+        flex-direction: column;
+    }
+    .theater-actions button,
+    .theater-actions a {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .room-grid {
+        grid-template-columns: 1fr;
+    }
+    .showing-movie {
+        grid-template-columns: 1fr;
+    }
+    .showing-movie img {
+        width: 150px;
+        height: 210px;
+    }
+}

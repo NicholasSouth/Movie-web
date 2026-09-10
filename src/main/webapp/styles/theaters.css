@@ -1,0 +1,90 @@
+.theater-header {
+    margin-bottom: 25px;
+}
+.theater-header h1 {
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+    font-size: 32px;
+}
+.theater-header p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+/*Theater Grid*/
+.theater-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/*Theater Card*/
+.theater-card {
+    background-color: var(--surface);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+.theater-card:hover {
+    transform: translateY(-5px);
+}
+
+/*Theater Image*/
+.theater-image img {
+    width: 100%;
+    height: 200px;
+    display: block;
+    object-fit: cover;
+}
+
+/*Theater Content*/
+.theater-content {
+    padding: 20px;
+}
+.theater-content h2 {
+    margin: 0 0 10px 0;
+    color: var(--text-primary);
+    font-size: 22px;
+}
+
+/*Theater Address*/
+.theater-address {
+    margin: 0 0 15px 0;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/*Theater Information*/
+.theater-info {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    color: var(--text-secondary);
+}
+
+/*View Theater Button*/
+.theater-button {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: var(--accent);
+    color: var(--text-primary);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+.theater-button:hover {
+    opacity: 0.85;
+}
+
+/*No Theaters*/
+.no-theaters {
+    color: var(--text-secondary);
+    padding: 20px 0;
+}
+
+/*Mobile*/
+@media (max-width: 700px) {
+    .theater-grid {
+        grid-template-columns: minmax(250px, 1fr);
+    }
+}

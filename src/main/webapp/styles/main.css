@@ -1,0 +1,298 @@
+* {
+    box-sizing: border-box;
+}
+
+/*Add body color so the furthest bg won't stand out*/
+body {
+    margin: 0;
+    background-color: #141414;
+}
+
+/*Fixed theme*/
+:root {
+    --background: #0D0F12;
+    --surface: #16191E;
+    --accent: #E50914;
+    --text-primary: #F5F5F7;
+    --text-secondary: #8A8F99;
+}
+
+/*Main layout*/
+.Layout1 {
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    grid:
+        "header header header" auto
+        "leftSide body rightSide" 1fr
+        "footer footer footer" auto
+        / 220px minmax(0, 1fr) 250px;
+    gap: 8px;
+    overflow: hidden; /*Prevent scrolling the whole page*/
+}
+.Header,
+.LeftSidebar,
+.MainBody,
+.RightSidebar,
+.footer {
+    border-radius: 12px;
+}
+
+
+/*Header*/
+.Header {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    gap: 25px;
+    background-color: var(--surface);
+    color: var(--text-primary);
+    grid-area: header;
+}
+.website-name {
+    color: var(--text-primary);
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.website-name:hover {
+    color: var(--accent);
+}
+.search-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+.search-bar {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px 15px;
+    border: 1px solid #2C2C2C;
+    border-radius: 8px;
+    background-color: var(--background);
+    color: var(--text-primary);
+    font-size: 15px;
+    outline: none;
+}
+.search-bar::placeholder {
+    color: var(--text-secondary);
+}
+.search-bar:focus {
+    border-color: var(--accent);
+}
+.settings-button {
+    padding: 5px 10px;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+}
+.settings-button:hover {
+    color: var(--accent);
+}
+
+/*LeftSidebar*/
+.LeftSidebar {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    background-color: var(--surface);
+    grid-area: leftSide;
+}
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.nav-item {
+    display: block;
+    padding: 12px 15px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 15px;
+}
+.nav-item:hover {
+    background-color: var(--background);
+    color: var(--text-primary);
+}
+.nav-item.active {
+    background-color: var(--accent);
+    color: var(--text-primary);
+}
+
+/*MainBody*/
+.MainBody {
+    padding: 25px;
+    background-color: var(--background);
+    color: var(--text-primary);
+    overflow-y: auto; /*Add scroll to body, not to whole page*/
+    grid-area: body;
+}
+.MainBody h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+/*Movie grid for main page*/
+.movie-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(3, minmax(150px, 1fr)); /*Min 1/row, max 3/row, add min size so not break*/
+    gap: 20px;
+}
+.movie-card {
+    min-width: 0;
+    display: block;
+    background-color: var(--surface);
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: transform 0.2s;
+}
+.movie-card:hover {
+    transform: translateY(-5px);
+}
+.movie-card img {
+    width: 100%;
+    min-width: 150px;
+    min-height: 225px;
+    aspect-ratio: 2 / 3;
+    display: block;
+    object-fit: cover;
+}
+.movie-card h3 {
+    margin: 10px;
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+/*RightSidebar*/
+.RightSidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    background-color: var(--surface);
+    grid-area: rightSide;
+    overflow-y: auto;
+	.ad-link {
+	    display: block;
+	}
+}
+/*Ads*/
+.ad {
+    width: 100%;
+    height: 150px;
+    display: block;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.ad-link:hover {
+    opacity: 0.8;
+}
+
+/*Footer*/
+.footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 50px;
+    gap: 40px;
+    background-color: var(--surface);
+    color: var(--text-primary);
+    grid-area: footer;
+}
+/*First section is slogan -> needs more space*/
+.footer-section:first-child {
+    flex: 2;
+}
+.footer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 40px;
+    border-right: 1px solid #2C2C2C;
+    min-width: 0;
+}
+.footer-section h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+.footer-section p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+.footer-section a {
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+.footer-section a:hover {
+    color: var(--accent);
+}
+/*Last section doesn't have column*/
+.footer-section:last-child {
+    border-right: none;
+}
+
+/*MainBody*/
+.MainBody::-webkit-scrollbar,
+.RightSidebar::-webkit-scrollbar {
+    width: 10px;
+}
+.MainBody::-webkit-scrollbar-track,
+.RightSidebar::-webkit-scrollbar-track {
+    background: var(--background);
+}
+.MainBody::-webkit-scrollbar-thumb,
+.RightSidebar::-webkit-scrollbar-thumb {
+    background: #2C2C2C;
+    border-radius: 10px;
+}
+.MainBody::-webkit-scrollbar-thumb:hover,
+.RightSidebar::-webkit-scrollbar-thumb:hover {
+    background: #444444;
+}
+
+/*Responsive*/
+/*Layout*/
+@media (max-width: 700px) {
+    .Header {
+        padding: 12px 15px;
+        gap: 15px;
+    }
+    .website-name {
+        font-size: 20px;
+    }
+    .search-bar {
+        max-width: none;
+    }
+    .settings-button {
+        font-size: 24px;
+    }
+    .LeftSidebar {
+        padding: 10px;
+    }
+    .sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+    .nav-item {
+        white-space: nowrap;
+    }
+    .movie-grid {
+        grid-template-columns:
+            repeat(2, minmax(150px, 1fr));
+    }
+}
+/*Movie grid*/
+@media (max-width: 400px) {
+    .movie-grid {
+        grid-template-columns:
+            minmax(150px, 1fr);
+    }
+}
