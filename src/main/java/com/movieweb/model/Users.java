@@ -1,4 +1,5 @@
 package com.movieweb.model;
+import java.sql.Timestamp;
 public class Users 
 {
 	private int user_id;
@@ -11,10 +12,37 @@ public class Users
     private String banner_path;
     private String role;
     private boolean isActive;
-    private String created_at;
-    private String deleted_at;
+    private Timestamp created_at;
+    private Timestamp deleted_at;
     //
     public Users() {
+    }
+    public Users(
+            int user_id,
+            String username,
+            String full_name,
+            String password,
+            String email,
+            String phone,
+            String avt_path,
+            String banner_path,
+            String role,
+            boolean isActive,
+            Timestamp created_at,
+            Timestamp deleted_at)
+    {
+        this.user_id = user_id;
+        this.username = username;
+        this.full_name = full_name;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.avt_path = avt_path;
+        this.banner_path = banner_path;
+        this.role = role;
+        this.isActive = isActive;
+        this.created_at = created_at;
+        this.deleted_at = deleted_at;
     }
     public int getUserId() {
         return user_id;
@@ -76,16 +104,16 @@ public class Users
     public void setActive(boolean active) {
         this.isActive = active;
     }
-    public String getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return created_at;
     }
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.created_at = createdAt;
     }
-    public String getDeletedAt() {
+    public Timestamp getDeletedAt() {
         return deleted_at;
     }
-    public void setDeletedAt(String deletedAt) {
+    public void setDeletedAt(Timestamp deletedAt) {
         this.deleted_at = deletedAt;
     }
 }

@@ -3,13 +3,26 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 public class DBConnection {
-    private static final String URL =
+	private static final String URL =
             "jdbc:sqlserver://localhost:57570;"
           + "databaseName=MovieWeb;"
-          + "integratedSecurity=true;"
           + "encrypt=true;"
           + "trustServerCertificate=true;";
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL);
+    
+    private static final String USERNAME = "nhan";
+    private static final String PASSWORD = "06102006";
+    
+    public static Connection getConnection()
+            throws SQLException
+    {
+        try
+        {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new SQLException("SQL Server JDBC Driver was not found.", e);
+        }
+        return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 }
