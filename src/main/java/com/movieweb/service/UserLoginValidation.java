@@ -23,22 +23,9 @@ public class UserLoginValidation
         {
             return null;
         }
-        login = login.trim();
-        Users user = null;
-     
+    
         //Check if user input email to find account
-        if (login.contains("@"))
-        {
-            user = usersDAO.getUserByEmail(login);
-        }
-        else //Check if user input username
-        {
-            user = usersDAO.getUserByUsername(login);
-            if (user == null) //Check if user input phone number
-            {
-                user = usersDAO.getUserByPhone(login);
-            }
-        }
+        Users user = getUserByLogin(login);
         //If no user found
         if (user == null)
         {

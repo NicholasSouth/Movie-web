@@ -34,17 +34,21 @@
 		        %>
 		
 		        <!-- Login Form -->
-		        <form class="login-form" action="${pageContext.request.contextPath}/login" method="post">
+		        <form 
+			        class="login-form" 
+			        action="${pageContext.request.contextPath}/login" 
+			        method="post"
+			        onsubmit="return validateLoginForm();">
 		            <!-- Email or Phone Number -->
 		            <div class="input-group">
 		                <label for="login">
-		                    Email or Phone Number
+		                    Username, Email or Phone Number
 		                </label>
 		                <input
 		                    type="text"
 		                    id="login"
 		                    name="login"
-		                    placeholder="Enter your email or phone number"
+		                    placeholder="Enter your username, email or phone number"
 		                    value="<%= request.getAttribute("login") != null ? request.getAttribute("login") : "" %>"
 		                    required
 		                >

@@ -100,6 +100,26 @@ public class UsersDAO
         return null;
     }
 
+    public Users getUserByLogin(String login)
+    {
+        if (login == null || login.trim().isEmpty())
+        {
+            return null;
+        }
+        Users user = getUserByUsername(login);
+        if (user != null)
+        {
+            return user;
+        }
+        user = getUserByEmail(login);
+        if (user != null)
+        {
+            return user;
+        }
+        user = getUserByPhone(login);
+        return user;
+    }
+    
     public boolean insertUser(Users user)
     {
         String sql =
