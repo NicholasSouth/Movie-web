@@ -120,6 +120,38 @@ public class UsersDAO
         return user;
     }
     
+    public Users getUserById(
+            int userId)
+    {
+        String sql =
+                "SELECT * " +
+                "FROM Users " +
+                "WHERE user_id = ? " +
+                "AND deleted_at IS NULL";
+        try (
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            statement.setInt(
+                    1,
+                    userId);
+            try (
+                ResultSet result =
+                        statement.executeQuery())
+            {
+                if (result.next())
+                {
+                    return mapUser(result);
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public boolean insertUser(Users user)
     {
         String sql =
@@ -128,10 +160,8 @@ public class UsersDAO
                 "avt_path, banner_path, role, isActive, created_at, deleted_at) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), NULL)";
         try (
-                Connection connection =
-                        DBConnection.getConnection();
-                PreparedStatement statement =
-                        connection.prepareStatement(sql))
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql))
         {
             statement.setString(
                     1,
@@ -192,10 +222,8 @@ public class UsersDAO
                 "WHERE user_id = ? " +
                 "AND deleted_at IS NULL";
         try (
-                Connection connection =
-                        DBConnection.getConnection();
-                PreparedStatement statement =
-                        connection.prepareStatement(sql))
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql))
         {
             statement.setString(
                     1,

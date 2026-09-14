@@ -77,7 +77,7 @@
 		            <div class="login-options">
 		                <!-- Remember Me -->
 		                <label class="remember-me">
-		                    <input type="checkbox" name="remember" value="true">
+		                    <input type="checkbox" name="remember_me" value="true">
 		                    <span>
 		                        Remember me
 		                    </span>

@@ -9,24 +9,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.movieweb.service.RememberMeService;
+
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
+    private final RememberMeService rememberMeService = new RememberMeService();
+
     @Override
     protected void doGet(
             HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException
     {
-        HttpSession session = request.getSession(false);
+        //Remove remember me cookie and database
+        rememberMeService.removeRememberMe(
+                request,
+                response);
 
-        // If a session exists, remove the logged-in user
+        //Remove current session
+        HttpSession session = request.getSession(false);
         if (session != null)
         {
-            session.removeAttribute("user");
+            session.invalidate();
         }
-        // Return to main page
+
+        //Back to main page
         response.sendRedirect(
                 request.getContextPath()
                 + "/main.jsp");

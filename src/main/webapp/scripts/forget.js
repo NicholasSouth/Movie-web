@@ -1,53 +1,39 @@
-function sendVerificationCode() {
-    const account =
-        document.getElementById("account").value.trim();
-    if (account === "") {
-        alert(
-            "Please enter your email or phone number first."
-        );
+function sendVerificationCode()
+{
+    const account = document.getElementById("account").value.trim();
+
+    if (account === "")
+    {
+        alert("Please enter your username, email or phone number first.");
         document.getElementById("account").focus();
         return;
     }
-    /*
-     * For now, verification is sent directly
-     * to the entered email.
-     *
-     * Later the ForgotPasswordServlet will:
-     * email/phone -> find user -> get user's email
-     */
-    const emailPattern =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(account)) {
-        alert(
-            "Please enter your account email."
-        );
-        return;
-    }
-    const button =
-        document.querySelector(".send-button");
+
+    const button = document.querySelector(".send-button");
+
     button.disabled = true;
     button.textContent = "Sending...";
+
     fetch(
-        "send-verification",
+        "send-forgot-verification",
         {
             method: "POST",
-            headers: {
-                "Content-Type":
-                    "application/x-www-form-urlencoded"
+            headers:
+            {
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-            body:
-                "email=" +
-                encodeURIComponent(account) +
-                "&purpose=forgot_password"
+            body: "account=" + encodeURIComponent(account)
         }
     )
     .then(response => response.text())
-    .then(message => {
+    .then(message =>
+    {
         alert(message);
         button.disabled = false;
         button.textContent = "Send Code";
     })
-    .catch(error => {
+    .catch(error =>
+    {
         console.error(error);
         alert(
             "Unable to send verification code. " +
@@ -58,36 +44,41 @@ function sendVerificationCode() {
     });
 }
 
-function validateForgotPasswordForm() {
-    const account =
-        document.getElementById("account").value.trim();
-    const password =
-        document.getElementById("password").value;
-    const confirmPassword =
-        document.getElementById("confirm_password").value;
-    const verificationCode =
-        document.getElementById("verification_code").value.trim();
-		
-    if (account === "") {
-        alert(
-            "Please enter your email or phone number."
-        );
+function validateForgotForm()
+{
+    const account = document.getElementById("account").value.trim();
+    const password = document.getElementById("new-password").value;
+    const confirmPassword = document.getElementById("confirm-password").value;
+    const verificationCode = document.getElementById("verification-code").value.trim();
+
+    if (account === "")
+    {
+        alert("Please enter your username, email or phone number.");
         return false;
     }
-    if (password === "") {
+    if (password === "")
+    {
         alert("Please enter a new password.");
         return false;
     }
-    if (confirmPassword === "") {
+    if (confirmPassword === "")
+    {
         alert("Please confirm your new password.");
         return false;
     }
-    if (password !== confirmPassword) {
+    if (password !== confirmPassword)
+    {
         alert("Passwords do not match.");
         return false;
     }
-    if (verificationCode === "") {
+    if (verificationCode === "")
+    {
         alert("Please enter the verification code.");
+        return false;
+    }
+    if (!/^\d{6}$/.test(verificationCode))
+    {
+        alert("Verification code must be 6 digits.");
         return false;
     }
     return true;
