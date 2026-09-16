@@ -3,7 +3,7 @@
 
 <div class="movie-grid">
 <%
-    List<Movies> movies = (List<Movies>) request.getAttribute("topMovies");
+    List<Movies> movies = (List<Movies>) request.getAttribute("movieGridMovies");
     if (movies != null) {
         for (Movies movie : movies) {
 			%>

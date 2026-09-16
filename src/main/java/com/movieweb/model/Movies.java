@@ -1,4 +1,5 @@
 package com.movieweb.model;
+import java.sql.Timestamp;
 
 public class Movies {
 	private int movie_id;
@@ -7,13 +8,13 @@ public class Movies {
 	private String age_rating;
 	private double avg_rating;
 	private int duration_minute;
-	private String available_from;
-	private String available_until;
+	private Timestamp available_from;
+	private Timestamp available_until;
 	private String poster_path;
 	private String trailer_path;
 	private String trailer_link;
 	private boolean isActive;
-	private String deleted_at;
+	private Timestamp deleted_at;
 	//
 	public Movies(){
 	}
@@ -53,16 +54,16 @@ public class Movies {
     public void setDuration_minute(int duration_minute) {
         this.duration_minute = duration_minute;
     }
-    public String getAvailable_from() {
+    public Timestamp getAvailable_from() {
         return available_from;
     }
-    public void setAvailable_from(String available_from) {
+    public void setAvailable_from(Timestamp available_from) {
         this.available_from = available_from;
     }
-    public String getAvailable_until() {
+    public Timestamp getAvailable_until() {
         return available_until;
     }
-    public void setAvailable_until(String available_until) {
+    public void setAvailable_until(Timestamp available_until) {
         this.available_until = available_until;
     }
     public String getPoster_path() {
@@ -89,10 +90,10 @@ public class Movies {
     public void setActive(boolean isActive) {
         this.isActive = isActive;
     }
-    public String getDeleted_at() {
-        return deleted_at;
+    public Timestamp getDeleted_at() {
+        return deleted_at; 
     }
-    public void setDeleted_at(String deleted_at) {
+    public void setDeleted_at(Timestamp deleted_at) {
         this.deleted_at = deleted_at;
     }
 }

@@ -26,13 +26,13 @@ public class MoviesDAO
                 movie.setAge_rating(rs.getString("age_rating"));
                 movie.setAvg_rating(rs.getDouble("avg_rating"));
                 movie.setDuration_minute(rs.getInt("duration_minute"));
-                movie.setAvailable_from(rs.getString("available_from"));
-                movie.setAvailable_until(rs.getString("available_until"));
+                movie.setAvailable_from(rs.getTimestamp("available_from"));
+                movie.setAvailable_until(rs.getTimestamp("available_until"));
                 movie.setPoster_path(rs.getString("poster_path"));
                 movie.setTrailer_path(rs.getString("trailer_path"));
                 movie.setTrailer_link(rs.getString("trailer_link"));
                 movie.setActive(rs.getBoolean("isActive"));
-                movie.setDeleted_at(rs.getString("deleted_at"));               
+                movie.setDeleted_at(rs.getTimestamp("deleted_at"));               
                 return movie;
             }
         } 

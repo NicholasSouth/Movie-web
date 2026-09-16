@@ -10,6 +10,7 @@ public class Users
     private String phone;
     private String avt_path;
     private String banner_path;
+    private boolean favourite_movies_visibility;
     private String role;
     private boolean isActive;
     private Timestamp created_at;
@@ -27,6 +28,7 @@ public class Users
             String avt_path,
             String banner_path,
             String role,
+            boolean favourite_movies_visibility,
             boolean isActive,
             Timestamp created_at,
             Timestamp deleted_at)
@@ -39,6 +41,7 @@ public class Users
         this.phone = phone;
         this.avt_path = avt_path;
         this.banner_path = banner_path;
+        this.favourite_movies_visibility = favourite_movies_visibility;
         this.role = role;
         this.isActive = isActive;
         this.created_at = created_at;
@@ -91,6 +94,12 @@ public class Users
     }
     public void setBannerPath(String bannerPath) {
         this.banner_path = bannerPath;
+    }
+    public boolean getFavouriteMoviesVisibility() { 
+    	return favourite_movies_visibility; 
+    } 
+    public void setFavouriteMoviesVisibility(boolean favourite_movies_visibility) { 
+    	this.favourite_movies_visibility = favourite_movies_visibility; 
     }
     public String getRole() {
         return role;

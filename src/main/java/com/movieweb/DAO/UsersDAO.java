@@ -18,14 +18,11 @@ public class UsersDAO
                 "WHERE username = ? " +
                 "AND deleted_at IS NULL";
         try (
-                Connection connection =
-                        DBConnection.getConnection();
-                PreparedStatement statement =
-                        connection.prepareStatement(sql))
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql))
         {
             statement.setString(1, username);
-            try (ResultSet result =
-                    statement.executeQuery())
+            try (ResultSet result = statement.executeQuery())
             {
                 if (result.next())
                 {
@@ -48,14 +45,11 @@ public class UsersDAO
                 "WHERE email = ? " +
                 "AND deleted_at IS NULL";
         try (
-                Connection connection =
-                        DBConnection.getConnection();
-                PreparedStatement statement =
-                        connection.prepareStatement(sql))
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql))
         {
             statement.setString(1, email);
-            try (ResultSet result =
-                    statement.executeQuery())
+            try (ResultSet result = statement.executeQuery())
             {
                 if (result.next())
                 {
@@ -78,14 +72,11 @@ public class UsersDAO
                 "WHERE phone = ? " +
                 "AND deleted_at IS NULL";
         try (
-                Connection connection =
-                        DBConnection.getConnection();
-                PreparedStatement statement =
-                        connection.prepareStatement(sql))
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql))
         {
             statement.setString(1, phone);
-            try (ResultSet result =
-                    statement.executeQuery())
+            try (ResultSet result = statement.executeQuery())
             {
                 if (result.next())
                 {
@@ -136,8 +127,7 @@ public class UsersDAO
                     1,
                     userId);
             try (
-                ResultSet result =
-                        statement.executeQuery())
+                ResultSet result = statement.executeQuery())
             {
                 if (result.next())
                 {
@@ -201,8 +191,7 @@ public class UsersDAO
             statement.setBoolean(
                     9,
                     user.isActive());
-            int rows =
-                    statement.executeUpdate();
+            int rows = statement.executeUpdate();
             return rows > 0;
         }
         catch (SQLException e)
@@ -231,8 +220,7 @@ public class UsersDAO
             statement.setInt(
                     2,
                     userId);
-            int rows =
-                    statement.executeUpdate();
+            int rows = statement.executeUpdate();
             return rows > 0;
         }
         catch (SQLException e)
@@ -241,7 +229,36 @@ public class UsersDAO
         }
         return false;
     }
+    public boolean updateFavouriteMoviesVisibility(
+            int userId,
+            boolean isPublic)
+    {
+        String sql =
+                "UPDATE Users " +
+                "SET favourite_movies_visibility = ? " +
+                "WHERE user_id = ? " +
+                "AND deleted_at IS NULL";
 
+        try (
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            statement.setBoolean(
+                    1,
+                    isPublic);
+            statement.setInt(
+                    2,
+                    userId);
+            int rows = statement.executeUpdate();
+            return rows > 0;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public boolean usernameExists(String username)
     {
         return getUserByUsername(username) != null;
@@ -274,6 +291,7 @@ public class UsersDAO
         user.setPhone(result.getString("phone"));
         user.setAvtPath(result.getString("avt_path"));
         user.setBannerPath(result.getString("banner_path"));
+        user.setFavouriteMoviesVisibility(result.getBoolean("favourite_movies_visibility"));
         user.setRole(result.getString("role"));
         user.setActive(result.getBoolean("isActive"));
         user.setCreatedAt(result.getTimestamp("created_at"));

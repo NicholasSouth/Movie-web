@@ -55,7 +55,9 @@
                 else {
             %>
 		                <!-- User Information -->
-		                <div class="user-menu-header">
+		                <a 
+		                	href="${pageContext.request.contextPath}/user-profile" 
+		                	class="user-menu-header user-profile-link">
 		                    <!-- Avatar -->
 		                    <div class="user-avatar">
 		                        <%
@@ -88,7 +90,7 @@
 		                            <%= currentUser.getRole() %>
 		                        </div>
 		                    </div>
-		                </div>
+		                </a>
 		
 		                <!-- Divider -->
 		                <div class="menu-divider"></div>
