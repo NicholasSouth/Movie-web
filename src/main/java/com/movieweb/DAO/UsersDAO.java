@@ -279,6 +279,61 @@ public class UsersDAO
         return getUserByPhone(phone) != null;
     }
 
+    public boolean updateUserInformation(
+            int userId,
+            String fullName,
+            String email,
+            String phone,
+            String avatarPath,
+            String bannerPath)
+    {
+        String sql =
+                "UPDATE Users " +
+                "SET full_name = ?, " +
+                "email = ?, " +
+                "phone = ?, " +
+                "avt_path = COALESCE(?, avt_path), " +
+                "banner_path = COALESCE(?, banner_path) " +
+                "WHERE user_id = ? " +
+                "AND deleted_at IS NULL";
+        try (
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            statement.setString(1, fullName);
+            statement.setString(2, email);
+            if (phone == null || phone.isEmpty())
+            {
+                statement.setNull(
+                        3,
+                        java.sql.Types.VARCHAR);
+            }
+            else
+            {
+                statement.setString(3, phone);
+            }
+            /* NULL means: keep the existing path. */ 
+            if (avatarPath == null) { 
+            	statement.setNull( 4, java.sql.Types.VARCHAR); 
+            } 
+            else { 
+            	statement.setString( 4, avatarPath); 
+            } 
+            if (bannerPath == null) { 
+            	statement.setNull( 5, java.sql.Types.VARCHAR); 
+            } 
+            else { 
+            	statement.setString( 5, bannerPath); 
+            } 
+            statement.setInt( 6, userId); 
+            return statement.executeUpdate() > 0;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
     private Users mapUser(ResultSet result)
             throws SQLException
     {

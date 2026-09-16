@@ -26,12 +26,12 @@
 	<body>
 		<div class="Layout1">
 		    <!-- Header -->
-		    <jsp:include page="/components/header.jsp" />
-		
-		    <!-- Left sidebar -->
-		    <aside class="LeftSidebar">
-		        <jsp:include page="/components/left_sidebar.jsp" />
-		    </aside>
+		    <!-- Because header also call an User object so we can't include its file
+		    , rather, its pager -->
+	        <jsp:include page="/components/header.jsp" />
+	        
+	        <!-- Left Sidebar -->
+	        <%@ include file="components/left_sidebar.jsp" %>
 		
 		    <!-- Main body -->
 		    <main class="MainBody profile-page">
@@ -44,7 +44,9 @@
 		                    if (currentUser.getBannerPath() != null &&
 		                        !currentUser.getBannerPath().isEmpty()) {
 		                %>
-		                    <img src="${pageContext.request.contextPath}/<%= currentUser.getBannerPath() %>" alt="Profile banner">
+		                    <img 
+		                    	src="${pageContext.request.contextPath}/<%= currentUser.getBannerPath() %>" 
+		                    	alt="Profile banner">
 		                <%
 		                    } else {
 		                %>
@@ -63,7 +65,9 @@
 		                        if (currentUser.getAvtPath() != null &&
 		                            !currentUser.getAvtPath().isEmpty()) {
 		                    %>
-		                        <img src="${pageContext.request.contextPath}/<%= currentUser.getAvtPath() %>" alt="<%= currentUser.getFullName() %>">
+		                        <img 
+		                        	src="${pageContext.request.contextPath}/<%= currentUser.getAvtPath() %>" 
+		                        	alt="<%= currentUser.getFullName() %>">
 		                    <%
 		                        } 
 		                        else {
@@ -94,7 +98,7 @@
 		                <!-- Settings -->
 		                <div class="profile-actions">
 		                    <a 
-		                    	href="${pageContext.request.contextPath}/settings.jsp" 
+		                    	href="${pageContext.request.contextPath}/information_change.jsp" 
 		                    	class="profile-settings-button">
 		                        <img 
 		                        	src="${pageContext.request.contextPath}/pictures/assessments/setting.png" 
@@ -144,7 +148,6 @@
 		
 		        <!-- Booking -->
 		        <section class="profile-section booking-section">
-		
 		            <div class="section-header">
 		                <div>
 		                    <h2>
@@ -175,13 +178,11 @@
 		        </section>
 		    </main>
 		
-		    <!-- Right side bar -->
-		    <aside class="RightSidebar">
-		        <jsp:include page="/components/right_sidebar.jsp" />
-		    </aside>
-		
-		    <!-- Footer -->
-		    <jsp:include page="/components/footer.jsp" />
+		    <!-- Right Sidebar -->
+	        <%@ include file="components/right_sidebar.jsp" %>
+	        
+	        <!-- Footer -->
+	        <%@ include file="components/footer.jsp" %>
 		</div>
 		
 		<script 
