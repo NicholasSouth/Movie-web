@@ -18,11 +18,11 @@
            class="nav-item <%= "theaters".equals(currentPage) ? "active" : "" %>">
             Theaters
         </a>
-        <a href="${pageContext.request.contextPath}/bookings.jsp"
+        <a href="${pageContext.request.contextPath}/user-profile#bookings"
            class="nav-item <%= "bookings".equals(currentPage) ? "active" : "" %>">
             My Bookings
         </a>
-        <a href="${pageContext.request.contextPath}/favourites.jsp"
+        <a href="${pageContext.request.contextPath}/user-profile#favourites"
            class="nav-item <%= "favorites".equals(currentPage) ? "active" : "" %>">
             Favorites
         </a>

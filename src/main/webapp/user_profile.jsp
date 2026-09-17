@@ -112,8 +112,9 @@
 		        </section>
 		
 		        <!-- Favourite movie -->
-		        <section class="profile-section favourite-section">
-		
+		        <section 
+		        	id="favourites"
+		        	class="profile-section favourite-section">		
 		            <!-- Section Header -->
 		            <div class="section-header">
 		                <div>
@@ -147,7 +148,9 @@
 		        </section>
 		
 		        <!-- Booking -->
-		        <section class="profile-section booking-section">
+		        <section 
+		        	id="bookings"
+		        	class="profile-section booking-section">
 		            <div class="section-header">
 		                <div>
 		                    <h2>
