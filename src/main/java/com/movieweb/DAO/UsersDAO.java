@@ -36,6 +36,35 @@ public class UsersDAO
         }
         return null;
     }
+    
+    public Users getDeletedUserByUsername(String username)
+    {
+        String sql =
+                "SELECT * " +
+                "FROM Users " +
+                "WHERE username = ? " +
+                "AND deleted_at IS NOT NULL " +
+                "AND deleted_at <= DATEADD(DAY, -30, GETDATE())";
+
+        try (
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            statement.setString(1, username);
+            try (ResultSet result = statement.executeQuery())
+            {
+                if (result.next())
+                {
+                    return mapUser(result);
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public Users getUserByEmail(String email)
     {
@@ -47,6 +76,35 @@ public class UsersDAO
         try (
                 Connection connection = DBConnection.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            statement.setString(1, email);
+            try (ResultSet result = statement.executeQuery())
+            {
+                if (result.next())
+                {
+                    return mapUser(result);
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public Users getDeletedUserByEmail(String email)
+    {
+        String sql =
+                "SELECT * " +
+                "FROM Users " +
+                "WHERE email = ? " +
+                "AND deleted_at IS NOT NULL " +
+                "AND deleted_at <= DATEADD(DAY, -30, GETDATE())";
+
+        try (
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql))
         {
             statement.setString(1, email);
             try (ResultSet result = statement.executeQuery())
@@ -200,6 +258,82 @@ public class UsersDAO
         }
         return false;
     }
+    
+    public boolean reuseDeletedAccount(Users user)
+    {
+        String sql =
+                "UPDATE Users " +
+                "SET username = ?, " +
+                "    full_name = ?, " +
+                "    password = ?, " +
+                "    email = ?, " +
+                "    phone = ?, " +
+                "    avt_path = ?, " +
+                "    banner_path = ?, " +
+                "    role = ?, " +
+                "    isActive = ?, " +
+                "    created_at = GETDATE(), " +
+                "    deleted_at = NULL " +
+                "WHERE user_id = ? " +
+                "AND deleted_at IS NOT NULL " +
+                "AND deleted_at <= DATEADD(DAY, -30, GETDATE())";
+        try (
+                Connection connection = DBConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getFullName());
+            statement.setString(3, user.getPassword());
+            statement.setString(4, user.getEmail());
+            if (user.getPhone() == null ||
+                    user.getPhone().trim().isEmpty())
+            {
+                statement.setNull(
+                        5,
+                        java.sql.Types.VARCHAR
+                );
+            }
+            else
+            {
+                statement.setString(5, user.getPhone());
+            }
+            statement.setString(6, user.getAvtPath());
+            statement.setString(7, user.getBannerPath());
+            statement.setString(8, user.getRole());
+            statement.setBoolean(9, true);
+            statement.setInt(10, user.getUserId());
+            int rows = statement.executeUpdate();
+            return rows > 0;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean softDeleteAccount(int userId)
+    {
+        String sql =
+                "UPDATE Users " +
+                "SET isActive = 0, " +
+                "    deleted_at = GETDATE() " +
+                "WHERE user_id = ? " +
+                "AND deleted_at IS NULL";
+        try (
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            statement.setInt(1, userId);
+            int rows = statement.executeUpdate();
+            return rows > 0;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public boolean updatePassword(
             int userId,
@@ -229,6 +363,7 @@ public class UsersDAO
         }
         return false;
     }
+    
     public boolean updateFavouriteMoviesVisibility(
             int userId,
             boolean isPublic)
@@ -333,7 +468,8 @@ public class UsersDAO
             e.printStackTrace();
         }
         return false;
-    }
+    }    
+    
     private Users mapUser(ResultSet result)
             throws SQLException
     {

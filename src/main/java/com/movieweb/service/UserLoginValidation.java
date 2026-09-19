@@ -45,7 +45,6 @@ public class UserLoginValidation
         return user;
     }
 
-
     //Register
     public String registerUser(
             String username,
@@ -116,23 +115,30 @@ public class UserLoginValidation
                 "numbers, and underscores.";
         }
 
-        // Check duplicate username
+     // Check active duplicate username
         if (usersDAO.usernameExists(username))
         {
             return "Username is already taken.";
         }
 
-        // Check duplicate email
+        // Check active duplicate email
         if (usersDAO.emailExists(email))
         {
             return "Email is already registered.";
         }
-        
-        // Check duplicate phone
+
+        // Check active duplicate phone
         if (phone != null &&
             usersDAO.phoneExists(phone))
         {
             return "Phone number is already registered.";
+        }
+
+        // Check whether an old soft-deleted account can be reused.
+        Users reusableAccount = usersDAO.getDeletedUserByUsername(username);
+        if (reusableAccount == null)
+        {
+            reusableAccount = usersDAO.getDeletedUserByEmail(email);
         }
         
         // Validate role       
@@ -177,10 +183,21 @@ public class UserLoginValidation
             user.setActive(true);
         }
 
-        // Insert into database
-        boolean inserted =
-                usersDAO.insertUser(user);
-        if (!inserted)
+        // Save account
+        boolean saved;
+        if (reusableAccount != null)
+        {
+            // Reuse the old soft-deleted account.
+            user.setUserId(reusableAccount.getUserId());
+            saved = usersDAO.reuseDeletedAccount(user);
+        }
+        else
+        {
+            // Create a completely new account.
+            saved = usersDAO.insertUser(user);
+        }
+
+        if (!saved)
         {
             return "Unable to create account. Please try again.";
         }
@@ -217,8 +234,7 @@ public class UserLoginValidation
         {
             return "Please enter a valid email address.";
         }
-        Users user =
-                usersDAO.getUserByEmail(email);
+        Users user = usersDAO.getUserByEmail(email);
         if (user == null)
         {
             return "No account was found with this email.";
@@ -227,10 +243,7 @@ public class UserLoginValidation
         {
             return "This account is currently disabled.";
         }
-        boolean updated =
-                usersDAO.updatePassword(
-                        user.getUserId(),
-                        newPassword);
+        boolean updated = usersDAO.updatePassword(user.getUserId(), newPassword);
         if (!updated)
         {
             return "Unable to reset password. Please try again.";
@@ -251,12 +264,10 @@ public class UserLoginValidation
         {
             return usersDAO.getUserByEmail(login);
         }
-        Users user =
-                usersDAO.getUserByUsername(login);
+        Users user = usersDAO.getUserByUsername(login);
         if (user == null)
         {
-            user =
-                usersDAO.getUserByPhone(login);
+            user = usersDAO.getUserByPhone(login);
         }
         return user;
     }
@@ -264,15 +275,13 @@ public class UserLoginValidation
     // Email validation
     private boolean isValidEmail(String email)
     {
-        String emailPattern =
-                "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+        String emailPattern = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
         return email.matches(emailPattern);
     }
    
     // Username validation
     private boolean isValidUsername(String username)
     {       
-        return username.matches(
-                "^[a-zA-Z0-9_]+$");
+        return username.matches("^[a-zA-Z0-9_]+$");
     }
 }

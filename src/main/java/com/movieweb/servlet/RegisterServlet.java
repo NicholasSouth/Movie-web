@@ -16,10 +16,8 @@ import com.movieweb.service.OTPValidation;
 public class RegisterServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
-    private final UserLoginValidation userService =
-            new UserLoginValidation();
-    private final OTPValidation verificationService =
-            new OTPValidation();
+    private final UserLoginValidation userService = new UserLoginValidation();
+    private final OTPValidation verificationService = new OTPValidation();
 
     // POST /register
     @Override

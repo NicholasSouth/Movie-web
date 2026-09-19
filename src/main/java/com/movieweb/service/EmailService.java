@@ -47,24 +47,50 @@ public class EmailService
         {
             Session session = createMailSession();
             String subject;
+            String messageText;
             if ("register".equals(purpose))
             {
                 subject = "PhnetPhlyx - Email Verification";
+                messageText =
+                        "Hello,\n\n"
+                        + "Your PhnetPhlyx email verification code is:\n\n"
+                        + code
+                        + "\n\n"
+                        + "This code will expire in 5 minutes.\n\n"
+                        + "If you did not request this code, "
+                        + "you can safely ignore this email.\n\n"
+                        + "PhnetPhlyx";
+            }
+            else if ("forgot_password".equals(purpose))
+            {
+                subject = "PhnetPhlyx - Password Reset Verification";
+                messageText =
+                        "Hello,\n\n"
+                        + "Your PhnetPhlyx password reset verification code is:\n\n"
+                        + code
+                        + "\n\n"
+                        + "This code will expire in 5 minutes.\n\n"
+                        + "If you did not request this code, "
+                        + "you can safely ignore this email.\n\n"
+                        + "PhnetPhlyx";
+            }
+            else if ("change_password".equals(purpose))
+            {
+                subject = "PhnetPhlyx - Password Change Verification";
+                messageText =
+                        "Hello,\n\n"
+                        + "Your PhnetPhlyx password change verification code is:\n\n"
+                        + code
+                        + "\n\n"
+                        + "This code will expire in 5 minutes.\n\n"
+                        + "If you did not request this code, "
+                        + "you can safely ignore this email.\n\n"
+                        + "PhnetPhlyx";
             }
             else
             {
-                subject = "PhnetPhlyx - Password Reset Verification";
+                return false;
             }
-
-            String messageText =
-                    "Hello,\n\n"
-                    + "Your PhnetPhlyx verification code is:\n\n"
-                    + code
-                    + "\n\n"
-                    + "This code will expire in 5 minutes.\n\n"
-                    + "If you did not request this code, "
-                    + "you can safely ignore this email.\n\n"
-                    + "PhnetPhlyx";
 
             Message message = new MimeMessage(session);
             message.setFrom( new InternetAddress(SENDER_EMAIL));

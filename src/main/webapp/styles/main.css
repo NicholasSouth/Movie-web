@@ -435,6 +435,130 @@ body {
     background: #444444;
 }
 
+/* Password Toggle */
+.password-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+.password-wrapper input {
+    flex: 1;
+    min-width: 0;
+}
+.password-toggle {
+    flex-shrink: 0;    
+    /* Lock the size completely so it never changes between Show/Hide */
+    width: 75px;
+    min-width: 75px;
+    max-width: 75px;
+    flex: 0 0 75px;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border: 1px solid #3A3A3A;
+    border-radius: 8px;
+    background-color: var(--surface);
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s;
+}
+.password-toggle:hover {
+    background-color: var(--background);
+    border-color: #666666;
+    color: var(--text-primary);
+}
+
+/* Password Visible */
+.password-toggle.password-visible {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.password-toggle.password-visible:hover {
+    background-color: rgba(229, 9, 20, 0.08);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Email Verification */
+.verification-section {
+    margin-bottom: 25px;
+    padding: 16px;
+
+    background-color: var(--surface-light, #1D2127);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+.verification-title {
+    margin-bottom: 6px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: bold;
+}
+.verification-note {
+    margin: 0 0 12px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.5;
+}
+.verification-row {
+    display: flex;
+    gap: 10px;
+}
+.verification-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px 15px;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+.verification-row input::placeholder {
+    color: var(--text-secondary);
+}
+.verification-row input:hover {
+    border-color: #444444;
+}
+.verification-row input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.15);
+}
+
+/* Send Verification Button */
+.send-button {
+    flex-shrink: 0;
+    padding: 0 15px;
+    background-color: transparent;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    color: var(--accent);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        background-color 0.2s,
+        color 0.2s;
+}
+.send-button:hover {
+    background-color: var(--accent);
+    color: #FFFFFF;
+}
+
 /*Responsive*/
 /*Layout*/
 @media (max-width: 700px) {

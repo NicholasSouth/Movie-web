@@ -3,9 +3,11 @@ function togglePassword(inputId, button) {
     if (input.type === "password") {
         input.type = "text";
         button.textContent = "Hide";
+		button.classList.add("password-visible");
     } 
 	else {
         input.type = "password";
         button.textContent = "Show";
+		button.classList.remove("password-visible");
     }
 }

@@ -7,6 +7,9 @@
 			name="viewport" 
 			content="width=device-width, initial-scale=1.0">
 		<title>Register - PhnetPhlyx</title>
+		<link
+	        rel="stylesheet"
+	        href="${pageContext.request.contextPath}/styles/main.css">
 		<link 
 			rel="stylesheet" 
 			href="${pageContext.request.contextPath}/styles/register.css">
@@ -133,12 +136,9 @@
 		                        placeholder="Create a password"
 		                        required
 		                    >
-		                    <button 
-			                    type="button" 
-			                    class="password-toggle" 
-			                    onclick="togglePassword('password', this)">
-		                        Show
-		                    </button>
+		                    <jsp:include page="/components/password_toggle.jsp">
+        							<jsp:param name="inputId" value="password" />
+    						</jsp:include>
 		                </div>
 		            </div>
 		
@@ -155,12 +155,9 @@
 		                        placeholder="Confirm your password"
 		                        required
 		                    >
-		                    <button 
-			                    type="button" 
-			                    class="password-toggle" 
-			                    onclick="togglePassword('confirm-password', this)">
-		                        Show
-		                    </button>
+		                    <jsp:include page="/components/password_toggle.jsp">
+        							<jsp:param name="inputId" value="confirm-password" />
+    						</jsp:include>
 		                </div>
 		            </div>
 		
@@ -182,33 +179,12 @@
 		                </span>
 		            </label>
 		
-		            <!-- Email Verification -->
-		            <div class="verification-section">
-		                <div class="verification-title">
-		                    Email Verification
-		                </div>
-		                <p class="verification-note">
-		                    Enter the verification code sent to your email.
-		                </p>
-		                <div class="verification-row">
-		                    <input
-		                        type="text"
-		                        id="verification-code"
-		                        name="verification_code"
-		                        placeholder="Enter verification code"
-		                        maxlength="6"
-		                        inputmode="numeric"
-		                        autocomplete="one-time-code"
-		                        required
-		                    >
-		                    <button 
-			                    type="button" 
-			                    class="send-button" 
-			                    onclick="sendVerificationCode()">
-		                        Send Code
-		                    </button>
-		                </div>
-		            </div>
+					<!-- Email Verifications -->
+		            <jsp:include page="/components/email_verification.jsp">
+					    <jsp:param name="inputId" value="verification-code" />
+					    <jsp:param name="inputName" value="verification_code" />
+					    <jsp:param name="sendFunction" value="sendVerificationCode" />
+					</jsp:include>
 		
 		            <!-- Register Button -->
 		            <button type="submit" class="register-button">

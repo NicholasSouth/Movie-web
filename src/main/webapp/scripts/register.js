@@ -6,15 +6,13 @@ function sendVerificationCode() {
         document.getElementById("email").focus();
         return;
     }
-    const emailPattern =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
         alert("Please enter a valid email address.");
         document.getElementById("email").focus();
         return;
     }
-    const button =
-        document.querySelector(".send-button");
+    const button = document.querySelector(".send-button");
     button.disabled = true;
     button.textContent = "Sending...";
     fetch(
@@ -49,18 +47,12 @@ function sendVerificationCode() {
 }
 
 function validateRegisterForm() {
-    const username =
-        document.getElementById("username").value.trim();
-    const fullName =
-        document.getElementById("full_name").value.trim();
-    const email =
-        document.getElementById("email").value.trim();
-    const password =
-        document.getElementById("password").value;
-    const confirmPassword =
-        document.getElementById("confirm_password").value;
-    const verificationCode =
-        document.getElementById("verification_code").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const fullName = document.getElementById("full_name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirm_password").value;
+    const verificationCode = document.getElementById("verification_code").value.trim();
 		
     if (username === "") {
         alert("Please enter a username.");
