@@ -72,7 +72,7 @@
 			                            %>
 			                        </div>
 			                        <a
-			                            href="${pageContext.request.contextPath}/theater_details.jsp?theater_id=<%= theater.getTheater_id() %>"
+			                            href="${pageContext.request.contextPath}/theater_details?theater_id=<%= theater.getTheater_id() %>"
 			                            class="theater-button">
 			                            View Theater
 			                        </a>
