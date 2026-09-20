@@ -1,0 +1,58 @@
+/* Shared additions for database-backed movie pages. */
+.movie-layout { font-family: Arial, sans-serif; }
+.movie-layout .MainBody { scroll-behavior: smooth; }
+.movie-layout .movie-card img { min-width: 0; min-height: 0; }
+.movie-layout .movie-info .movie-poster img { height: auto; }
+.movie-layout .movie-card-meta { margin: 7px 0 0; color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+.movie-layout .movie-card-content h3 { margin: 0 0 8px; }
+.movie-empty { grid-column: 1 / -1; margin: 0; padding: 24px 12px; color: var(--text-secondary); text-align: center; line-height: 1.6; }
+.movie-filter-actions a { padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 14px; text-align: center; }
+.section-link, .back-to-movies { color: #f5b0b5; text-decoration: none; }
+.section-link:hover, .back-to-movies:hover { text-decoration: underline; }
+.section-link { white-space: nowrap; margin-left: 12px; font-size: 14px; }
+.back-to-movies { display: inline-block; margin-bottom: 18px; }
+.movie-pagination { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 25px; color: var(--text-secondary); }
+.movie-pagination a { padding: 10px 16px; border: 1px solid #444; border-radius: 7px; color: var(--text-primary); text-decoration: none; }
+.movie-pagination a:hover { border-color: var(--accent); }
+.movie-actions { flex-wrap: wrap; }
+.movie-actions form { margin: 0; }
+.movie-actions a { display: inline-flex; align-items: center; justify-content: center; padding: 12px 18px; border-radius: 8px; font-size: 15px; text-decoration: none; }
+.movie-actions button { font-family: inherit; }
+.movie-help, .muted { color: var(--text-secondary); line-height: 1.6; }
+.movie-information .movie-help, .movie-section .movie-help { font-size: 13px; }
+.movie-description { white-space: pre-wrap; overflow-wrap: anywhere; }
+.movie-information h1 { overflow-wrap: anywhere; }
+.movie-notice { border: 1px solid #3a6850; border-radius: 8px; background: #173626; padding: 14px 18px; color: #cbf3d8; }
+.trailer-link { max-width: 900px; color: var(--text-primary); text-decoration: none; border: 1px solid #373b43; border-radius: 10px; overflow: hidden; }
+.trailer-image { height: auto; max-height: 460px; aspect-ratio: 16 / 9; object-fit: cover; }
+.trailer-action { display: block; padding: 18px; background: #24282f; }
+.trailer-link:hover .trailer-action { background: #333944; }
+.showtime-list { display: grid; gap: 14px; }
+.showtime-card h3 { margin-bottom: 6px; }
+.showtime-card .showtime-address { margin-top: 0; }
+.showtime-facts { display: flex; flex-wrap: wrap; gap: 16px 28px; margin-bottom: 0; }
+.showtime-facts dt { color: var(--text-secondary); font-size: 12px; margin-bottom: 6px; }
+.showtime-facts dd { margin: 0; color: var(--text-primary); }
+.movie-error p { line-height: 1.7; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.movie-layout :is(a,button,input,select):focus-visible { outline: 2px solid #f5b0b5; outline-offset: 3px; }
+@media (max-width: 1200px) and (min-width: 701px) {
+    .movie-layout { grid-template-columns: 180px minmax(0, 1fr) 0; }
+    .movie-layout .RightSidebar { padding: 0; }
+    .movie-layout .movie-info { grid-template-columns: 220px minmax(0, 1fr); gap: 20px; }
+}
+@media (max-width: 900px) and (min-width: 701px) {
+    .movie-layout .movie-info { grid-template-columns: 1fr; }
+    .movie-layout .movie-info .movie-poster { max-width: 260px; }
+}
+@media (max-width: 700px) {
+    .movie-layout .MainBody { padding: 16px; }
+    .movie-layout .RightSidebar:empty { display: none; }
+    .movie-layout .footer { flex-wrap: wrap; gap: 24px; padding: 24px; }
+    .movie-layout .footer-section { flex: 1 1 150px; border: 0; padding: 0; }
+    .movie-layout .Header { flex-wrap: wrap; }
+    .movie-layout .search-container { order: 3; flex-basis: 100%; }
+    .movie-layout .header-menu { margin-left: auto; }
+    .movie-layout .section-header { gap: 8px; flex-wrap: wrap; }
+    .movie-actions a, .movie-actions form { width: 100%; }
+}

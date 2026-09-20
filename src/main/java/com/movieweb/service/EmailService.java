@@ -13,8 +13,8 @@ import javax.mail.internet.MimeMessage;
 public class EmailService
 {
     //Phnetphlyx's gmail
-    private static final String SENDER_EMAIL = "giaydepthanhhuyenbienhoa@gmail.com";
-    private static final String APP_PASSWORD = "posk hzrm zqwb fgec";
+    private static final String SENDER_EMAIL = System.getenv("MOVIEWEB_MAIL_USER");
+    private static final String APP_PASSWORD = System.getenv("MOVIEWEB_MAIL_PASSWORD");
 
     // Create Gmail SMTP session
     private Session createMailSession()
@@ -45,52 +45,30 @@ public class EmailService
     {
         try
         {
+            if (SENDER_EMAIL == null || APP_PASSWORD == null) {
+                System.err.println("Email is not configured: set MOVIEWEB_MAIL_USER and MOVIEWEB_MAIL_PASSWORD.");
+                return false;
+            }
             Session session = createMailSession();
             String subject;
-            String messageText;
             if ("register".equals(purpose))
             {
                 subject = "PhnetPhlyx - Email Verification";
-                messageText =
-                        "Hello,\n\n"
-                        + "Your PhnetPhlyx email verification code is:\n\n"
-                        + code
-                        + "\n\n"
-                        + "This code will expire in 5 minutes.\n\n"
-                        + "If you did not request this code, "
-                        + "you can safely ignore this email.\n\n"
-                        + "PhnetPhlyx";
-            }
-            else if ("forgot_password".equals(purpose))
-            {
-                subject = "PhnetPhlyx - Password Reset Verification";
-                messageText =
-                        "Hello,\n\n"
-                        + "Your PhnetPhlyx password reset verification code is:\n\n"
-                        + code
-                        + "\n\n"
-                        + "This code will expire in 5 minutes.\n\n"
-                        + "If you did not request this code, "
-                        + "you can safely ignore this email.\n\n"
-                        + "PhnetPhlyx";
-            }
-            else if ("change_password".equals(purpose))
-            {
-                subject = "PhnetPhlyx - Password Change Verification";
-                messageText =
-                        "Hello,\n\n"
-                        + "Your PhnetPhlyx password change verification code is:\n\n"
-                        + code
-                        + "\n\n"
-                        + "This code will expire in 5 minutes.\n\n"
-                        + "If you did not request this code, "
-                        + "you can safely ignore this email.\n\n"
-                        + "PhnetPhlyx";
             }
             else
             {
-                return false;
+                subject = "PhnetPhlyx - Password Reset Verification";
             }
+
+            String messageText =
+                    "Hello,\n\n"
+                    + "Your PhnetPhlyx verification code is:\n\n"
+                    + code
+                    + "\n\n"
+                    + "This code will expire in 5 minutes.\n\n"
+                    + "If you did not request this code, "
+                    + "you can safely ignore this email.\n\n"
+                    + "PhnetPhlyx";
 
             Message message = new MimeMessage(session);
             message.setFrom( new InternetAddress(SENDER_EMAIL));

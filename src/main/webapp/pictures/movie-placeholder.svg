@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600" role="img" aria-label="Poster not available">
+  <rect width="400" height="600" fill="#20242b"/>
+  <rect x="140" y="218" width="120" height="112" rx="10" fill="none" stroke="#8a8f99" stroke-width="5"/>
+  <path d="M175 220v110m50-110v110m-82-82h30m53 0h30m-113 30h30m53 0h30m-113 30h30m53 0h30" fill="none" stroke="#8a8f99" stroke-width="5"/>
+  <text x="200" y="385" text-anchor="middle" fill="#bdc3ce" font-family="Arial,sans-serif" font-size="20">Poster not available</text>
+</svg>

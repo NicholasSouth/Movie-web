@@ -1,131 +1,49 @@
-<%@ page import="com.movieweb.model.Users" %>
+<%@ page import="com.movieweb.model.Users,com.movieweb.util.ViewUtils" %>
 <%
-    Users currentUser = (Users) session.getAttribute("user");
+    Users headerUser = (Users) session.getAttribute("user");
+    String headerName = headerUser == null ? "" : ViewUtils.text(headerUser.getFullName(), "Member");
 %>
-
 <header class="Header">
-    <!-- Website Name -->
-    <a
-        href="${pageContext.request.contextPath}/main.jsp"
-        class="website-name">
-        PhnetPhlyx
-    </a>
-
-    <!-- Search Bar -->
-    <div class="search-container">
-
-        <input
-            type="text"
-            placeholder="Search movies..."
-            class="search-bar">
-    </div>
-
-    <!-- Menu -->
+    <a href="${pageContext.request.contextPath}/main.jsp" class="website-name">PhnetPhlyx</a>
+    <form class="search-container" action="${pageContext.request.contextPath}/movies" method="get" role="search">
+        <input type="search" name="search" maxlength="200" placeholder="Search movies..."
+               aria-label="Search movies" class="search-bar">
+    </form>
     <div class="header-menu">
-        <!-- Menu Button -->
-        <button
-            type="button"
-            class="menu-button"
-            id="menuButton"
-            aria-label="Open menu"
-            aria-expanded="false">
+        <button type="button" class="menu-button" id="menuButton" aria-label="Open menu" aria-expanded="false">
             <span class="menu-dots">...</span>
         </button>
-
-        <!-- Dropdown Menu -->
-        <div
-            class="menu-dropdown"
-            id="menuDropdown">
-
-           	<%
-                /*Guest Mode*/
-                if (currentUser == null) {
-           	%>
-                <!-- Guest Menu -->
-                <div class="guest-menu">
-                    <a
-                        href="${pageContext.request.contextPath}/log_in.jsp"
-                        class="menu-item login-item">
-                        Log in / Register
-                    </a>
+        <div class="menu-dropdown" id="menuDropdown">
+            <% if (headerUser == null) { %>
+            <div class="guest-menu">
+                <a href="${pageContext.request.contextPath}/log_in.jsp" class="menu-item login-item">Log in / Register</a>
+            </div>
+            <% } else { %>
+            <a href="${pageContext.request.contextPath}/user-profile" class="user-menu-header user-profile-link">
+                <div class="user-avatar">
+                    <% if (ViewUtils.hasText(headerUser.getAvtPath())) { %>
+                    <img src="<%= ViewUtils.h(ViewUtils.asset(request.getContextPath(), headerUser.getAvtPath())) %>"
+                         alt="<%= ViewUtils.h(headerName) %>">
+                    <% } else { %>
+                    <div class="default-avatar"><%= ViewUtils.h(headerName.substring(0, 1).toUpperCase(java.util.Locale.ROOT)) %></div>
+                    <% } %>
                 </div>
-           	<%
-                /*Logged-in Mode */
-                } 
-                else {
-            %>
-		                <!-- User Information -->
-		                <a 
-		                	href="${pageContext.request.contextPath}/user-profile" 
-		                	class="user-menu-header user-profile-link">
-		                    <!-- Avatar -->
-		                    <div class="user-avatar">
-		                        <%
-		                            if (currentUser.getAvtPath() != null &&
-		                                !currentUser.getAvtPath().isEmpty()) {
-				                %>
-			                            <img
-			                                src="${pageContext.request.contextPath}/<%= currentUser.getAvtPath() %>"
-			                                alt="<%= currentUser.getFullName() %>">
-				                <%
-		                            } 
-		                            else {
-				                %>
-			                            <div class="default-avatar">
-			                                <%= currentUser.getFullName()
-			                                    .substring(0, 1)
-			                                    .toUpperCase() %>
-			                            </div>
-				                <%
-		                            }
-		                        %>
-		                    </div>
-		
-		                    <!-- Name and Role -->
-		                    <div class="user-information">
-		                        <div class="user-name">
-		                            <%= currentUser.getFullName() %>
-		                        </div>
-		                        <div class="user-role">
-		                            <%= currentUser.getRole() %>
-		                        </div>
-		                    </div>
-		                </a>
-		
-		                <!-- Divider -->
-		                <div class="menu-divider"></div>
-		
-		                <!-- Settings -->
-		                <a
-		                    href="${pageContext.request.contextPath}/settings.jsp"
-		                    class="menu-item">
-		                    <img 
-		                    	src="${pageContext.request.contextPath}/pictures/assessments/setting.png"
-								alt="Settings" 
-								class="menu-item-icon">
-		                    <span>
-		                        Settings
-		                    </span>
-		                </a>
-		
-		                <!-- Log Out -->
-		                <a
-		                    href="${pageContext.request.contextPath}/logout"
-		                    class="menu-item logout-item">
-		                    <img 
-		                    	src="${pageContext.request.contextPath}/pictures/assessments/log_out.png" 
-		                    	alt="Log out" 
-		                    	class="menu-item-icon">
-		                    <span>
-		                        Log out
-		                    </span>
-		                </a>
-            <%
-                }
-            %>
+                <div class="user-information">
+                    <div class="user-name"><%= ViewUtils.h(headerName) %></div>
+                    <div class="user-role"><%= ViewUtils.h(headerUser.getRole()) %></div>
+                </div>
+            </a>
+            <div class="menu-divider"></div>
+            <a href="${pageContext.request.contextPath}/settings.jsp" class="menu-item">
+                <img src="${pageContext.request.contextPath}/pictures/assessments/setting.png" alt="Settings" class="menu-item-icon">
+                <span>Settings</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/logout" class="menu-item logout-item">
+                <img src="${pageContext.request.contextPath}/pictures/assessments/log_out.png" alt="Log out" class="menu-item-icon">
+                <span>Log out</span>
+            </a>
+            <% } %>
         </div>
     </div>
 </header>
-<script
-    src="${pageContext.request.contextPath}/scripts/header.js">
-</script>
+<script src="${pageContext.request.contextPath}/scripts/header.js"></script>

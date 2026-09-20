@@ -10,7 +10,7 @@
            class="nav-item <%= "home".equals(currentPage) ? "active" : "" %>">
             Home
         </a>
-        <a href="${pageContext.request.contextPath}/movies.jsp"
+        <a href="${pageContext.request.contextPath}/movies"
            class="nav-item <%= "movies".equals(currentPage) ? "active" : "" %>">
             Movies
         </a>
@@ -18,11 +18,11 @@
            class="nav-item <%= "theaters".equals(currentPage) ? "active" : "" %>">
             Theaters
         </a>
-        <a href="${pageContext.request.contextPath}/user-profile#bookings"
+        <a href="${pageContext.request.contextPath}/bookings.jsp"
            class="nav-item <%= "bookings".equals(currentPage) ? "active" : "" %>">
             My Bookings
         </a>
-        <a href="${pageContext.request.contextPath}/user-profile#favourites"
+        <a href="${pageContext.request.contextPath}/favourites.jsp"
            class="nav-item <%= "favorites".equals(currentPage) ? "active" : "" %>">
             Favorites
         </a>
