@@ -1,1 +1,9 @@
 /build/
+/target/
+/dist/
+/runtime/
+/config/database.properties
+/database/*.bak
+/database/data/
+*.log
+.env
