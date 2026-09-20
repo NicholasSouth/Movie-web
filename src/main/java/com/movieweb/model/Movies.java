@@ -1,7 +1,18 @@
 package com.movieweb.model;
+
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.Map;
+import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Movies {
+	//How much movies should be shown at once
+	public static final int PAGE_SIZE = 20;
+	
+	//Basic SQL table variables
 	private int movie_id;
 	private String movie_name;
 	private String description;
@@ -15,9 +26,102 @@ public class Movies {
 	private String trailer_link;
 	private boolean isActive;
 	private Timestamp deleted_at;
-	//
+	
+	//For filtering and paging
+	private String search = "";
+    private Integer genreId;
+    private Integer tagId;
+    private Integer theaterId;
+    private Double maxPrice;
+    private LocalDate date;
+    private String filterAgeRating = "";
+    private Double minRating;
+    private String sort = "newest";
+    private String status = "all";
+    private int page = 1;
+	   
+    // Related movie information
+    private List<Genres> genres = new ArrayList<>();
+    private List<Tags> tags = new ArrayList<>();
+    
+    //
 	public Movies(){
 	}
+	//Adding the parameter into movies.jsp
+	/** Parses request parameters directly into filter fields. */
+    public static Movies fromParameters(Map<String, String[]> parameters) {
+        Movies filter = new Movies();      
+        filter.search = value(parameters, "search");
+        if (filter.search.length() > 200) throw new IllegalArgumentException("Maximum 200 characters search.");       
+        filter.genreId = optionalId(value(parameters, "genre"), "Genre");
+        filter.tagId = optionalId(value(parameters, "tag"), "Tag");
+        filter.theaterId = optionalId(value(parameters, "theater"), "Theater");
+        
+        // Ticket Price filter
+        String priceText = value(parameters, "price");
+        if (!priceText.isEmpty()) {
+            try {
+                filter.maxPrice = Double.valueOf(priceText);
+                if (!Double.isFinite(filter.maxPrice) || filter.maxPrice < 0) throw new NumberFormatException();
+            } catch (NumberFormatException ex) {
+                throw new IllegalArgumentException("Price invalid.");
+            }
+        }
+        String dateText = value(parameters, "date");
+        if (!dateText.isEmpty()) {
+            try {
+                if (!dateText.matches("\\d{4}-\\d{2}-\\d{2}")) throw new DateTimeParseException("format", dateText, 0);
+                filter.date = LocalDate.parse(dateText);
+                if (filter.date.getYear() < 1753) throw new IllegalArgumentException("Date invalid.");
+            } catch (DateTimeParseException ex) {
+                throw new IllegalArgumentException("Date must be in format YYYY-MM-DD.");
+            }
+        }
+        filter.filterAgeRating = value(parameters, "age-rating");
+        if (filter.filterAgeRating.length() > 100 || filter.filterAgeRating.chars().anyMatch(Character::isISOControl))
+            throw new IllegalArgumentException("Age rating invalid.");
+        String ratingText = value(parameters, "rating");
+        if (!ratingText.isEmpty()) {
+            try {
+                if (!ratingText.matches("\\d+(\\.\\d{1,2})?")) throw new NumberFormatException();
+                filter.minRating = Double.valueOf(ratingText);
+                if (!Double.isFinite(filter.minRating) || filter.minRating < 0 || filter.minRating > 10) throw new NumberFormatException();
+            } catch (NumberFormatException ex) {
+                throw new IllegalArgumentException("Rating must be in range from 0 to 10.");
+            }
+        }
+        filter.sort = value(parameters, "sort");
+        if (filter.sort.isEmpty()) filter.sort = "newest";
+        if (!Set.of("newest", "popular", "rating", "name", "duration").contains(filter.sort))
+            throw new IllegalArgumentException("Filtering invalid.");
+        filter.status = value(parameters, "status");
+        if (filter.status.isEmpty()) filter.status = "all";
+        if (!Set.of("all", "now-showing", "coming-soon").contains(filter.status))
+            throw new IllegalArgumentException("Movie status invalid.");
+        Integer pageNum = optionalId(value(parameters, "page"), "Page");
+        if (pageNum != null && pageNum > 100000) throw new IllegalArgumentException("Too large page number.");
+        filter.page = pageNum == null ? 1 : pageNum;
+        return filter;
+    }
+    public static String value(Map<String, String[]> parameters, String key) {
+        String[] values = parameters.get(key);
+        if (values == null || values.length == 0) return "";
+        if (values.length != 1) throw new IllegalArgumentException("Variable " + key + " can only appears once.");
+        return values[0] == null ? "" : values[0].trim();
+    }   
+    private static Integer optionalId(String text, String label) {
+        if (text == null || text.isEmpty()) return null;
+        try {
+            if (!text.matches("[0-9]{1,10}")) throw new NumberFormatException();
+            int id = Integer.parseInt(text);
+            if (id < 1) throw new NumberFormatException();
+            return id;
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException(label + " must be valid positive integer.");
+        }
+    }
+		
+	//For fetching and adjusting movie_details
 	public int getMovie_id() {
         return movie_id;
     }
@@ -95,5 +199,46 @@ public class Movies {
     }
     public void setDeleted_at(Timestamp deleted_at) {
         this.deleted_at = deleted_at;
+    }
+
+    //For fetching filter details
+    public String getSearch() { return search; }
+    public Integer getGenreId() { return genreId; }
+    public Integer getTagId() { return tagId; }
+    public Integer getTheaterId() { return theaterId; }
+    public Double getMaxPrice() { return maxPrice; }
+    public LocalDate getDate() { return date; }
+    public String getFilterAgeRating() { return filterAgeRating; }
+    public Double getMinRating() { return minRating; }
+    public String getSort() { return sort; }
+    public String getStatus() { return status; }
+    public int getPage() { return page; }
+    public int getOffset() { return (page - 1) * PAGE_SIZE; }
+    public boolean isHasFilters() {
+        return (search != null && !search.isEmpty())
+                || genreId != null
+                || tagId != null
+                || theaterId != null
+                || maxPrice != null
+                || date != null
+                || (filterAgeRating != null
+                    && !filterAgeRating.isEmpty())
+                || minRating != null
+                || (status != null
+                    && !"all".equals(status));
+    }
+    
+ // For displaying movie genres and tags
+    public List<Genres> getGenres() {
+        return genres;
+    }
+    public void setGenres(List<Genres> genres) {
+        this.genres = genres;
+    }
+    public List<Tags> getTags() {
+        return tags;
+    }
+    public void setTags(List<Tags> tags) {
+        this.tags = tags;
     }
 }

@@ -10,7 +10,7 @@
            class="nav-item <%= "home".equals(currentPage) ? "active" : "" %>">
             Home
         </a>
-        <a href="${pageContext.request.contextPath}/movies.jsp"
+        <a href="${pageContext.request.contextPath}/movies"
            class="nav-item <%= "movies".equals(currentPage) ? "active" : "" %>">
             Movies
         </a>
