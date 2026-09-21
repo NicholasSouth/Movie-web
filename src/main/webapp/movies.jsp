@@ -134,17 +134,7 @@
 		                        step="0.01"
 		                        placeholder="Max price"
 		                        value="<%= filter.getMaxPrice() != null ? filter.getMaxPrice() : "" %>">
-		                </div>
-		                <div class="movie-filter">
-		                    <label for="date">
-		                        Date
-		                    </label>
-		                    <input
-		                        type="date"
-		                        id="date"
-		                        name="date"
-		                        value="<%= filter.getDate() != null ? ViewUtils.h(filter.getDate().toString()) : "" %>">
-		                </div>
+		                </div>		                
 		                <div class="movie-filter">
 		                    <label for="age-rating">
 		                        Age Rating
@@ -178,20 +168,9 @@
 		                        <option value="all" <%= "all".equals(filter.getStatus()) ? "selected" : "" %>>All Movies</option>
 		                        <option value="now-showing" <%= "now-showing".equals(filter.getStatus()) ? "selected" : "" %>>Now Showing</option>
 		                        <option value="coming-soon" <%= "coming-soon".equals(filter.getStatus()) ? "selected" : "" %>>Coming Soon</option>
+		                        <option value="popular" <%= "popular".equals(filter.getStatus()) ? "selected" : "" %>>Most Popular</option>
 		                    </select>
-		                </div>
-		                <div class="movie-filter">
-		                    <label for="sort">
-		                        Sort By
-		                    </label>
-		                    <select id="sort" name="sort">
-		                        <option value="newest" <%= "newest".equals(filter.getSort()) ? "selected" : "" %>>Newest Release</option>
-		                        <option value="rating" <%= "rating".equals(filter.getSort()) ? "selected" : "" %>>Highest Rating</option>
-		                        <option value="popular" <%= "popular".equals(filter.getSort()) ? "selected" : "" %>>Most Favorited</option>
-		                        <option value="name" <%= "name".equals(filter.getSort()) ? "selected" : "" %>>Title A–Z</option>
-		                        <option value="duration" <%= "duration".equals(filter.getSort()) ? "selected" : "" %>>Shortest Duration</option>
-		                    </select>
-		                </div>
+		                </div>		                
 		            </div>
 		
 		            <!-- Filter Buttons -->

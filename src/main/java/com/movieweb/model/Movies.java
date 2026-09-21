@@ -33,10 +33,8 @@ public class Movies {
     private Integer tagId;
     private Integer theaterId;
     private Double maxPrice;
-    private LocalDate date;
     private String filterAgeRating = "";
     private Double minRating;
-    private String sort = "newest";
     private String status = "all";
     private int page = 1;
 	   
@@ -66,17 +64,7 @@ public class Movies {
             } catch (NumberFormatException ex) {
                 throw new IllegalArgumentException("Price invalid.");
             }
-        }
-        String dateText = value(parameters, "date");
-        if (!dateText.isEmpty()) {
-            try {
-                if (!dateText.matches("\\d{4}-\\d{2}-\\d{2}")) throw new DateTimeParseException("format", dateText, 0);
-                filter.date = LocalDate.parse(dateText);
-                if (filter.date.getYear() < 1753) throw new IllegalArgumentException("Date invalid.");
-            } catch (DateTimeParseException ex) {
-                throw new IllegalArgumentException("Date must be in format YYYY-MM-DD.");
-            }
-        }
+        }        
         filter.filterAgeRating = value(parameters, "age-rating");
         if (filter.filterAgeRating.length() > 100 || filter.filterAgeRating.chars().anyMatch(Character::isISOControl))
             throw new IllegalArgumentException("Age rating invalid.");
@@ -89,14 +77,10 @@ public class Movies {
             } catch (NumberFormatException ex) {
                 throw new IllegalArgumentException("Rating must be in range from 0 to 10.");
             }
-        }
-        filter.sort = value(parameters, "sort");
-        if (filter.sort.isEmpty()) filter.sort = "newest";
-        if (!Set.of("newest", "popular", "rating", "name", "duration").contains(filter.sort))
-            throw new IllegalArgumentException("Filtering invalid.");
+        }        
         filter.status = value(parameters, "status");
         if (filter.status.isEmpty()) filter.status = "all";
-        if (!Set.of("all", "now-showing", "coming-soon").contains(filter.status))
+        if (!Set.of("all", "now-showing", "coming-soon", "popular").contains(filter.status))
             throw new IllegalArgumentException("Movie status invalid.");
         Integer pageNum = optionalId(value(parameters, "page"), "Page");
         if (pageNum != null && pageNum > 100000) throw new IllegalArgumentException("Too large page number.");
@@ -207,10 +191,8 @@ public class Movies {
     public Integer getTagId() { return tagId; }
     public Integer getTheaterId() { return theaterId; }
     public Double getMaxPrice() { return maxPrice; }
-    public LocalDate getDate() { return date; }
     public String getFilterAgeRating() { return filterAgeRating; }
     public Double getMinRating() { return minRating; }
-    public String getSort() { return sort; }
     public String getStatus() { return status; }
     public int getPage() { return page; }
     public int getOffset() { return (page - 1) * PAGE_SIZE; }
@@ -220,7 +202,6 @@ public class Movies {
                 || tagId != null
                 || theaterId != null
                 || maxPrice != null
-                || date != null
                 || (filterAgeRating != null
                     && !filterAgeRating.isEmpty())
                 || minRating != null

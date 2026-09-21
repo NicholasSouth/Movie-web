@@ -23,6 +23,7 @@ public class MoviesDAO {
             "AND (m.available_until IS NULL " +
             "OR m.available_until >= CAST(GETDATE() AS date))";
     private static final String COMING_SOON = "m.available_from > GETDATE()";
+    private static final String MOST_POPULAR = " ORDER BY m.avg_rating DESC, m.movie_id DESC";
     private static final String SHOWTIME_JOINS =
             " FROM Showtimes s " +
             "INNER JOIN Rooms r ON r.room_id = s.room_id " +
@@ -78,8 +79,7 @@ public class MoviesDAO {
     }
 
     //Search and filter
-    public List<Movies> searchAndFilterMovies(Movies filter) {
-        List<Movies> movies = new ArrayList<>();
+    public List<Movies> searchAndFilterMovies(Movies filter) {        
         StringBuilder q = new StringBuilder(
                 "SELECT DISTINCT m.* " +
                 "FROM Movies m " +
@@ -174,7 +174,6 @@ public class MoviesDAO {
 
         // Showtime-related filters
         if (filter.getTheaterId() != null
-            || filter.getDate() != null
             || filter.getMaxPrice() != null) {
             q.append(" AND EXISTS (SELECT 1").append(SHOWTIME_JOINS).append(
                     " WHERE s.movie_id = m.movie_id " +
@@ -184,13 +183,7 @@ public class MoviesDAO {
             if (filter.getTheaterId() != null) {
                 q.append(" AND t.theater_id = ?");
                 params.add(filter.getTheaterId());
-            }
-
-            // Date filter
-            if (filter.getDate() != null) {
-                q.append(" AND CAST(s.start_at AS date) = ?");
-                params.add(Date.valueOf(filter.getDate()));
-            }
+            }          
 
             // Maximum ticket price filter
             if (filter.getMaxPrice() != null) {
@@ -199,33 +192,14 @@ public class MoviesDAO {
             }
             q.append(")");
         }
-
-        // Sorting and pagination
-        q.append(" ORDER BY ")
-         .append(orderBy(filter.getSort()))
-         .append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
-        params.add(filter.getOffset());
-        params.add(Movies.PAGE_SIZE);
-        try (
-                Connection conn = DBConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(q.toString())
-        ) {
-            for (int i = 0; i < params.size(); i++) {
-                stmt.setObject(i + 1, params.get(i));
-            }
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    movies.add(mapMovie(rs));
-                }
-            }
-
-            // Batch-load genres and tags using the same connection
-            loadGenresAndTags(movies, conn);
+        // Ordering
+        if ("popular".equals(filter.getStatus())) {
+            q.append(MOST_POPULAR);
         } 
-        catch (SQLException e) {
-            e.printStackTrace();
+        else {
+            q.append(" ORDER BY m.movie_id DESC");
         }
-        return movies;
+        return fetchMovies(q.toString(), params);
     }
 
     public Movies getMovieById(int movieId) {
@@ -306,6 +280,32 @@ public class MoviesDAO {
             // one for all genres and one for all tags
             loadGenresAndTags(movies, conn);
         } 
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return movies;
+    }
+    
+    //Overload method cuz we need to pass parameters
+    private List<Movies> fetchMovies(String sql, List<Object> params) {
+        List<Movies> movies = new ArrayList<>();
+        try (
+                Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            // Bind parameters in the same order they were added
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    movies.add(mapMovie(rs));
+                }
+            }
+
+            // Avoid N+1 query problem
+            loadGenresAndTags(movies, conn);
+        }
         catch (SQLException e) {
             e.printStackTrace();
         }
@@ -437,25 +437,6 @@ public class MoviesDAO {
         m.setActive(rs.getBoolean("isActive"));
         m.setDeleted_at(rs.getTimestamp("deleted_at"));
         return m;
-    }
-
-    // Sorting
-    private String orderBy(String sort) {
-        if (sort == null) {
-            return "m.available_from DESC, m.movie_id DESC";
-        }
-        return switch (sort) {
-            case "popular" ->
-                    "(SELECT COUNT(*) " +
-                    "FROM Favourite_movies f " +
-                    "WHERE f.movie_id = m.movie_id) DESC, " +
-                    "m.avg_rating DESC, " +
-                    "m.movie_id DESC";
-            case "name" -> "m.movie_name ASC, m.movie_id ASC";
-            case "rating" -> "m.avg_rating DESC, m.movie_id DESC";
-            case "duration" -> "m.duration_minute ASC, m.movie_id ASC";
-            default -> "m.available_from DESC, m.movie_id DESC";
-        };
     }
 
     private String escapeLike(String val) {
