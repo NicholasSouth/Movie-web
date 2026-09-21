@@ -147,17 +147,15 @@ public class ForgetPasswordServlet
                     account);
             return;
         }
+
+        // Password successfully changed
+        request.getSession().setAttribute(
+                "message",
+                "Password reset successfully. You can now log in.");
         response.sendRedirect(
                 request.getContextPath()
                 + "/log_in.jsp");
-
-        // Password successfully changed
-        request.setAttribute(
-                "message",
-                "Password reset successfully. You can now log in.");
-        request.getRequestDispatcher(
-                "/forget.jsp")
-                .forward(request, response);
+        return;
     }
 
     private void showError(
