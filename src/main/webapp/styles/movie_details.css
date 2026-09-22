@@ -106,6 +106,21 @@
     flex-wrap: wrap;
     gap: 8px;
 }
+.movie-people {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+.person-name {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: var(--surface);
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 14px;
+}
 
 /*Genre and Tag Links*/
 .genre-tag,

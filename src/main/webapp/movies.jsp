@@ -137,14 +137,41 @@
 		                </div>		                
 		                <div class="movie-filter">
 		                    <label for="age-rating">
-		                        Age Rating
-		                    </label>
-		                    <select id="age-rating" name="age-rating">
-		                        <option value="">All Ratings</option>
-		                        <option value="PG-13" <%= "PG-13".equals(filter.getFilterAgeRating()) ? "selected" : "" %>>PG-13</option>
-		                        <option value="R" <%= "R".equals(filter.getFilterAgeRating()) ? "selected" : "" %>>R</option>
-		                        <option value="18+" <%= "18+".equals(filter.getFilterAgeRating()) ? "selected" : "" %>>18+</option>
-		                    </select>
+							    Age Rating
+							</label>
+							<select id="age-rating" name="age-rating">
+							    <option value=""
+							        <%= (filter.getFilterAgeRating() == null
+							                || filter.getFilterAgeRating().isEmpty())
+							                ? "selected" : "" %>>
+							        All Ratings
+							    </option>
+							    <option value="G"
+							        <%= "G".equals(filter.getFilterAgeRating())
+							                ? "selected" : "" %>>
+							        G
+							    </option>
+							    <option value="PG"
+							        <%= "PG".equals(filter.getFilterAgeRating())
+							                ? "selected" : "" %>>
+							        PG
+							    </option>
+							    <option value="PG-13"
+							        <%= "PG-13".equals(filter.getFilterAgeRating())
+							                ? "selected" : "" %>>
+							        PG-13
+							    </option>
+							    <option value="R"
+							        <%= "R".equals(filter.getFilterAgeRating())
+							                ? "selected" : "" %>>
+							        R
+							    </option>
+							    <option value="NC-17"
+							        <%= "NC-17".equals(filter.getFilterAgeRating())
+							                ? "selected" : "" %>>
+							        NC-17
+							    </option>
+							</select>
 		                </div>
 		                <div class="movie-filter">
 		                    <label for="rating">

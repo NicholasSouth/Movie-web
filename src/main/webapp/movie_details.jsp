@@ -5,7 +5,12 @@
 <%@ page import="com.movieweb.model.Movies" %>
 <%@ page import="com.movieweb.model.Genres" %>
 <%@ page import="com.movieweb.model.Tags" %>
+<%@ page import="com.movieweb.model.Actors" %>
+<%@ page import="com.movieweb.model.Directors" %>
+<%@ page import="com.movieweb.model.Authors" %>
 <%@ page import="com.movieweb.model.Users" %>
+
+<%@ page import="java.text.SimpleDateFormat" %>
 
 <%
     request.setAttribute("currentPage", "movies");
@@ -23,19 +28,29 @@
     String posterPath = movie.getPoster_path();
     String trailerPath = movie.getTrailer_path();
     String trailerLink = movie.getTrailer_link();
-    String directors = request.getAttribute("directors") != null
-                    ? String.valueOf(
-                            request.getAttribute("directors"))
-                    : "";
-    String actors = request.getAttribute("actors") != null
-                    ? String.valueOf(
-                            request.getAttribute("actors"))
-                    : "";
+    List<Actors> actors = (List<Actors>) request.getAttribute("actors");
+    if (actors == null) {
+        actors = new java.util.ArrayList<>();
+    }
+    List<Directors> directors = (List<Directors>) request.getAttribute("directors");
+    if (directors == null) {
+        directors = new java.util.ArrayList<>();
+    }
+    List<Authors> authors = (List<Authors>) request.getAttribute("authors");
+    if (authors == null) {
+        authors = new java.util.ArrayList<>();
+    }
     Users loggedInUser = (Users) request.getAttribute("loggedInUser");
     Boolean favouriteAttribute = (Boolean) request.getAttribute("isFavourite");
     boolean isFavourite = favouriteAttribute != null && favouriteAttribute;
     String csrfToken = (String) request.getAttribute("csrfToken");
     String favouriteMessage = (String) request.getAttribute("favouriteMessage");
+%>
+<%
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");;
+    String releaseDate = movie.getAvailable_from() != null
+            ? dateFormat.format(movie.getAvailable_from())
+            : "Not available.";
 %>
 
 <!DOCTYPE html>
@@ -138,18 +153,86 @@
 		                </div>
 		
 		                <!-- Movie Metadata -->
-		                <p>
-		                    <strong>Director:</strong>
-		                    <%= directors.isEmpty()
-		                            ? "Not available."
-		                            : directors %>
-		                </p>
-		                <p>
-		                    <strong>Actors:</strong>
-		                    <%= actors.isEmpty()
-		                            ? "Not available."
-		                            : actors %>
-		                </p>
+		                <!-- Directors -->
+						<div class="movie-meta-group">
+						    <strong>Directors:</strong>						
+						    <% 
+						    	if (directors.isEmpty()) { 
+						    %>
+						        	<span class="empty-meta">Not available.</span>
+						    <% 
+						    	} 
+						    	else { 
+						    %>
+						        <div class="movie-people">
+						            <% 
+						            	for (Directors director : directors) { 
+						            %>
+							                <span class="person-name">
+							                    <%= director.getDirector_name() %>
+							                </span>
+						            <% 
+						            	} 
+						            %>
+						        </div>
+						    <% 
+						    	} 
+						    %>
+						</div>
+						
+						<!-- Authors -->
+						<div class="movie-meta-group">
+						    <strong>Authors:</strong>						
+						    <% 
+						    	if (authors.isEmpty()) { 
+						    %>
+						        	<span class="empty-meta">Not available.</span>
+						    <% 
+						    	} 
+						    	else { 
+						    %>
+						        <div class="movie-people">
+						            <% 
+						            	for (Authors author : authors) { 
+						            %>
+							                <span class="person-name">
+							                    <%= author.getAuthor_name() %>
+							                </span>
+						            <% 
+						            	} 
+						            %>
+						        </div>
+						    <% 
+						    	} 
+						    %>
+						</div>
+						
+						<!-- Actors -->
+						<div class="movie-meta-group">
+						    <strong>Actors:</strong>						
+						    <% 
+						    	if (actors.isEmpty()) { 
+						    %>
+						        	<span class="empty-meta">Not available.</span>
+						    <% 
+						    	} 
+						    	else { 
+						    %>
+						        <div class="movie-people">
+						            <% 
+						            	for (Actors actor : actors) { 
+						            %>
+							                <span class="person-name">
+							                    <%= actor.getActor_name() %>
+							                </span>
+						            <% 
+						            	} 
+						            %>
+						        </div>
+						    <% 
+						    	} 
+						    %>
+						</div>
 		                <p>
 		                    <strong>Duration:</strong>
 		                    <%= movie.getDuration_minute() %> minutes
@@ -161,10 +244,10 @@
 		                            : "Not available." %>
 		                </p>
 		                <p>
-		                    <strong>Release Date:</strong>
-		                    <%= movie.getAvailable_from() != null
-		                            ? movie.getAvailable_from()
-		                            : "Not available." %>
+		                	<strong>
+		                		Release Date:
+		                	</strong> 
+		                	<%= releaseDate %>
 		                </p>
 		
 		                <!-- Actions -->

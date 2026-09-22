@@ -4,36 +4,36 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import com.movieweb.model.Movie_directors;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.movieweb.model.Directors;
 import com.movieweb.util.DBConnection;
 
-public class Movie_directorsDAO 
-{
-    public Movie_directors getMovieDirector(int movie_id, int director_id) 
-    {
-        String sql = "SELECT * FROM Movie_directors WHERE movie_id = ? AND director_id = ?";
-        
+public class Movie_directorsDAO {
+    public List<Directors> getDirectorsByMovieId(int movieId)
+            throws SQLException {
+        List<Directors> directors = new ArrayList<>();
+        String sql = """
+                SELECT d.director_id, d.director_name
+                FROM Directors d
+                INNER JOIN Movie_directors md
+                    ON d.director_id = md.director_id
+                WHERE md.movie_id = ?
+                ORDER BY d.director_name
+                """;
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) 
-        {
-            stmt.setInt(1, movie_id);
-            stmt.setInt(2, director_id);
-            
-            ResultSet rs = stmt.executeQuery();
-            
-            if (rs.next()) 
-            {
-                Movie_directors movie_director = new Movie_directors();
-                movie_director.setMovie_id(rs.getInt("movie_id"));
-                movie_director.setDirector_id(rs.getInt("director_id"));
-                return movie_director;
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, movieId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Directors director = new Directors();
+                    director.setDirector_id(rs.getInt("director_id"));
+                    director.setDirector_name(rs.getString("director_name"));
+                    directors.add(director);
+                }
             }
-        } 
-        catch (SQLException e) 
-        {
-            e.printStackTrace();
         }
-        
-        return null;
+        return directors;
     }
 }

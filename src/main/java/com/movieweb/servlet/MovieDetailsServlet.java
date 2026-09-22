@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,8 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.movieweb.model.Movies;
 import com.movieweb.model.Users;
+import com.movieweb.model.Actors;
+import com.movieweb.model.Directors;
+import com.movieweb.model.Authors;
 import com.movieweb.service.FavouriteMoviesService;
 import com.movieweb.service.MoviesService;
+import com.movieweb.service.MovieCastService;
 
 @WebServlet(urlPatterns = {
         "/movie-details",
@@ -27,17 +32,21 @@ public class MovieDetailsServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(MovieDetailsServlet.class.getName());
     private final MoviesService moviesService;
     private final FavouriteMoviesService favouriteMoviesService;
+    private final MovieCastService movieCastService;
     public MovieDetailsServlet() {
         this(
-                new MoviesService(),
-                new FavouriteMoviesService()
+            new MoviesService(),
+            new FavouriteMoviesService(),
+            new MovieCastService()
         );
     }
     public MovieDetailsServlet(
             MoviesService moviesService,
-            FavouriteMoviesService favouriteMoviesService) {
+            FavouriteMoviesService favouriteMoviesService,
+            MovieCastService movieCastService) {
         this.moviesService = Objects.requireNonNull(moviesService);
         this.favouriteMoviesService = Objects.requireNonNull(favouriteMoviesService);
+        this.movieCastService = Objects.requireNonNull(movieCastService);
     }
 
     @Override
@@ -55,7 +64,7 @@ public class MovieDetailsServlet extends HttpServlet {
                             user == null
                                     ? null
                                     : user.getUserId()
-                    );
+                    );            
             if (movie == null) {
                 MoviePageServlet.error(
                         request,
@@ -66,8 +75,12 @@ public class MovieDetailsServlet extends HttpServlet {
                 );
                 return;
             }
+            // Load movie cast
+            List<Actors> actors = movieCastService.getActorsByMovieId(movieId);
+            List<Directors> directors = movieCastService.getDirectorsByMovieId(movieId);
+            List<Authors> authors = movieCastService.getAuthorsByMovieId(movieId);
+            
             boolean isFavourite = false;
-
             if (user != null) {
                 isFavourite = favouriteMoviesService.isFavourite(
                                 user.getUserId(),
@@ -77,6 +90,9 @@ public class MovieDetailsServlet extends HttpServlet {
 
             // Pass data to JSP
             request.setAttribute("movie", movie);
+            request.setAttribute("actors", actors);
+            request.setAttribute("directors", directors);
+            request.setAttribute("authors", authors);
             request.setAttribute("loggedInUser", user);
             request.setAttribute("isFavourite", isFavourite);
             request.setAttribute("csrfToken", MoviePageServlet.csrfToken(request)

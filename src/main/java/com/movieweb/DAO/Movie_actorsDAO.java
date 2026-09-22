@@ -4,36 +4,36 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import com.movieweb.model.Movie_actors;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.movieweb.model.Actors;
 import com.movieweb.util.DBConnection;
 
-public class Movie_actorsDAO 
-{
-    public Movie_actors getMovieActor(int movie_id, int actor_id) 
-    {
-        String sql = "SELECT * FROM Movie_actors WHERE movie_id = ? AND actor_id = ?";
-        
+public class Movie_actorsDAO {
+    public List<Actors> getActorsByMovieId(int movieId)
+            throws SQLException {
+        List<Actors> actors = new ArrayList<>();
+        String sql = """
+                SELECT a.actor_id, a.actor_name
+                FROM Actors a
+                INNER JOIN Movie_actors ma
+                    ON a.actor_id = ma.actor_id
+                WHERE ma.movie_id = ?
+                ORDER BY a.actor_name
+                """;
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) 
-        {
-            stmt.setInt(1, movie_id);
-            stmt.setInt(2, actor_id);
-            
-            ResultSet rs = stmt.executeQuery();
-            
-            if (rs.next()) 
-            {
-                Movie_actors movie_actor = new Movie_actors();
-                movie_actor.setMovie_id(rs.getInt("movie_id"));
-                movie_actor.setActor_id(rs.getInt("actor_id"));
-                return movie_actor;
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, movieId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Actors actor = new Actors();
+                    actor.setActor_id(rs.getInt("actor_id"));
+                    actor.setActor_name(rs.getString("actor_name"));
+                    actors.add(actor);
+                }
             }
-        } 
-        catch (SQLException e) 
-        {
-            e.printStackTrace();
         }
-        
-        return null;
+        return actors;
     }
 }
