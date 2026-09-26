@@ -1,4 +1,4 @@
-    package com.movieweb.DAO;
+package com.movieweb.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,7 +22,6 @@ public class TheatersDAO
             stmt.setInt(1, theater_id);
             
             ResultSet rs = stmt.executeQuery();
-            
             if (rs.next()) 
             {
                 return mapTheater(rs);
@@ -49,7 +48,6 @@ public class TheatersDAO
             while (rs.next()) {
                 theaters.add(mapTheater(rs));
             }
-
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -64,8 +62,19 @@ public class TheatersDAO
         theater.setTheater_address(rs.getString("theater_address"));
         theater.setTheater_image_path(rs.getString("theater_image_path"));
         theater.setDescription(rs.getString("description"));
-        theater.setLatitude(rs.getDouble("latitude"));
-        theater.setLongtitude(rs.getDouble("longtitude"));
+
+        double latitude = rs.getDouble("latitude");
+        if (rs.wasNull()) {
+            latitude = Double.NaN;
+        }
+        theater.setLatitude(latitude);
+
+        double longtitude = rs.getDouble("longtitude");
+        if (rs.wasNull()) {
+            longtitude = Double.NaN;
+        }
+        theater.setLongtitude(longtitude);
+
         theater.setOpen_time(rs.getString("open_time"));
         theater.setClosing_time(rs.getString("closing_time"));
         theater.setActive(rs.getBoolean("isActive"));

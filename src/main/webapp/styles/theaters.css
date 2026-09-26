@@ -1,8 +1,12 @@
 .theater-header {
-    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 15px;
 }
 .theater-header h1 {
-    margin: 0 0 8px 0;
+    margin: 0;
     color: var(--text-primary);
     font-size: 32px;
 }
@@ -10,14 +14,67 @@
     margin: 0;
     color: var(--text-secondary);
 }
-
+.theater-search {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+}
+.theater-search input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 15px;
+    border: 1px solid #2c2c2c;
+    border-radius: 8px;
+    outline: none;
+    background-color: var(--background);
+    color: var(--text-primary);
+    font-size: 15px;
+}
+.theater-search input::placeholder {
+    color: var(--text-secondary);
+}
+.theater-search input:focus {
+    border-color: var(--accent);
+}
+.theater-search button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--accent);
+    color: var(--text-primary);
+    font-size: 15px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+.theater-search button:hover {
+    opacity: 0.85;
+}
+.theater-header-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.find-near-status {
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-style: italic;
+}
+#nearest-theater-result {
+    margin-bottom: 20px;
+}
+.all-theaters-title,
+.nearest-title {
+    margin: 0 0 15px 0;
+    color: var(--text-primary);
+    font-size: 20px;
+}
 /*Theater Grid*/
 .theater-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(250px, 1fr));
     gap: 20px;
 }
-
 /*Theater Card*/
 .theater-card {
     background-color: var(--surface);
@@ -28,7 +85,10 @@
 .theater-card:hover {
     transform: translateY(-5px);
 }
-
+.nearest-card {
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 15px rgba(229, 9, 20, 0.25);
+}
 /*Theater Image*/
 .theater-image img {
     width: 100%;
@@ -61,7 +121,10 @@
     margin-bottom: 20px;
     color: var(--text-secondary);
 }
-
+.theater-distance {
+    color: var(--accent);
+    font-weight: bold;
+}
 /*View Theater Button*/
 .theater-button {
     display: inline-block;
@@ -75,15 +138,26 @@
 .theater-button:hover {
     opacity: 0.85;
 }
-
+button.theater-button {
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
 /*No Theaters*/
 .no-theaters {
+    margin: 0;
     color: var(--text-secondary);
-    padding: 20px 0;
+    padding: 0 0 20px 0;
 }
 
 /*Mobile*/
 @media (max-width: 700px) {
+    .theater-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
     .theater-grid {
         grid-template-columns: minmax(250px, 1fr);
     }
