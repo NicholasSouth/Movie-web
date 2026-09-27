@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +22,9 @@ import com.movieweb.model.Authors;
 import com.movieweb.service.FavouriteMoviesService;
 import com.movieweb.service.MoviesService;
 import com.movieweb.service.MovieCastService;
+import com.movieweb.DAO.ShowtimesDAO;
+import com.movieweb.model.Showtimes;
+import com.movieweb.model.Theaters;
 
 @WebServlet(urlPatterns = {
         "/movie-details",
@@ -33,20 +37,25 @@ public class MovieDetailsServlet extends HttpServlet {
     private final MoviesService moviesService;
     private final FavouriteMoviesService favouriteMoviesService;
     private final MovieCastService movieCastService;
+    //for showing nearest showtimes
+    private final ShowtimesDAO showtimesDAO;
     public MovieDetailsServlet() {
         this(
             new MoviesService(),
             new FavouriteMoviesService(),
-            new MovieCastService()
+            new MovieCastService(),
+            new ShowtimesDAO()
         );
     }
     public MovieDetailsServlet(
             MoviesService moviesService,
             FavouriteMoviesService favouriteMoviesService,
-            MovieCastService movieCastService) {
+            MovieCastService movieCastService,
+            ShowtimesDAO showtimesDAO) {
         this.moviesService = Objects.requireNonNull(moviesService);
         this.favouriteMoviesService = Objects.requireNonNull(favouriteMoviesService);
         this.movieCastService = Objects.requireNonNull(movieCastService);
+        this.showtimesDAO = Objects.requireNonNull(showtimesDAO);
     }
 
     @Override
@@ -80,6 +89,10 @@ public class MovieDetailsServlet extends HttpServlet {
             List<Directors> directors = movieCastService.getDirectorsByMovieId(movieId);
             List<Authors> authors = movieCastService.getAuthorsByMovieId(movieId);
             
+            //Load showtimes
+            Map<Showtimes, Theaters> movieShowtimes = showtimesDAO.getTop5ShowtimesByMovieId(movieId);
+            
+            //Set favourite status
             boolean isFavourite = false;
             if (user != null) {
                 isFavourite = favouriteMoviesService.isFavourite(
@@ -95,8 +108,8 @@ public class MovieDetailsServlet extends HttpServlet {
             request.setAttribute("authors", authors);
             request.setAttribute("loggedInUser", user);
             request.setAttribute("isFavourite", isFavourite);
-            request.setAttribute("csrfToken", MoviePageServlet.csrfToken(request)
-            );
+            request.setAttribute("csrfToken", MoviePageServlet.csrfToken(request));
+            request.setAttribute("movieShowtimes", movieShowtimes);
             if ("added".equals(favourite)) {
                 request.setAttribute(
                         "favouriteMessage",

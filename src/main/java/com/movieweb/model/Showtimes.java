@@ -1,13 +1,16 @@
 package com.movieweb.model;
 
-public class Showtimes {
-	private int showtime_id;
+import java.sql.Timestamp;
+
+public class Showtimes 
+{
+    private int showtime_id;
     private int room_id;
     private int movie_id;
-    private String start_at;
-    private String end_at;
+    private Timestamp start_at;
+    private Timestamp end_at;
     private String status;
-    //
+
     public Showtimes() {
     }
     public int getShowtime_id() {
@@ -28,16 +31,16 @@ public class Showtimes {
     public void setMovie_id(int movie_id) {
         this.movie_id = movie_id;
     }
-    public String getStart_at() {
+    public Timestamp getStart_at() {
         return start_at;
     }
-    public void setStart_at(String start_at) {
+    public void setStart_at(Timestamp start_at) {
         this.start_at = start_at;
     }
-    public String getEnd_at() {
+    public Timestamp getEnd_at() {
         return end_at;
     }
-    public void setEnd_at(String end_at) {
+    public void setEnd_at(Timestamp end_at) {
         this.end_at = end_at;
     }
     public String getStatus() {

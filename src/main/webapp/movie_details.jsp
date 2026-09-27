@@ -9,8 +9,11 @@
 <%@ page import="com.movieweb.model.Directors" %>
 <%@ page import="com.movieweb.model.Authors" %>
 <%@ page import="com.movieweb.model.Users" %>
+<%@ page import="com.movieweb.model.Showtimes" %>
+<%@ page import="com.movieweb.model.Theaters" %>
 
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.List,java.util.Map,java.sql.Timestamp" %>
 
 <%
     request.setAttribute("currentPage", "movies");
@@ -40,6 +43,7 @@
     if (authors == null) {
         authors = new java.util.ArrayList<>();
     }
+    Map<Showtimes, Theaters> movieShowtimes = (Map<Showtimes, Theaters>) request.getAttribute("movieShowtimes");
     Users loggedInUser = (Users) request.getAttribute("loggedInUser");
     Boolean favouriteAttribute = (Boolean) request.getAttribute("isFavourite");
     boolean isFavourite = favouriteAttribute != null && favouriteAttribute;
@@ -341,15 +345,72 @@
 		
 		        <!-- Showtimes -->
 		        <section class="movie-section">
-		            <h2>Available Showtimes</h2>
-		            <div class="showtime-card">
-		                <h3>Theater</h3>
-		                <p>Date</p>
-		                <div class="showtimes">
-		                    Showtimes will appear here.
-		                </div>
-		            </div>
-		        </section>
+				    <h2>Available Showtimes</h2>				
+				    <%
+				        SimpleDateFormat showtimeDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");			
+				        if (movieShowtimes != null && !movieShowtimes.isEmpty()) {
+				            for (Map.Entry<Showtimes, Theaters> entry : movieShowtimes.entrySet()) {
+				                Showtimes showtime = entry.getKey();
+				                Theaters theater = entry.getValue();
+				                String showtimeDate =
+				                        showtime.getStart_at() != null
+				                                ? showtimeDateFormat.format(showtime.getStart_at())
+				                                : "Date unavailable.";
+				                String selectedDate =
+				                        showtime.getStart_at() != null
+				                                ? new SimpleDateFormat("yyyy-MM-dd")
+				                                    .format(showtime.getStart_at())
+				                                : "";
+				    %>
+				                <a 
+				                	href="<%= contextPath %>/theater-details?id=<%= theater.getTheater_id() %>&date=<%= selectedDate %>#movie-schedule"
+				                   	class="showtime-card">
+				                    <div class="showtime-theater-image">
+				                        <% 
+				                        	if (theater.getTheater_image_path() != null
+				                                && !theater.getTheater_image_path().isEmpty()) { 
+				                        %>
+					                            <img src="<%= contextPath %>/<%= theater.getTheater_image_path() %>"
+					                                 alt="<%= theater.getTheater_name() %>">
+				
+				                        <% 
+				                        	} 
+				                        	else { 
+				                        %>
+					                            <div class="showtime-theater-placeholder">
+					                                No Image
+					                            </div>
+				                        <% 
+				                        	} 
+				                        %>
+				                    </div>
+				                    <div class="showtime-theater-info">
+				                        <h3>
+				                            <%= theater.getTheater_name() %>
+				                        </h3>
+				                        <p class="showtime-theater-address">
+				                            <%= theater.getTheater_address() != null
+				                                    ? theater.getTheater_address()
+				                                    : "Address unavailable." %>
+				                        </p>
+				                        <p class="showtime-start">
+				                            <strong>Starts:</strong>
+				                            <%= showtimeDate %>
+				                        </p>
+				                    </div>
+				                </a>
+				    <%
+				            }
+				        } 
+				        else {
+				    %>
+				            <p class="empty-meta">
+				                No upcoming showtimes are available.
+				            </p>
+				    <%
+				        }
+				    %>
+				</section>
 		
 		        <!-- Reviews -->
 		        <section class="movie-section">
@@ -367,7 +428,6 @@
 		    <%@ include file="components/right_sidebar.jsp" %>
 		
 		    <%@ include file="components/footer.jsp" %>
-		
 		</section>
 	</body>
 </html>

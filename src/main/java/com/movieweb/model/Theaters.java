@@ -1,20 +1,24 @@
 package com.movieweb.model;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+
 public class Theaters {
-	private int theater_id;
+    private int theater_id;
     private String theater_name;
     private String theater_address;
     private String theater_image_path;
     private String description;
     private double latitude;
     private double longtitude;
-    private String open_time;
-    private String closing_time;
+    private Time open_time;
+    private Time closing_time;
     private boolean isActive;
-    private String deleted_at;
-    //
+    private Timestamp deleted_at;
+
     public Theaters() {
     }
+    
     public int getTheater_id() {
         return theater_id;
     }
@@ -57,16 +61,16 @@ public class Theaters {
     public void setLongtitude(double longtitude) {
         this.longtitude = longtitude;
     }
-    public String getOpen_time() {
+    public Time getOpen_time() {
         return open_time;
     }
-    public void setOpen_time(String open_time) {
+    public void setOpen_time(Time open_time) {
         this.open_time = open_time;
     }
-    public String getClosing_time() {
+    public Time getClosing_time() {
         return closing_time;
     }
-    public void setClosing_time(String closing_time) {
+    public void setClosing_time(Time closing_time) {
         this.closing_time = closing_time;
     }
     public boolean isActive() {
@@ -75,10 +79,10 @@ public class Theaters {
     public void setActive(boolean isActive) {
         this.isActive = isActive;
     }
-    public String getDeleted_at() {
+    public Timestamp getDeleted_at() {
         return deleted_at;
     }
-    public void setDeleted_at(String deleted_at) {
+    public void setDeleted_at(Timestamp deleted_at) {
         this.deleted_at = deleted_at;
     }
 }

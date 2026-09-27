@@ -14,7 +14,7 @@
            class="nav-item <%= "movies".equals(currentPage) ? "active" : "" %>">
             Movies
         </a>
-        <a href="${pageContext.request.contextPath}/theaters.jsp"
+        <a href="${pageContext.request.contextPath}/theaters"
            class="nav-item <%= "theaters".equals(currentPage) ? "active" : "" %>">
             Theaters
         </a>

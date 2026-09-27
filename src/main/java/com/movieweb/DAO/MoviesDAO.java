@@ -327,7 +327,6 @@ public class MoviesDAO {
         loadGenres(movies, movieMap, conn);
         loadTags(movies, movieMap, conn);
     }
-
     private void loadGenres(
             List<Movies> movies,
             Map<Integer, Movies> movieMap,
@@ -373,7 +372,6 @@ public class MoviesDAO {
             }
         }
     }
-
     private void loadTags(
             List<Movies> movies,
             Map<Integer, Movies> movieMap,
@@ -420,6 +418,31 @@ public class MoviesDAO {
         }
     }
 
+    // for theater_details.jsp
+    public List<Movies> getMoviesByIds(List<Integer> movieIds) {
+        if (movieIds == null || movieIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        StringBuilder placeholders = new StringBuilder();
+        for (int i = 0; i < movieIds.size(); i++) {
+            if (i > 0) {
+                placeholders.append(", ");
+            }
+            placeholders.append("?");
+        }
+        String sql =
+            "SELECT m.* " +
+            "FROM Movies m " +
+            "WHERE " + VISIBLE + " " +
+            "AND m.movie_id IN (" + placeholders + ") " +
+            "ORDER BY m.movie_id ASC";
+        List<Object> params = new ArrayList<>();
+        for (Integer movieId : movieIds) {
+            params.add(movieId);
+        }
+        return fetchMovies(sql, params);
+    }
+    
     private Movies mapMovie(ResultSet rs)
             throws SQLException {
         Movies m = new Movies();
