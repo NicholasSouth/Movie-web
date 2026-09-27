@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.movieweb.DAO.UsersDAO;
 import com.movieweb.model.Movies;
 import com.movieweb.model.Users;
 import com.movieweb.service.FavouriteMoviesService;
@@ -19,12 +20,14 @@ public class UserProfileServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
     private FavouriteMoviesService favouriteMoviesService;
+    private UsersDAO usersDAO;
 
     @Override
     public void init()
             throws ServletException
     {
         favouriteMoviesService = new FavouriteMoviesService();
+        usersDAO = new UsersDAO();
     }
 
     @Override
@@ -34,7 +37,7 @@ public class UserProfileServlet extends HttpServlet
             throws ServletException, IOException
     {
         HttpSession session = request.getSession(false);
-        /*User must be logged in.*/
+        /* User must be logged in. */
         if (session == null)
         {
             response.sendRedirect(request.getContextPath() + "/log_in.jsp");
@@ -47,14 +50,55 @@ public class UserProfileServlet extends HttpServlet
             return;
         }
 
-        /*Get the user's favourite movies.*/
-        List<Movies> favouriteMovies = favouriteMoviesService.getFavouriteMovies(currentUser.getUserId());
+        /*Check whether a specific user profile was requested.*/
+        String userIdParameter = request.getParameter("user_id");
+        Users profileUser;
+        if (userIdParameter == null
+            || userIdParameter.trim().isEmpty())
+        {
+            /*No user_id means the logged-in user's own profile.*/
+            profileUser = currentUser;
+        }
+        else
+        {
+            try
+            {
+                int userId = Integer.parseInt(userIdParameter);
+                profileUser = usersDAO.getUserById(userId);
+                if (profileUser == null)
+                {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "User not found.");
+                    return;
+                }
+            }
+            catch (NumberFormatException e)
+            {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user ID.");
+                return;
+            }
+        }
 
-        /*Give the movies to movie_grid.jsp.*/
+        /*Check whether this is the logged-in user's own profile.*/
+        boolean isOwnProfile = currentUser.getUserId() == profileUser.getUserId();
+
+        /* Get favourite movies.
+         * Own profile:
+         * Always allow the owner to see their favourites.
+         * Other profile:
+         * Only load favourites when the user has made them public.
+         */
+        List<Movies> favouriteMovies = null;
+        if (isOwnProfile
+            || profileUser.getFavouriteMoviesVisibility())
+        {
+            favouriteMovies = favouriteMoviesService.getFavouriteMovies(profileUser.getUserId());
+        }
+
+        /*Give the profile information to user_profile.jsp.*/
+        request.setAttribute("profileUser", profileUser);
+        request.setAttribute("loggedInUser", currentUser);
+        request.setAttribute("isOwnProfile", isOwnProfile);
         request.setAttribute("movieGridMovies", favouriteMovies);
-
-        /*Display the profile page.*/
         request.getRequestDispatcher("/user_profile.jsp").forward(request, response);
     }
 }
-

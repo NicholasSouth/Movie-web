@@ -10,6 +10,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import java.sql.Timestamp;
+
 public class EmailService
 {
     //Phnetphlyx's gmail
@@ -104,6 +106,39 @@ public class EmailService
         }
         catch (Exception e)
         {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    //Send report comment email
+    public boolean sendReport(
+            Timestamp commentCreatedAt,
+            String commentText,
+            String commentUsername,
+            String reporterUsername) {
+        try {
+            Session session = createMailSession();
+            String subject = "PhnetPhlyx - Comment Report";
+            String messageText =
+                    "A comment has been reported on PhnetPhlyx.\n\n" +
+                    "Comment author: " + commentUsername + "\n" +
+                    "Reporter: " + reporterUsername + "\n" +
+                    "Comment created at: " + commentCreatedAt + "\n\n" +
+                    "Comment:\n" +
+                    commentText + "\n";
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(SENDER_EMAIL));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(SENDER_EMAIL)
+            );
+            message.setSubject(subject);
+            message.setText(messageText);
+            Transport.send(message);
+            return true;
+        } 
+        catch (Exception e) {
             e.printStackTrace();
             return false;
         }

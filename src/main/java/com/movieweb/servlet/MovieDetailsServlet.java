@@ -25,6 +25,10 @@ import com.movieweb.service.MovieCastService;
 import com.movieweb.DAO.ShowtimesDAO;
 import com.movieweb.model.Showtimes;
 import com.movieweb.model.Theaters;
+import com.movieweb.model.Ratings;
+import com.movieweb.model.Comments;
+import com.movieweb.service.RatingsService;
+import com.movieweb.service.CommentsService;
 
 @WebServlet(urlPatterns = {
         "/movie-details",
@@ -39,23 +43,32 @@ public class MovieDetailsServlet extends HttpServlet {
     private final MovieCastService movieCastService;
     //for showing nearest showtimes
     private final ShowtimesDAO showtimesDAO;
+    //for rating and comments
+    private final RatingsService ratingsService;
+    private final CommentsService commentsService;
     public MovieDetailsServlet() {
         this(
             new MoviesService(),
             new FavouriteMoviesService(),
             new MovieCastService(),
-            new ShowtimesDAO()
+            new ShowtimesDAO(),
+            new RatingsService(),
+            new CommentsService()
         );
     }
     public MovieDetailsServlet(
             MoviesService moviesService,
             FavouriteMoviesService favouriteMoviesService,
             MovieCastService movieCastService,
-            ShowtimesDAO showtimesDAO) {
+            ShowtimesDAO showtimesDAO,
+            RatingsService ratingsService,
+            CommentsService commentsService) {
         this.moviesService = Objects.requireNonNull(moviesService);
         this.favouriteMoviesService = Objects.requireNonNull(favouriteMoviesService);
         this.movieCastService = Objects.requireNonNull(movieCastService);
         this.showtimesDAO = Objects.requireNonNull(showtimesDAO);
+        this.ratingsService = Objects.requireNonNull(ratingsService);
+        this.commentsService = Objects.requireNonNull(commentsService);
     }
 
     @Override
@@ -100,6 +113,17 @@ public class MovieDetailsServlet extends HttpServlet {
                                 movieId
                         );
             }
+            
+            //Load comments and ratings
+            // Load user's rating
+            Ratings userRating = null;
+            if (user != null) {
+                userRating = ratingsService.getRating(user.getUserId(), movieId);
+            }
+
+            // Load movie comments
+            List<Comments> comments = commentsService.getCommentsByMovieId(movieId);
+            Map<Integer, Users> commentUsers = commentsService.getCommentUsersByMovieId(movieId);
 
             // Pass data to JSP
             request.setAttribute("movie", movie);
@@ -110,6 +134,9 @@ public class MovieDetailsServlet extends HttpServlet {
             request.setAttribute("isFavourite", isFavourite);
             request.setAttribute("csrfToken", MoviePageServlet.csrfToken(request));
             request.setAttribute("movieShowtimes", movieShowtimes);
+            request.setAttribute("userRating", userRating);
+            request.setAttribute("comments", comments);
+            request.setAttribute("commentUsers", commentUsers);
             if ("added".equals(favourite)) {
                 request.setAttribute(
                         "favouriteMessage",

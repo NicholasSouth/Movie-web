@@ -11,6 +11,8 @@
 <%@ page import="com.movieweb.model.Users" %>
 <%@ page import="com.movieweb.model.Showtimes" %>
 <%@ page import="com.movieweb.model.Theaters" %>
+<%@ page import="com.movieweb.model.Ratings" %>
+<%@ page import="com.movieweb.model.Comments" %>
 
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.List,java.util.Map,java.sql.Timestamp" %>
@@ -45,6 +47,15 @@
     }
     Map<Showtimes, Theaters> movieShowtimes = (Map<Showtimes, Theaters>) request.getAttribute("movieShowtimes");
     Users loggedInUser = (Users) request.getAttribute("loggedInUser");
+    Ratings userRating = (Ratings) request.getAttribute("userRating");
+    List<Comments> comments = (List<Comments>) request.getAttribute("comments");
+    if (comments == null) {
+        comments = new java.util.ArrayList<>();
+    }
+    Map<Integer, Users> commentUsers = (Map<Integer, Users>) request.getAttribute("commentUsers");
+    if (commentUsers == null) {
+        commentUsers = new java.util.HashMap<>();
+    }
     Boolean favouriteAttribute = (Boolean) request.getAttribute("isFavourite");
     boolean isFavourite = favouriteAttribute != null && favouriteAttribute;
     String csrfToken = (String) request.getAttribute("csrfToken");
@@ -412,17 +423,178 @@
 				    %>
 				</section>
 		
-		        <!-- Reviews -->
-		        <section class="movie-section">
-		            <h2>Reviews</h2>
-		            <div class="review">
-		                <strong>User</strong>
-		                <span>⭐⭐⭐⭐⭐</span>
-		                <p>
-		                    Reviews will appear here.
-		                </p>
-		            </div>
-		        </section>
+		        <!-- Ratings -->
+				<section class="movie-section">
+				    <h2>Ratings</h2>				
+				    <div class="movie-rating-summary">
+				        <img src="<%= contextPath %>/pictures/assessments/star.png"
+				             alt="Rating"
+				             class="rating-star">		
+				        <span>
+				            <%= movie.getAvg_rating() %> / 10
+				        </span>
+				    </div>
+				    <% 
+				    	if (loggedInUser != null) { 
+				    %>
+					        <div class="user-rating-section">
+					            <h3>Your Rating</h3>
+					            <% 
+					            	if (userRating != null) { 
+					            %>
+						                <p>
+						                    You rated this movie
+						                    <strong>
+						                        <%= userRating.getRating() %> / 10
+						                    </strong>
+						                </p>
+					            <%
+					            	} 
+					            	else { 
+					            %>
+						                <p>
+						                    You have not rated this movie yet.
+						                </p>
+					            <% 
+					            	} 
+					            %>
+					            <form action="<%= contextPath %>/rating"
+					                  method="post"
+					                  class="rating-form">
+					                <input type="hidden"
+					                       name="movieId"
+					                       value="<%= movie.getMovie_id() %>">
+					                <label for="rating">
+					                    <%= userRating != null
+					                            ? "Change your rating:"
+					                            : "Give this movie a rating:" %>
+					                </label>
+					                <select id="rating"
+					                        name="rating"
+					                        required>
+					                    <option value="">
+					                        Select rating
+					                    </option>
+					                    <% 
+					                    	for (int rating = 1; rating <= 10; rating++) { 
+					                    %>
+						                        <option value="<%= rating %>"
+						                            <%= userRating != null
+						                                    && userRating.getRating() == rating
+						                                    ? "selected"
+						                                    : "" %>>
+						                            <%= rating %> / 10
+						                        </option>
+					
+					                    <% 
+					                    	} 
+					                    %>
+					                </select>
+					                <button type="submit">
+					                    <%= userRating != null
+					                            ? "Update Rating"
+					                            : "Submit Rating" %>
+					                </button>
+					            </form>
+					        </div>
+				    <% 
+				    	} 
+				    	else { 
+				    %>
+					        <p>
+					            <a href="<%= contextPath %>/log_in.jsp">
+					                Log in
+					            </a>
+					            to rate this movie.
+					        </p>
+				    <% 
+				    	} 
+				    %>
+				</section>
+				
+				<!-- Comments -->
+				<section class="movie-section">
+				    <h2>Comments</h2>
+				    <%
+				        if (loggedInUser != null) {
+				    %>
+						    <form action="<%= contextPath %>/comment" method="post" class="comment-form">
+						        <input type="hidden" name="movieId" value="<%= movie.getMovie_id() %>">
+						        <textarea name="commentText" rows="4" placeholder="Write a comment..." required></textarea>
+						        <button type="submit">Post Comment</button>
+						    </form>
+				    <%
+				        } 
+				        else {
+				    %>
+						    <p>
+						        <a href="<%= contextPath %>/log_in.jsp">Log in</a> to leave a comment.
+						    </p>
+				    <%
+				        }
+				    %>
+				
+				    <div class="comments-list">
+				        <%
+				            if (comments.isEmpty()) {
+				        %>
+						        <p class="empty-meta">No comments yet.</p>
+				        <%
+				            } 
+				            else {
+				                for (Comments comment : comments) {
+				        %>
+						            <div class="comment">
+						                <%
+										    Users commentUser = commentUsers.get(comment.getUserId());
+										    String commentUsername = commentUser != null ? commentUser.getUsername() : "Unknown User";
+										    String commentAvatar = commentUser != null ? commentUser.getAvtPath() : null;
+										%>
+										<div class="comment-header">
+										    <div class="comment-user">
+										        <a href="<%= contextPath %>/user-profile?user_id=<%= comment.getUserId() %>" class="comment-user-link">
+										            <%
+										                if (commentAvatar != null && !commentAvatar.isEmpty()) {
+										            %>
+										                	<img src="<%= contextPath %>/<%= commentAvatar %>" alt="<%= commentUsername %>" class="comment-avatar">
+										            <%
+										                } 
+										                else {
+										            %>
+											                <div class="comment-avatar comment-avatar-placeholder">
+											                    <%= commentUsername != null && !commentUsername.isEmpty() ? commentUsername.substring(0, 1).toUpperCase() : "?" %>
+											                </div>
+										            <%
+										                }
+										            %>
+										            <strong><%= commentUsername %></strong>
+										        </a>
+										    </div>
+										    <span class="comment-date">
+											    <%= new SimpleDateFormat("MMM dd, yyyy HH:mm").format(comment.getCreatedAt()) %>
+											</span>
+										</div>
+						                <p class="comment-text">
+						                    <%= comment.getCommentText() %>
+						                </p>
+						                <%
+						                    if (loggedInUser != null) {
+						                %>
+								                <form action="<%= contextPath %>/report" method="post" class="report-form">
+								                    <input type="hidden" name="commentId" value="<%= comment.getCommentId() %>">
+								                    <input type="hidden" name="movieId" value="<%= movie.getMovie_id() %>">
+								                    <button type="submit" class="report-button">Report</button>
+								                </form>
+						                <%
+						                    }
+						                %>
+						            </div>
+				        <%
+				                }
+				            }
+				        %>
+				    </div>
+				</section>
 		    </main>
 		
 		    <%@ include file="components/right_sidebar.jsp" %>
