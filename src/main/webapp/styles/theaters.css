@@ -82,9 +82,141 @@
     padding: 20px 0;
 }
 
+/* Theater Search */
+.theater-search {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	margin-top: 20px;
+}
+.theater-search input[type="search"] {
+	flex: 1;
+	min-width: 0;
+	height: 44px;
+	padding: 0 14px;
+	background: #16191E;
+	color: #F5F5F7;
+	border: 1px solid #30343B;
+	border-radius: 8px;
+	font-size: 14px;
+	outline: none;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.theater-search input[type="search"]::placeholder {
+  	color: #8A8F99;
+}
+.theater-search input[type="search"]:focus {
+	border-color: #E50914;
+	box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.15);
+}
+
+/* Search Button */
+.theater-search button {
+	height: 44px;
+	padding: 0 20px;
+	background: #E50914;
+	color: #F5F5F7;
+	border: none;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.2s ease, transform 0.2s ease;
+}
+.theater-search button:hover {
+  	background: #B80710;
+}
+.theater-search button:active {
+  	transform: scale(0.97);
+}
+
+/* Nearby Theater Row & Find Button */
+.theater-header-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 15px;
+	margin-top: 18px;
+}
+.theater-header-row p {
+	margin: 0;
+	color: #8A8F99;
+	font-size: 14px;
+}
+#find-near-btn {
+	flex-shrink: 0;
+	height: 40px;
+	padding: 0 18px;
+	background: transparent;
+	color: #F5F5F7;
+	border: 1px solid #E50914;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+#find-near-btn:hover {
+  	background: #E50914;
+  	color: #F5F5F7;
+}
+#find-near-btn:active {
+  	transform: scale(0.97);
+}
+#find-near-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+	transform: none;
+}
+.find-near-status {
+	display: inline-block;
+	margin-top: 10px;
+	color: #8A8F99;
+	font-size: 13px;
+}
+
+/* Nearest Theater & Search Results */
+#nearest-theater-result {
+  	margin-top: 30px;
+}
+.nearest-title {
+	margin: 0 0 15px;
+	color: #F5F5F7;
+	font-size: 20px;
+	font-weight: 600;
+}
+.nearest-card {
+  	border: 1px solid #E50914;
+}
+.theater-distance {
+  	color: #E50914;
+  	font-weight: 600;
+}
+.all-theaters-title {
+	margin-top: 35px;
+	margin-bottom: 15px;
+	color: #F5F5F7;
+	font-size: 20px;
+	font-weight: 600;
+}
+
 /*Mobile*/
 @media (max-width: 700px) {
     .theater-grid {
         grid-template-columns: minmax(250px, 1fr);
     }
+    .theater-search {
+    	gap: 8px;
+  	}
+	.theater-search button {
+		padding: 0 14px;
+	}
+	.theater-header-row {
+	  	align-items: flex-start;
+	  	flex-direction: column;
+	}
+	#find-near-btn {
+	  	width: 100%;
+	}
 }

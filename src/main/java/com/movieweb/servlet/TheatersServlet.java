@@ -29,9 +29,45 @@ public class TheatersServlet extends HttpServlet {
             HttpServletRequest req,
             HttpServletResponse resp)
             throws ServletException, IOException {
-        List<Theaters> theaters = theatersService.getAllTheaters();
+    	List<Theaters> allTheaters = theatersService.getAllTheaters();       
+        /* Search */
+        String searchParam = req.getParameter("search");
+        List<Theaters> theaters;
+        if (searchParam != null
+    		&& !searchParam.trim().isEmpty()) {
+            theaters = theatersService.searchTheaters(allTheaters, searchParam);
+        } 
+        else {
+            theaters = allTheaters;
+        }
         req.setAttribute("theaters", theaters);
-        req.getRequestDispatcher("/theaters.jsp")
-           .forward(req, resp);
+        
+        /* Nearest theater */
+        String latParam = req.getParameter("userLat");
+        String lngParam = req.getParameter("userLng");
+        if (latParam != null
+            && lngParam != null) {
+            try {
+                double userLat = Double.parseDouble(latParam);
+                double userLng = Double.parseDouble(lngParam);
+                Theaters nearestTheater = theatersService.findNearestTheater(
+                                allTheaters,
+                                userLat,
+                                userLng
+                        );
+                if (nearestTheater != null) {
+                    double nearestDistance = theatersService.calculateDistance(
+                                    userLat,
+                                    userLng,
+                                    nearestTheater
+                            );
+                    req.setAttribute("nearestTheater", nearestTheater);
+                    req.setAttribute("nearestDistance", nearestDistance);
+                }
+            } 
+            catch (NumberFormatException e) {
+            }
+        }
+        req.getRequestDispatcher("/theaters.jsp").forward(req, resp);
     }
 }
