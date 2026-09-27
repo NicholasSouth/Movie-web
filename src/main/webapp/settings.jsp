@@ -123,13 +123,11 @@
 		                        </p>
 		                    </div>
 		                    <div class="settings-card-action">
-		                        <button
-		                            type="button"
-		                            class="settings-button"
-		                            disabled>
-		                            Coming Soon
-		                        </button>
-		                    </div>
+							    <a href="${pageContext.request.contextPath}/payment-method"
+							       class="settings-button">
+							        Payment Methods
+							    </a>
+							</div>
 		                </div>
 		            </section>
 		

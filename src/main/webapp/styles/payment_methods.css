@@ -1,0 +1,306 @@
+.payment-method-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Page Header */
+.payment-method-header {
+    margin-bottom: 30px;
+}
+.payment-method-header h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    font-size: 24px;
+}
+.payment-method-header p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Error & Success Messages */
+.error-message {
+    margin-bottom: 25px;
+    padding: 15px 20px;
+    background-color: #331A1A;
+    border: 1px solid #592B2B;
+    border-radius: 8px;
+    color: #FF6B6B;
+    font-size: 14px;
+    font-weight: 500;
+}
+.success-message {
+    margin-bottom: 25px;
+    padding: 15px 20px;
+    background-color: #1A3322;
+    border: 1px solid #2B593C;
+    border-radius: 8px;
+    color: #4ADE80;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Payment Sections */
+.payment-section {
+    margin-bottom: 30px;
+}
+.payment-section-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Saved Payment Card */
+.payment-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    padding: 20px;
+    background-color: var(--surface);
+    border: 1px solid #2C2C2C;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+.payment-card:last-child {
+    margin-bottom: 0;
+}
+
+.payment-card-information {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+    flex: 1;
+}
+
+.payment-card-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 36px;
+    background-color: #1A1A1A;
+    border: 1px solid #3A3A3A;
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+}
+
+.payment-card-details {
+    min-width: 0;
+}
+.payment-card-details h4 {
+    margin: 0 0 4px 0;
+    color: var(--text-primary);
+    font-size: 15px;
+    font-weight: bold;
+}
+.payment-card-details p {
+    margin: 0 0 4px 0;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: monospace;
+    letter-spacing: 1px;
+}
+.payment-card-details span {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.payment-card-action {
+    flex-shrink: 0;
+}
+
+.payment-delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 110px;
+    padding: 10px 16px;
+    border: 1px solid #7A2A2A;
+    border-radius: 8px;
+    background-color: var(--background);
+    color: #FF6B6B;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.payment-delete-button:hover {
+    background-color: #3A1D1D;
+    border-color: #FF4D4D;
+    color: #FF6B6B;
+}
+
+/* Empty State */
+.no-payment-method {
+    padding: 25px 20px;
+    background-color: var(--surface);
+    border: 1px solid #2C2C2C;
+    border-radius: 10px;
+    text-align: center;
+}
+.no-payment-method p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Add Card Form Card */
+.payment-form-card {
+    padding: 25px;
+    background-color: var(--surface);
+    border: 1px solid #2C2C2C;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+.payment-form-description {
+    margin: 0 0 20px 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Input Fields */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.input-group label {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+}
+.input-group input {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: var(--background);
+    border: 1px solid #3A3A3A;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.2s, outline 0.2s;
+}
+.input-group input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.6;
+}
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Simulation Notice Box */
+.payment-information {
+    padding: 15px 18px;
+    background-color: #19202A;
+    border: 1px solid #2A3950;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+}
+.payment-information p {
+    margin: 0 0 4px 0;
+}
+.payment-information p:last-child {
+    margin-bottom: 0;
+}
+.payment-information strong {
+    color: var(--text-primary);
+}
+
+/* Submit Action */
+.payment-form-actions {
+    display: flex;
+    justify-content: flex-start;
+}
+.payment-submit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    padding: 12px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background-color: var(--accent);
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.payment-submit-button:hover {
+    opacity: 0.9;
+}
+
+/* Footer / Back to Settings Button */
+.payment-method-footer {
+    margin-top: 30px;
+}
+.cancel-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: 1px solid #3A3A3A;
+    border-radius: 8px;
+    background-color: var(--background);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.cancel-button:hover {
+    background-color: #22252A;
+    border-color: var(--accent);
+    color: var(--text-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 700px) {
+    .payment-method-container {
+        max-width: none;
+    }
+    .payment-card {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .payment-card-action {
+        width: 100%;
+    }
+    .payment-delete-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    .MainBody {
+        padding: 15px;
+    }
+    .payment-form-card {
+        padding: 15px;
+    }
+}
