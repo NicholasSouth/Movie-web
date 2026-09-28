@@ -12,25 +12,25 @@ public class UserLoginValidation
     }
 
     // Login
-    public Users login(
-            String login,
-            String password)
+    public Users login(String login, String password)
     {
-        if (login == null ||
-            login.trim().isEmpty() ||
-            password == null ||
-            password.isEmpty())
+        if (login == null 
+        	|| login.trim().isEmpty() 
+        	|| password == null 
+            || password.isEmpty())
         {
             return null;
         }
     
         //Check if user input email to find account
         Users user = getUserByLogin(login);
+        
         //If no user found
         if (user == null)
         {
             return null;
         }
+        
         //If account blocked
         if (!user.isActive())
         {
@@ -56,28 +56,28 @@ public class UserLoginValidation
             String role)
     {
         // Basic validation
-        if (username == null ||
-            username.trim().isEmpty())
+        if (username == null 
+        	|| username.trim().isEmpty())
         {
             return "Username is required.";
         }
-        if (fullName == null ||
-            fullName.trim().isEmpty())
+        if (fullName == null 
+        	|| fullName.trim().isEmpty())
         {
             return "Full name is required.";
         }
-        if (email == null ||
-            email.trim().isEmpty())
+        if (email == null 
+        	|| email.trim().isEmpty())
         {
             return "Email is required.";
         }
-        if (password == null ||
-            password.isEmpty())
+        if (password == null 
+        	|| password.isEmpty())
         {
             return "Password is required.";
         }
-        if (confirmPassword == null ||
-            confirmPassword.isEmpty())
+        if (confirmPassword == null 
+        	|| confirmPassword.isEmpty())
         {
             return "Please confirm your password.";
         }
@@ -110,12 +110,10 @@ public class UserLoginValidation
         // Username validation
         if (!isValidUsername(username))
         {
-            return
-                "Username must contain only letters, " +
-                "numbers, and underscores.";
+            return "Username must contain only letters, " + "numbers, and underscores.";
         }
 
-     // Check active duplicate username
+        // Check active duplicate username
         if (usersDAO.usernameExists(username))
         {
             return "Username is already taken.";

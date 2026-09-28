@@ -23,8 +23,7 @@ public class RememberMeService
 
     // Token expires after 6 months
     // 180 days
-    private static final long TOKEN_LIFETIME =
-    		180L * 24 * 60 * 60 * 1000;
+    private static final long TOKEN_LIFETIME = 180L * 24 * 60 * 60 * 1000;
 
     // Random token generator
     private final SecureRandom random = new SecureRandom();
@@ -39,9 +38,7 @@ public class RememberMeService
     }
 
     // Create remember-me token
-    public void createRememberMe(
-            Users user,
-            HttpServletResponse response)
+    public void createRememberMe(Users user, HttpServletResponse response)
     {
         if (user == null)
         {
@@ -87,8 +84,7 @@ public class RememberMeService
     }
 
     // Automatically log in using remember-me cookie
-    public Users autoLogin(
-            HttpServletRequest request)
+    public Users autoLogin(HttpServletRequest request)
     {
         Cookie[] cookies = request.getCookies();
         if (cookies == null)
@@ -135,9 +131,7 @@ public class RememberMeService
     }
 
     // Remove remember-me token and cookie
-    public void removeRememberMe(
-            HttpServletRequest request,
-            HttpServletResponse response)
+    public void removeRememberMe(HttpServletRequest request, HttpServletResponse response)
     {
         Cookie[] cookies = request.getCookies();
         if (cookies == null)
@@ -163,12 +157,10 @@ public class RememberMeService
 
             // Delete browser cookie
             Cookie deleteCookie = new Cookie(COOKIE_NAME, "");
-
             deleteCookie.setMaxAge(0);
             deleteCookie.setPath("/");
             deleteCookie.setHttpOnly(true);
             deleteCookie.setSecure(false);
-
             response.addCookie(deleteCookie);
             return;
         }
@@ -179,14 +171,11 @@ public class RememberMeService
     {
         byte[] bytes = new byte[32];
         random.nextBytes(bytes);
-        return Base64.getUrlEncoder()
-                .withoutPadding()
-                .encodeToString(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 
     // SHA-256 hash
-    private String hashToken(
-            String token)
+    private String hashToken(String token)
     {
         try
         {

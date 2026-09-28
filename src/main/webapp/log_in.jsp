@@ -10,6 +10,9 @@
 		<link 
 			rel="stylesheet" 
 			href="${pageContext.request.contextPath}/styles/log_in.css">
+		<link 
+			rel="stylesheet" 
+			href="${pageContext.request.contextPath}/styles/main.css">
 	</head>
 	<body>
 		<main class="login-page">
@@ -37,8 +40,7 @@
 		        <form 
 			        class="login-form" 
 			        action="${pageContext.request.contextPath}/login" 
-			        method="post"
-			        onsubmit="return validateLoginForm();">
+			        method="post">
 		            <!-- Email or Phone Number -->
 		            <div class="input-group">
 		                <label for="login">
@@ -65,9 +67,11 @@
 		                        id="password"
 		                        name="password"
 		                        placeholder="Enter your password"
-		                        required
-		                    >
-		                    <button type="button" class="password-toggle" onclick="togglePassword('password', this)">
+		                        required>
+		                    <button 
+		                    	type="button" 
+		                    	class="password-toggle" 
+		                    	onclick="togglePassword('password', this)">
 		                        Show
 		                    </button>
 		                </div>
@@ -104,10 +108,7 @@
 		        </p>
 		    </div>
 		</main>
-		
-		<script
-			src="${pageContext.request.contextPath}/scripts/log_in.js">		    
-		</script>
+
 		<script 
 			src="${pageContext.request.contextPath}/scripts/password_toggle.js">
 		</script>

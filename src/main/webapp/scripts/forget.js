@@ -1,19 +1,15 @@
 function sendVerificationCode()
 {
     const account = document.getElementById("account").value.trim();
-
     if (account === "")
     {
         alert("Please enter your username, email or phone number first.");
         document.getElementById("account").focus();
         return;
     }
-
     const button = document.querySelector(".send-button");
-
     button.disabled = true;
     button.textContent = "Sending...";
-
     fetch(
         "send-forgot-verification",
         {
@@ -50,7 +46,6 @@ function validateForgotForm()
     const password = document.getElementById("new-password").value;
     const confirmPassword = document.getElementById("confirm-password").value;
     const verificationCode = document.getElementById("verification-code").value.trim();
-
     if (account === "")
     {
         alert("Please enter your username, email or phone number.");

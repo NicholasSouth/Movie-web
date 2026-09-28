@@ -11,14 +11,12 @@ import com.movieweb.util.DBConnection;
 public class Remember_meDAO
 {
     //Create token
-    public boolean insertToken(
-            Remember_me token)
+    public boolean insertToken(Remember_me token)
     {
         String sql =
                 "INSERT INTO Remember_me " +
                 "(user_id, token_hash, expires_at, created_at) " +
                 "VALUES (?, ?, ?, GETDATE())";
-
         try (
             Connection connection = DBConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql))
@@ -42,8 +40,7 @@ public class Remember_meDAO
     }
 
     //Find valid token
-    public Remember_me getValidToken(
-            String tokenHash)
+    public Remember_me getValidToken(String tokenHash)
     {
         String sql =
                 "SELECT * " +
@@ -57,8 +54,7 @@ public class Remember_meDAO
             statement.setString(
                     1,
                     tokenHash);
-            try (
-                ResultSet result = statement.executeQuery())
+            try (ResultSet result = statement.executeQuery())
             {
                 if (result.next())
                 {
@@ -74,13 +70,11 @@ public class Remember_meDAO
     }
 
     //Delete 1 token
-    public boolean deleteToken(
-            String tokenHash)
+    public boolean deleteToken(String tokenHash)
     {
         String sql =
                 "DELETE FROM Remember_me " +
                 "WHERE token_hash = ?";
-
         try (
             Connection connection = DBConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql))
@@ -98,8 +92,7 @@ public class Remember_meDAO
     }
 
     //Delete all remember me token if user got deleted
-    public boolean deleteTokensByUserId(
-            int userId)
+    public boolean deleteTokensByUserId(int userId)
     {
         String sql =
                 "DELETE FROM Remember_me " +
@@ -126,7 +119,6 @@ public class Remember_meDAO
         String sql =
                 "DELETE FROM Remember_me " +
                 "WHERE expires_at <= GETDATE()";
-
         try (
             Connection connection = DBConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql))
@@ -140,8 +132,7 @@ public class Remember_meDAO
         }
     }
 
-    private Remember_me mapToken(
-            ResultSet result)
+    private Remember_me mapToken(ResultSet result)
             throws SQLException
     {
         Remember_me token = new Remember_me();

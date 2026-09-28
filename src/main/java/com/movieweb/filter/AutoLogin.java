@@ -42,15 +42,11 @@ public class AutoLogin
             {
                 //Auto create session
                 HttpSession newSession = httpRequest.getSession(true);
-                newSession.setAttribute(
-                        "user",
-                        user);
+                newSession.setAttribute("user", user);
             }
         }
 
         //Continue request page
-        chain.doFilter(
-                httpRequest,
-                httpResponse);
+        chain.doFilter(httpRequest, httpResponse);
     }
 }

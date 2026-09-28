@@ -57,13 +57,13 @@
 		            <!-- Account -->
 		            <div class="input-group">
 		                <label for="account">
-		                    Email or Phone Number
+		                    Username, Email or Phone Number
 		                </label>
 		                <input
 		                    type="text"
 		                    id="account"
 		                    name="account"
-		                    placeholder="Enter your email or phone number"
+		                    placeholder="Enter your username, email or phone number"
 		                    required
 		                >
 		            </div>	

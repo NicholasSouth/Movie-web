@@ -37,11 +37,7 @@ public class ForgetPasswordServlet
         if (account == null ||
             account.trim().isEmpty())
         {
-            showError(
-                    request,
-                    response,
-                    "Please enter your email or phone number.",
-                    account);
+            showError(request, response, "Please enter your email or phone number.", account);
             return;
         }
         account = account.trim();
@@ -50,22 +46,14 @@ public class ForgetPasswordServlet
         Users user = userService.getUserByLogin(account);
         if (user == null)
         {
-            showError(
-                    request,
-                    response,
-                    "No account was found with that information.",
-                    account);
+            showError(request, response, "No account was found with that information.", account);
             return;
         }
 
         // Check if account is active
         if (!user.isActive())
         {
-            showError(
-                    request,
-                    response,
-                    "This account is currently disabled.",
-                    account);
+            showError(request, response, "This account is currently disabled.", account);
             return;
         }
 
@@ -73,31 +61,18 @@ public class ForgetPasswordServlet
         if (newPassword == null ||
             newPassword.isEmpty())
         {
-            showError(
-                    request,
-                    response,
-                    "Please enter a new password.",
-                    account);
+            showError(request, response, "Please enter a new password.", account);
             return;
         }
         if (confirmPassword == null ||
             confirmPassword.isEmpty())
         {
-            showError(
-                    request,
-                    response,
-                    "Please confirm your new password.",
-                    account);
+            showError(request, response, "Please confirm your new password.", account);
             return;
         }
         if (!newPassword.equals(confirmPassword))
         {
-            showError(
-                    request,
-                    response,
-                    "Passwords do not match.",
-                    account);
-
+            showError(request, response, "Passwords do not match.", account);
             return;
         }
 
@@ -107,54 +82,32 @@ public class ForgetPasswordServlet
         if (email == null ||
             email.trim().isEmpty())
         {
-            showError(
-                    request,
-                    response,
-                    "This account does not have an email address.",
-                    account);
+            showError(request, response, "This account does not have an email address.", account);
             return;
         }
         email = email.trim().toLowerCase();
 
         // Verify OTP
         HttpSession session = request.getSession();
-        boolean verified = otpValidation.verifyCode(
-							                        session,
-							                        email,
-							                        "forgot_password",
-							                        verificationCode);
+        boolean verified = otpValidation.
+        		verifyCode(session, email, "forgot_password", verificationCode);
         if (!verified)
         {
-            showError(
-                    request,
-                    response,
-                    "Invalid or expired verification code.",
-                    account);
+            showError(request, response, "Invalid or expired verification code.", account);
             return;
         }
 
         // Reset password
-        String error = userService.resetPassword(
-						                        email,
-						                        newPassword,
-						                        confirmPassword);
+        String error = userService.resetPassword(email, newPassword, confirmPassword);
         if (error != null)
         {
-            showError(
-                    request,
-                    response,
-                    error,
-                    account);
+            showError(request, response, error, account);
             return;
         }
 
         // Password successfully changed
-        request.getSession().setAttribute(
-                "message",
-                "Password reset successfully. You can now log in.");
-        response.sendRedirect(
-                request.getContextPath()
-                + "/log_in.jsp");
+        request.getSession().setAttribute("message", "Password reset successfully. You can now log in.");
+        response.sendRedirect(request.getContextPath() + "/log_in.jsp");
         return;
     }
 
@@ -165,14 +118,8 @@ public class ForgetPasswordServlet
             String account)
             throws ServletException, IOException
     {
-        request.setAttribute(
-                "error",
-                error);
-        request.setAttribute(
-                "account",
-                account);
-        request.getRequestDispatcher(
-                "/forget.jsp")
-                .forward(request, response);
+        request.setAttribute("error", error);
+        request.setAttribute("account", account);
+        request.getRequestDispatcher("/forget.jsp").forward(request, response);
     }
 }

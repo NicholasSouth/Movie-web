@@ -29,7 +29,6 @@ public class LoginServlet extends HttpServlet
         request.setCharacterEncoding("UTF-8");
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-
         String rememberMeParameter = request.getParameter("remember_me");
         boolean rememberMe = "true".equals(rememberMeParameter);
         if (login != null)
@@ -38,40 +37,26 @@ public class LoginServlet extends HttpServlet
         }
 
         //validate login
-        Users user = userService.login(
-			                        login,
-			                        password);
+        Users user = userService.login(login, password);
         if (user == null)
         {
-            request.setAttribute(
-                    "error",
-                    "Invalid username/email/phone or password.");
-            request.setAttribute(
-                    "login",
-                    login);
-            request.getRequestDispatcher(
-                    "/log_in.jsp")
-                    .forward(request, response);
+            request.setAttribute("error", "Invalid username/email/phone or password.");
+            request.setAttribute("login", login);
+            request.getRequestDispatcher("/log_in.jsp").forward(request, response);
             return;
         }
 
         //Sucessful login
         HttpSession session = request.getSession();
-        session.setAttribute(
-                "user",
-                user);
+        session.setAttribute("user", user);
 
         //Create remember me cookie
         if (rememberMe)
         {
-            rememberMeService.createRememberMe(
-						                    user,
-						                    response);
+            rememberMeService.createRememberMe(user, response);
         }
 
         //Go to main
-        response.sendRedirect(
-                request.getContextPath()
-                + "/main.jsp");
+        response.sendRedirect(request.getContextPath() + "/main.jsp");
     }
 }
