@@ -1,3 +1,13 @@
+<%@ page import="com.movieweb.model.Users" %>
+<%
+    Users user = (Users) session.getAttribute("user");
+    if (user != null &&
+        "MANAGER".equalsIgnoreCase(user.getRole()))
+    {
+        response.sendRedirect(request.getContextPath() + "/main_manager.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html>
 	<head>

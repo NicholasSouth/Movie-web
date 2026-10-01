@@ -56,7 +56,14 @@ public class LoginServlet extends HttpServlet
             rememberMeService.createRememberMe(user, response);
         }
 
-        //Go to main
-        response.sendRedirect(request.getContextPath() + "/main.jsp");
+        // Redirect based on user's role
+        if ("MANAGER".equalsIgnoreCase(user.getRole()))
+        {
+            response.sendRedirect(request.getContextPath() + "/main_manager.jsp");
+        }
+        else
+        {
+            response.sendRedirect(request.getContextPath() + "/main.jsp");
+        }
     }
 }
