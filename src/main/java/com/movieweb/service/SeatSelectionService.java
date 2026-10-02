@@ -21,9 +21,8 @@ public class SeatSelectionService {
         }
         if (!"SCHEDULED".equalsIgnoreCase(showtime.getStatus())) {
             return null;
-        }
-        // || !showtime.getStart_at().after(new Timestamp(System.currentTimeMillis()))
-        if (showtime.getStart_at() == null) {
+        } 
+        if (showtime.getStart_at() == null || !showtime.getStart_at().after(new Timestamp(System.currentTimeMillis()))) {
             return null;
         }
         return showtime;
