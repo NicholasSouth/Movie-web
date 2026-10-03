@@ -2,6 +2,7 @@ package com.movieweb.servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +15,7 @@ import com.movieweb.DAO.UsersDAO;
 import com.movieweb.model.Movies;
 import com.movieweb.model.Users;
 import com.movieweb.service.FavouriteMoviesService;
+import com.movieweb.DAO.Booking_showtimesDAO;
 
 @WebServlet("/user-profile")
 public class UserProfileServlet extends HttpServlet
@@ -21,6 +23,7 @@ public class UserProfileServlet extends HttpServlet
     private static final long serialVersionUID = 1L;
     private FavouriteMoviesService favouriteMoviesService;
     private UsersDAO usersDAO;
+    private Booking_showtimesDAO bookingShowtimesDAO;
 
     @Override
     public void init()
@@ -28,6 +31,7 @@ public class UserProfileServlet extends HttpServlet
     {
         favouriteMoviesService = new FavouriteMoviesService();
         usersDAO = new UsersDAO();
+        bookingShowtimesDAO = new Booking_showtimesDAO();
     }
 
     @Override
@@ -81,11 +85,11 @@ public class UserProfileServlet extends HttpServlet
         /*Check whether this is the logged-in user's own profile.*/
         boolean isOwnProfile = currentUser.getUserId() == profileUser.getUserId();
 
-        /* Get favourite movies.
+        /* Get favourite movies, booking history.
          * Own profile:
-         * Always allow the owner to see their favourites.
+         * Always allow the owner to see their favourites, bookings.
          * Other profile:
-         * Only load favourites when the user has made them public.
+         * Only load favourites when the user has made them public, bookings are always hidden .
          */
         List<Movies> favouriteMovies = null;
         if (isOwnProfile
@@ -93,12 +97,18 @@ public class UserProfileServlet extends HttpServlet
         {
             favouriteMovies = favouriteMoviesService.getFavouriteMovies(profileUser.getUserId());
         }
+        List<Map<String, Object>> bookingHistory = null;
 
+        if (isOwnProfile) {
+            bookingHistory = bookingShowtimesDAO.getBookingHistoryByUserId(profileUser.getUserId());
+        }
+        
         /*Give the profile information to user_profile.jsp.*/
         request.setAttribute("profileUser", profileUser);
         request.setAttribute("loggedInUser", currentUser);
         request.setAttribute("isOwnProfile", isOwnProfile);
         request.setAttribute("movieGridMovies", favouriteMovies);
+        request.setAttribute("bookingHistory", bookingHistory);
         request.getRequestDispatcher("/user_profile.jsp").forward(request, response);
     }
 }

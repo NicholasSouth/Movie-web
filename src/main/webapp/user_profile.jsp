@@ -1,4 +1,5 @@
 <%@ page import="com.movieweb.model.Users" %>
+<%@ page import="java.util.List,java.util.Map,java.text.SimpleDateFormat" %>
 <%
     Users loggedInUser = (Users) request.getAttribute("loggedInUser");
     Users profileUser = (Users) request.getAttribute("profileUser");
@@ -176,51 +177,158 @@
 		            <jsp:include page="/components/movie_grid.jsp" />
 		        </section>
 		
-		        <!-- Booking -->
-		        <section id="bookings" class="profile-section booking-section">
-		            <div class="section-header">
-		                <div>
-		                    <h2>Bookings</h2>
-		                    <p class="section-description">
-		                        <%
-		                            if (isOwnProfile) {
-		                        %>
-		                            	Your movie booking history.
-		                        <%
-		                            } 
-		                            else {
-		                        %>
-		                            	This user's movie booking history.
-		                        <%
-		                            }
-		                        %>
-		                    </p>
-		                </div>
-		                <span class="private-label">Private</span>
-		            </div>
-		
-		            <!-- Booking will be implemented later -->
-		            <div class="booking-placeholder">
-		                <div class="booking-lock">
-		                    placeholderlock
-		                </div>
-		                <h3>Booking History</h3>
-		                <p>
-		                    <%
-		                        if (isOwnProfile) {
-		                    %>
-		                        	Your bookings are private and can only be viewed by you.
-		                    <%
-		                        } 
-		                        else {
-		                    %>
-		                        	This user's bookings are private and can only be viewed by them.
-		                    <%
-		                        }
-		                    %>
-		                </p>
-		            </div>
-		        </section>
+		        <!-- Booking History -->
+				<section id="bookings" class="profile-section booking-section">
+				    <div class="section-header">
+				        <div>
+				            <h2>Bookings</h2>
+				            <p class="section-description">
+				                Your movie booking history.
+				            </p>
+				        </div>
+				        <span class="private-label">Private</span>
+				    </div>
+				
+				    <%
+				        if (isOwnProfile) {
+				            List<Map<String, Object>> bookingHistory =
+				                (List<Map<String, Object>>) request.getAttribute("bookingHistory");
+				
+				            SimpleDateFormat dateFormat =
+				                new SimpleDateFormat("dd MMM yyyy, HH:mm");
+				    %>
+				
+				            <%
+				                if (bookingHistory == null || bookingHistory.isEmpty()) {
+				            %>
+				                    <div class="booking-placeholder">
+				                        <h3>No bookings yet</h3>
+				                        <p>Your bookings will appear here after you book a movie.</p>
+				                    </div>
+				            <%
+				                } 
+				                else {
+				            %>
+				                    <div class="booking-history-list">
+				                        <%
+				                            for (Map<String, Object> booking : bookingHistory) {
+				                                String status = String.valueOf(booking.get("booking_status"));
+				                                String statusClass = status.toLowerCase();
+				
+				                                Object bookAt = booking.get("book_at");
+				                                Object startAt = booking.get("start_at");
+				                                Object endAt = booking.get("end_at");
+				
+				                                String posterPath = (String) booking.get("poster_path");
+				                        %>
+				                                <article class="booking-card">
+				                                    <div class="booking-card-main">
+				                                        <div class="booking-poster">
+				                                            <%
+				                                                if (posterPath != null && !posterPath.trim().isEmpty()) {
+				                                            %>
+				                                                    <img src="<%= request.getContextPath() %>/<%= posterPath %>" alt="Movie poster">
+				                                            <%
+				                                                } 
+				                                                else {
+				                                            %>
+				                                                    <div class="booking-no-poster">No poster</div>
+				                                            <%
+				                                                }
+				                                            %>
+				                                        </div>
+				
+				                                        <div class="booking-card-info">
+				                                            <h3><%= booking.get("movie_name") %></h3>
+				
+				                                            <p class="booking-id">
+				                                                Booking #<%= booking.get("booking_id") %>
+				                                            </p>
+				
+				                                            <p>
+				                                                Booked:
+				                                                <%= bookAt == null ? "-" : dateFormat.format((java.util.Date) bookAt) %>
+				                                            </p>
+				
+				                                            <div class="booking-card-bottom">
+				                                                <span class="booking-status <%= statusClass %>">
+				                                                    <%= status %>
+				                                                </span>
+				
+				                                                <strong>
+				                                                    <%= String.format("%,d", booking.get("price")) %>VND
+				                                                </strong>
+				                                            </div>
+				                                        </div>
+				                                    </div>
+				
+				                                    <details class="booking-details">
+				                                        <summary>View Details</summary>
+				
+				                                        <div class="booking-details-content">
+				                                            <p>
+				                                                <strong>Theater:</strong>
+				                                                <%= booking.get("theater_name") %>
+				                                            </p>
+				
+				                                            <p>
+				                                                <strong>Room:</strong>
+				                                                <%= booking.get("room_name") %>
+				                                            </p>
+				
+				                                            <p>
+				                                                <strong>Showtime:</strong>
+				                                                <%= startAt == null ? "-" : dateFormat.format((java.util.Date) startAt) %>
+				                                            </p>
+				
+				                                            <p>
+				                                                <strong>End time:</strong>
+				                                                <%= endAt == null ? "-" : dateFormat.format((java.util.Date) endAt) %>
+				                                            </p>
+				
+				                                            <p>
+				                                                <strong>Seats and ticket types:</strong>
+				                                                <%= booking.get("seat_summary") == null ? "No seat information" : booking.get("seat_summary") %>
+				                                            </p>
+				
+				                                            <p>
+				                                                <strong>Payment status:</strong>
+				                                                <%= booking.get("payment_status") %>
+				                                            </p>
+				
+				                                            <p>
+				                                                <strong>Payment method:</strong>
+				                                                <%= booking.get("payment_method") == null ? "-" : booking.get("payment_method") %>
+				                                            </p>
+				
+				                                            <p>
+				                                                <strong>Payment amount:</strong>
+				                                                <%= booking.get("payment_amount") == null ? "-" : String.format("%,d", ((Number) booking.get("payment_amount")).longValue()) + "VND" %>
+				                                            </p>
+				                                        </div>
+				                                    </details>
+				                                </article>
+				                        <%
+				                            }
+				                        %>
+				                    </div>
+				            <%
+				                }
+				            %>
+				
+				    <%
+				        } 
+				        else {
+				    %>
+				            <div class="booking-placeholder">
+				                <div class="booking-lock">Private</div>
+				                <h3>Booking History</h3>
+				                <p>This user's bookings are private and can only be viewed by them.</p>
+				            </div>
+				    <%
+				        }
+				    %>
+				</section>
 		    </main>
 		
 		    <!-- Right Sidebar -->
