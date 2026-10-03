@@ -470,27 +470,6 @@ body {
 	line-height: 1.2;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-	.manager-summary {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
-	.Layout2 {
-		grid-template-columns: 220px minmax(0, 1fr);
-	}
-	.ManagerNavigation {
-		width: 220px;
-		padding: 16px 10px;
-	}
-	.manager-header { 
-		align-items: flex-start; 
-		flex-direction: column; 
-	} 
-	.manager-theater-filter {
-		width: 100%; 
-	}
-}
-
 @media (max-width: 700px) {
 	.Layout2 {
 		height: auto;

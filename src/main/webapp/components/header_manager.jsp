@@ -24,7 +24,7 @@
 			<!-- Fix the link to manager_profile -->
             <!-- User Information -->
             <a 
-            	href="${pageContext.request.contextPath}/user-profile" 
+            	href="${pageContext.request.contextPath}/manager-profile" 
             	class="user-menu-header user-profile-link">
 
                 <!-- Avatar -->
