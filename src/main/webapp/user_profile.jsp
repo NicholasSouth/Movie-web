@@ -183,21 +183,28 @@
 				        <div>
 				            <h2>Bookings</h2>
 				            <p class="section-description">
-				                Your movie booking history.
-				            </p>
+		                        <%
+		                            if (isOwnProfile) {
+		                        %>
+		                            	Your booking history.
+		                        <%
+		                            } 
+		                            else {
+		                        %>
+		                            	This user's booking history.
+		                        <%
+		                            }
+		                        %>
+		                    </p>
 				        </div>
 				        <span class="private-label">Private</span>
 				    </div>
 				
 				    <%
 				        if (isOwnProfile) {
-				            List<Map<String, Object>> bookingHistory =
-				                (List<Map<String, Object>>) request.getAttribute("bookingHistory");
-				
-				            SimpleDateFormat dateFormat =
-				                new SimpleDateFormat("dd MMM yyyy, HH:mm");
-				    %>
-				
+				            List<Map<String, Object>> bookingHistory = (List<Map<String, Object>>) request.getAttribute("bookingHistory");				
+				            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy, HH:mm");
+				    %>				
 				            <%
 				                if (bookingHistory == null || bookingHistory.isEmpty()) {
 				            %>
@@ -213,12 +220,10 @@
 				                        <%
 				                            for (Map<String, Object> booking : bookingHistory) {
 				                                String status = String.valueOf(booking.get("booking_status"));
-				                                String statusClass = status.toLowerCase();
-				
+				                                String statusClass = status.toLowerCase();				
 				                                Object bookAt = booking.get("book_at");
 				                                Object startAt = booking.get("start_at");
 				                                Object endAt = booking.get("end_at");
-				
 				                                String posterPath = (String) booking.get("poster_path");
 				                        %>
 				                                <article class="booking-card">
@@ -239,12 +244,7 @@
 				                                        </div>
 				
 				                                        <div class="booking-card-info">
-				                                            <h3><%= booking.get("movie_name") %></h3>
-				
-				                                            <p class="booking-id">
-				                                                Booking #<%= booking.get("booking_id") %>
-				                                            </p>
-				
+				                                            <h3><%= booking.get("movie_name") %></h3>								                                           			
 				                                            <p>
 				                                                Booked:
 				                                                <%= bookAt == null ? "-" : dateFormat.format((java.util.Date) bookAt) %>
