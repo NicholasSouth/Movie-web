@@ -1,0 +1,496 @@
+/* Payment page */
+.PaymentPage {
+    min-height: 70vh;
+    padding: 40px 24px 65px;
+    background: var(--background, #0D0F12);
+    color: var(--text-primary, #F5F5F7);
+}
+.PaymentContainer {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+.PaymentHeading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.PaymentEyebrow,
+.PanelEyebrow {
+    margin: 0 0 8px;
+    color: var(--accent, #E50914);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+}
+.PaymentHeading h1 {
+    margin: 0;
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 800;
+}
+.PaymentSubtitle {
+    margin: 10px 0 0;
+    color: var(--text-secondary, #8A8F99);
+    line-height: 1.6;
+}
+.PaymentSecureLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid #30343C;
+    border-radius: 999px;
+    color: #C4C8D0;
+    font-size: 13px;
+    white-space: nowrap;
+}
+.PaymentLayout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: start;
+    gap: 24px;
+}
+.PaymentPanel {
+    min-width: 0;
+    padding: 26px;
+    background: var(--surface, #16191E);
+    border: 1px solid #292D35;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+}
+.PanelHeading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+.PanelHeading h2 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 750;
+}
+
+.BookingId {
+    padding: 7px 10px;
+    border: 1px solid #343943;
+    border-radius: 8px;
+    color: #B6BBC5;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.MovieSummary {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.MoviePlaceholder {
+    display: flex;
+    flex: 0 0 76px;
+    width: 76px;
+    height: 100px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #292D35, #17191E);
+    border: 1px solid #373B44;
+    font-size: 30px;
+}
+.MovieSummaryText {
+    min-width: 0;
+}
+.MovieSummaryText h3 {
+    margin: 0 0 9px;
+    font-size: 19px;
+    overflow-wrap: anywhere;
+}
+.MovieSummaryText p {
+    margin: 5px 0;
+    color: var(--text-secondary, #8A8F99);
+    font-size: 13px;
+}
+.MovieSummaryText .ShowtimeDate {
+    margin-top: 12px;
+    color: #E6E7EB;
+}
+.MovieSummaryText .ShowtimeTime {
+    color: #E6E7EB;
+    font-weight: 700;
+}
+
+.SummaryDivider {
+    height: 1px;
+    margin: 24px 0;
+    background: #30343C;
+}
+
+.SeatSummaryHeading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+.SeatSummaryHeading h3 {
+    margin: 0;
+    font-size: 15px;
+}
+.SeatSummaryHeading > span {
+    color: var(--text-secondary, #8A8F99);
+    font-size: 12px;
+}
+.SeatList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.SeatItem,
+.SeatItemInfo {
+    display: flex;
+    align-items: center;
+}
+.SeatItem {
+    justify-content: space-between;
+    gap: 12px;
+}
+.SeatItemInfo {
+    min-width: 0;
+    gap: 12px;
+}
+.SeatLabel {
+    display: inline-flex;
+    min-width: 42px;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 7px;
+    border: 1px solid #4A4F59;
+    border-radius: 7px;
+    background: #20242B;
+    font-size: 13px;
+    font-weight: 800;
+}
+.SeatItemInfo > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.SeatItemInfo strong {
+    font-size: 13px;
+}
+.SeatSubtext {
+    color: var(--text-secondary, #8A8F99);
+    font-size: 12px;
+}
+.SeatPrice {
+    font-size: 13px;
+    font-weight: 650;
+    text-align: right;
+    white-space: nowrap;
+}
+.EmptySeats {
+    color: #FCA5A5;
+    font-size: 13px;
+}
+
+.TotalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+}
+.TotalRow > span {
+    color: #C4C8D0;
+    font-size: 14px;
+}
+.TotalRow strong {
+    color: #FFFFFF;
+    font-size: clamp(18px, 2.5vw, 23px);
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.BookingFootnote {
+    margin: 16px 0 0;
+    color: var(--text-secondary, #8A8F99);
+    font-size: 12px;
+    line-height: 1.6;
+}
+.VisaLogo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 9px;
+    border-radius: 5px;
+    background: #FFFFFF;
+    color: #173D8F;
+    font-size: 15px;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.5px;
+}
+.PaymentMethodDescription {
+    margin: -7px 0 20px;
+    color: var(--text-secondary, #8A8F99);
+    font-size: 13px;
+    line-height: 1.6;
+}
+.VisaCardList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.VisaCardOption {
+    display: block;
+    cursor: pointer;
+}
+.VisaCardOption > input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+.VisaCardVisual {
+    display: flex;
+    min-height: 155px;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 17px 19px;
+    border: 1px solid #393E48;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #292E38, #171A20 70%);
+    transition: border-color 0.18s, box-shadow 0.18s;
+}
+.VisaCardOption > input:checked + .VisaCardVisual {
+    border-color: var(--accent, #E50914);
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.17);
+}
+.VisaCardOption > input:focus-visible + .VisaCardVisual {
+    outline: 2px solid #FFFFFF;
+    outline-offset: 3px;
+}
+.CardTopLine,
+.CardBottomLine {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.CardChip {
+    display: block;
+    width: 30px;
+    height: 22px;
+    border: 1px solid #A6A8AB;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #D5D6D8, #777D86);
+}
+.CardNumber {
+    margin: 16px 0;
+    font-size: clamp(16px, 2vw, 19px);
+    font-weight: 650;
+    letter-spacing: 1.2px;
+}
+.CardBottomLine {
+    color: #B8BDC7;
+    font-size: 11px;
+}
+.CardRadioText {
+    display: block;
+    margin: 9px 2px 0;
+    color: #C3C7D0;
+    font-size: 12px;
+}
+
+.DemoPaymentNotice {
+    margin: 20px 0;
+    padding: 14px 15px;
+    border: 1px solid #49402D;
+    border-radius: 10px;
+    background: #211F1A;
+}
+.DemoPaymentNotice strong {
+    color: #F0CB80;
+    font-size: 13px;
+}
+.DemoPaymentNotice p {
+    margin: 6px 0 0;
+    color: #C8BFAE;
+    font-size: 12px;
+    line-height: 1.6;
+}
+.PayButton {
+    display: flex;
+    width: 100%;
+    min-height: 50px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 9px;
+    background: var(--accent, #E50914);
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 750;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.18s, transform 0.18s, opacity 0.18s;
+}
+.PayButton:hover:not(:disabled) {
+    background: #C90812;
+    transform: translateY(-1px);
+}
+.PayButton:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}
+.PaymentTerms {
+    margin: 12px 0 0;
+    color: var(--text-secondary, #8A8F99);
+    font-size: 11px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.NoCardsNotice {
+    padding: 25px 15px;
+    border: 1px dashed #3A3F49;
+    border-radius: 12px;
+    text-align: center;
+}
+.NoCardsIcon {
+    font-size: 30px;
+}
+.NoCardsNotice h3 {
+    margin: 12px 0 8px;
+    font-size: 17px;
+}
+.NoCardsNotice p {
+    margin: 0 0 18px;
+    color: var(--text-secondary, #8A8F99);
+    font-size: 13px;
+    line-height: 1.6;
+}
+.SecondaryButton {
+    display: inline-flex;
+    justify-content: center;
+    padding: 10px 14px;
+    border: 1px solid #444A55;
+    border-radius: 8px;
+    color: #F5F5F7;
+    font-size: 13px;
+    font-weight: 650;
+    text-decoration: none;
+}
+.SecondaryButton:hover {
+    border-color: var(--accent, #E50914);
+}
+
+.PaymentNotice {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    margin-bottom: 22px;
+    padding: 17px 19px;
+    border: 1px solid;
+    border-radius: 12px;
+}
+.PaymentNotice h2 {
+    margin: 0 0 7px;
+    font-size: 18px;
+}
+.PaymentNotice p {
+    margin: 5px 0 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+.PaymentNoticeError {
+    border-color: #71343A;
+    background: #28191C;
+    color: #F4C5C8;
+}
+.PaymentNoticeSuccess {
+    border-color: #285D45;
+    background: #17271F;
+    color: #C4F0D7;
+}
+.PaymentSuccessIcon {
+    display: flex;
+    flex: 0 0 30px;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #285D45;
+    color: #D7FFE8;
+    font-weight: 800;
+}
+.TransactionCode {
+    overflow-wrap: anywhere;
+}
+.TransactionCode strong {
+    color: #FFFFFF;
+}
+.PaymentUnavailableText {
+    padding: 14px;
+    border-radius: 8px;
+    background: #211F1A;
+    color: #E7D4A8;
+    font-size: 13px;
+    line-height: 1.6;
+}
+.PaymentSuccessDetails {
+    margin: 22px 0;
+}
+.PaymentSuccessDetails p {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: #C4C8D0;
+    font-size: 13px;
+}
+.PaymentSuccessDetails strong {
+    color: #FFFFFF;
+}
+.SuccessReturnButton {
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+@media (max-width: 850px) {
+    .PaymentLayout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 540px) {
+    .PaymentPage {
+        padding: 26px 14px 42px;
+    }
+    .PaymentHeading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    .PaymentPanel {
+        padding: 19px;
+    }
+    .MoviePlaceholder {
+        flex-basis: 60px;
+        width: 60px;
+        height: 82px;
+    }
+    .MovieSummaryText h3 {
+        font-size: 16px;
+    }
+    .SeatPrice {
+        font-size: 12px;
+    }
+    .PaymentSecureLabel {
+        font-size: 12px;
+    }
+}

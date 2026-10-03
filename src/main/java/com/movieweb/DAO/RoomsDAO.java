@@ -12,22 +12,29 @@ import com.movieweb.model.Room_types;
 import com.movieweb.util.DBConnection;
 
 public class RoomsDAO {
-    public Rooms getRoomById(int room_id) {
-        String sql = "SELECT * FROM Rooms WHERE room_id = ?";       
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, room_id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapRoom(rs);
-                }
-            }
-        } 
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+	public Rooms getRoomById(int room_id) {
+	    String sql =
+	        "SELECT r.*, " +
+	        "       rt.room_type_name, " +
+	        "       rt.price_modify " +
+	        "FROM Rooms r " +
+	        "INNER JOIN Room_types rt " +
+	        "    ON r.room_type_id = rt.room_type_id " +
+	        "WHERE r.room_id = ?";
+	    try (Connection conn = DBConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, room_id);
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	                return mapRoom(rs);
+	            }
+	        }
+	    }
+	    catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
 
     public List<Rooms> getRoomsByTheaterId(int theaterId) {
         List<Rooms> rooms = new ArrayList<>();

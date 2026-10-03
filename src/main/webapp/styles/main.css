@@ -110,14 +110,12 @@ body {
 .menu-button:active {
     transform: scale(0.95);
 }
-
 /*Three dots*/
 .menu-dots {
     font-size: 25px;
     line-height: 1;
     transform: translateY(-1px);
 }
-
 /*Menu dropdown*/
 .menu-dropdown {
     position: absolute;
@@ -135,10 +133,62 @@ body {
 .menu-dropdown.show {
     display: block;
 }
-
-/*Guest menu*/
+/*Guest menu, with the login/register button*/
 .guest-menu {
     width: 100%;
+}
+/*Menu items*/
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+.menu-item:hover {
+    background-color: var(--background);
+    color: var(--text-primary);
+}
+/*Menu icons*/
+.menu-item-icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    object-fit: contain;
+    /*Black PNG icons -> white*/
+    filter: brightness(0) invert(1);
+    flex-shrink: 0;
+}
+/*Menu divider*/
+.menu-divider {
+    height: 1px;
+    margin: 5px 0;
+    background-color: #2C2C2C;
+}
+/*Login*/
+.login-item {
+    justify-content: center;
+    background-color: var(--accent);
+    color: var(--text-primary);
+    font-weight: bold;
+}
+.login-item:hover {
+    background-color: var(--accent);
+    color: var(--text-primary);
+    opacity: 0.85;
+}
+/*Logout*/
+.logout-item {
+    color: #FF6B6B;
+}
+.logout-item:hover {
+    color: #FF6B6B;
 }
 
 /*User information*/
@@ -147,7 +197,6 @@ body {
     align-items: center;
     gap: 12px;
 }
-
 .user-profile-link {
     text-decoration: none;
     color: inherit;
@@ -157,7 +206,6 @@ body {
     text-decoration: none;
     color: inherit;
 }
-
 /*User avatar*/
 .user-avatar {
     width: 48px;
@@ -173,7 +221,6 @@ body {
     display: block;
     object-fit: cover;
 }
-
 /*Default avatar*/
 .default-avatar {
     width: 100%;
@@ -186,7 +233,6 @@ body {
     font-size: 20px;
     font-weight: bold;
 }
-
 /*User name / role*/
 .user-information {
     min-width: 0;
@@ -209,64 +255,6 @@ body {
     font-size: 12px;
     text-transform: uppercase;
     line-height: 1.2;
-}
-
-/*Menu divider*/
-.menu-divider {
-    height: 1px;
-    margin: 5px 0;
-    background-color: #2C2C2C;
-}
-
-/*Menu items*/
-.menu-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 11px 12px;
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 14px;
-    text-decoration: none;
-    transition: background-color 0.2s, color 0.2s;
-}
-.menu-item:hover {
-    background-color: var(--background);
-    color: var(--text-primary);
-}
-
-/*Menu icons*/
-.menu-item-icon {
-    width: 20px;
-    height: 20px;
-    display: block;
-    object-fit: contain;
-    /*Black PNG icons -> white*/
-    filter: brightness(0) invert(1);
-    flex-shrink: 0;
-}
-
-/*Login*/
-.login-item {
-    justify-content: center;
-    background-color: var(--accent);
-    color: var(--text-primary);
-    font-weight: bold;
-}
-.login-item:hover {
-    background-color: var(--accent);
-    color: var(--text-primary);
-    opacity: 0.85;
-}
-
-/*Logout*/
-.logout-item {
-    color: #FF6B6B;
-}
-.logout-item:hover {
-    color: #FF6B6B;
 }
 
 /*LeftSidebar*/
@@ -441,7 +429,6 @@ body {
     color: var(--text-primary);
     grid-area: footer;
 }
-
 /*First section is slogan -> needs more space*/
 .footer-section:first-child {
     flex: 2;
@@ -470,7 +457,6 @@ body {
 .footer-section a:hover {
     color: var(--accent);
 }
-
 /*Last section doesn't have column*/
 .footer-section:last-child {
     border-right: none;
@@ -535,7 +521,6 @@ body {
     border-color: #666666;
     color: var(--text-primary);
 }
-
 /* Password Visible */
 .password-toggle.password-visible {
     border-color: var(--accent);
@@ -597,7 +582,6 @@ body {
     border-color: var(--accent);
     box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.15);
 }
-
 /* Send Verification Button */
 .send-button {
     flex-shrink: 0;

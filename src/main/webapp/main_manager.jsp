@@ -23,15 +23,12 @@
 	    <title>Manager Dashboard - PhnetPhlyx</title>
 	    <link 
 	    	rel="stylesheet" 
-	    	href="${pageContext.request.contextPath}/styles/main.css">
-	    <link 
-	    	rel="stylesheet" 
 	    	href="${pageContext.request.contextPath}/styles/main_manager.css">
 	</head>
 	<body>
 		<section class="Layout2">
 		
-			<jsp:include page="/components/header.jsp" />
+			<jsp:include page="/components/header_manager.jsp" />
 			
 		    <%@ include file="components/manager_navigation.jsp" %>
 		
@@ -82,11 +79,7 @@
 		            <div class="manager-summary-card">
 		                <h3>Today's Revenue</h3>
 		                <p>--</p>
-		            </div>
-		            <div class="manager-summary-card">
-		                <h3>Occupied Seats</h3>
-		                <p>--</p>
-		            </div>
+		            </div>		         
 		            <div class="manager-summary-card">
 		                <h3>Upcoming Showtimes</h3>
 		                <p>--</p>

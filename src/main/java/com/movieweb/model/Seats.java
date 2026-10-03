@@ -7,8 +7,13 @@ public class Seats {
     private int seat_col;
     private int seat_type_id;
     private boolean isActive;
+    private boolean booked;
+    private String seat_type_name;
+    private String seat_price_modify;
+    private int price;
     //
     public Seats() {
+    	
     }
     public int getSeat_id() {
         return seat_id;
@@ -35,7 +40,7 @@ public class Seats {
         this.seat_col = seat_col;
     }
     public int getSeat_type_id() {
-        return seat_type_id;
+    	return seat_type_id;
     }
     public void setSeat_type_id(int seat_type_id) {
         this.seat_type_id = seat_type_id;
@@ -46,4 +51,12 @@ public class Seats {
     public void setActive(boolean isActive) {
         this.isActive = isActive;
     }
+    public boolean isBooked() {return booked;}
+    public void setBooked(boolean booked) {this.booked = booked;}
+    public String getSeat_type_name() { return seat_type_name; }
+    public void setSeat_type_name(String seat_type_name) { this.seat_type_name = seat_type_name; }
+    public String getSeat_price_modify() { return seat_price_modify; }
+    public void setSeat_price_modify(String seat_price_modify) { this.seat_price_modify = seat_price_modify; }
+    public int getPrice() { return price; }
+    public void setPrice(int price) { this.price = price; }
 }

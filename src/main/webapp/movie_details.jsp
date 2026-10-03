@@ -303,10 +303,15 @@
 							        <span>Login to Add Favorites</span>
 							    </button>							
 							<% } %>
-		                    <button type="button"
-		                            class="booking-button">
-		                        Book Ticket
-		                    </button>
+		                    <form action="<%= contextPath %>/booking-showtimes" method="get">
+							    <input type="hidden"
+							           name="movie_id"
+							           value="<%= movie.getMovie_id() %>">
+							
+							    <button type="submit" class="booking-button">
+							        Book Ticket
+							    </button>
+							</form>
 		                </div>
 		            </div>
 		        </section>

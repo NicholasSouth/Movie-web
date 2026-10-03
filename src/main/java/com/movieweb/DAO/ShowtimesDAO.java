@@ -9,11 +9,11 @@ import com.movieweb.model.Showtimes;
 import com.movieweb.model.Theaters;
 import com.movieweb.util.DBConnection;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
+import java.sql.Timestamp;
 
 import java.util.LinkedHashMap;
 
@@ -150,6 +150,90 @@ public class ShowtimesDAO {
         return showtimes;
     }
     
+    //for booking_showtimes.jsp
+    public List<Theaters> getTheatersByMovieId(int movieId) {
+        List<Theaters> theaters = new ArrayList<>();
+        String sql =
+            "SELECT DISTINCT t.* " +
+            "FROM Theaters t " +
+            "INNER JOIN Rooms r ON r.theater_id = t.theater_id " +
+            "INNER JOIN Showtimes s ON s.room_id = r.room_id " +
+            "WHERE s.movie_id = ? " +
+            "AND r.isActive = 1 " +
+            "AND t.isActive = 1 " +
+            "AND t.deleted_at IS NULL " +
+            "AND UPPER(s.status) = 'SCHEDULED' " +
+            "AND s.start_at >= GETDATE() " +
+            "AND s.start_at < DATEADD(DAY, 7, CONVERT(date, GETDATE())) " +
+            "ORDER BY t.theater_id";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, movieId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Theaters theater = new Theaters();
+                    theater.setTheater_id(rs.getInt("theater_id"));
+                    theater.setTheater_name(rs.getString("theater_name"));
+                    theater.setTheater_address(rs.getString("theater_address"));
+                    theater.setTheater_image_path(rs.getString("theater_image_path"));
+                    theater.setDescription(rs.getString("description"));
+                    theater.setLatitude(rs.getDouble("latitude"));
+                    theater.setLongtitude(rs.getDouble("longtitude"));
+                    theater.setOpen_time(rs.getTime("open_time"));
+                    theater.setClosing_time(rs.getTime("closing_time"));
+                    theater.setActive(rs.getBoolean("isActive"));
+                    theater.setDeleted_at(rs.getTimestamp("deleted_at"));
+                    theaters.add(theater);
+                }
+            }
+        } 
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return theaters;
+    }
+    public List<Showtimes> getShowtimesByMovieTheaterAndDate(int movieId, int theaterId, LocalDate date) {
+        List<Showtimes> showtimes = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+
+        // Exclude showtimes that have already started if selecting today.
+        java.time.LocalDateTime startDateTime =
+            date.equals(today)
+                ? java.time.LocalDateTime.now()
+                : date.atStartOfDay();
+        java.time.LocalDateTime endDateTime = date.plusDays(1).atStartOfDay();
+        String sql =
+            "SELECT s.* " +
+            "FROM Showtimes s " +
+            "INNER JOIN Rooms r ON r.room_id = s.room_id " +
+            "INNER JOIN Theaters t ON t.theater_id = r.theater_id " +
+            "WHERE s.movie_id = ? " +
+            "AND t.theater_id = ? " +
+            "AND r.isActive = 1 " +
+            "AND t.isActive = 1 " +
+            "AND t.deleted_at IS NULL " +
+            "AND UPPER(s.status) = 'SCHEDULED' " +
+            "AND s.start_at >= ? " +
+            "AND s.start_at < ? " +
+            "ORDER BY s.start_at ASC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, movieId);
+            stmt.setInt(2, theaterId);
+            stmt.setTimestamp(3, Timestamp.valueOf(startDateTime));
+            stmt.setTimestamp(4, Timestamp.valueOf(endDateTime));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    showtimes.add(mapShowtime(rs));
+                }
+            }
+        } 
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return showtimes;
+    }
+    
     private Showtimes mapShowtime(ResultSet rs) throws SQLException {
         Showtimes showtime = new Showtimes();
         showtime.setShowtime_id(rs.getInt("showtime_id"));
@@ -157,6 +241,7 @@ public class ShowtimesDAO {
         showtime.setMovie_id(rs.getInt("movie_id"));
         showtime.setStart_at(rs.getTimestamp("start_at"));
         showtime.setEnd_at(rs.getTimestamp("end_at"));
+        showtime.setStatus(rs.getString("status")); // Add this line
         return showtime;
     }
 }
