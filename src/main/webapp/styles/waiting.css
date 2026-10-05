@@ -1,26 +1,9 @@
-* {
-    box-sizing: border-box;
-}
-
-:root {
-    --background: #0D0F12;
-    --surface: #16191E;
-    --accent: #E50914;
-    --accent-hover: #B20710;
-    --text-primary: #F5F5F7;
-    --text-secondary: #8A8F99;
-    --border: #2C2C2C;
-}
-
+/* Base styles */
 body {
-    margin: 0;
     min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: var(--background);
-    color: var(--text-primary);
 }
 
-/*Page*/
+/* Page layout */
 .waiting-page {
     width: 100%;
     min-height: 100vh;
@@ -30,11 +13,11 @@ body {
     padding: 30px 20px;
     background: radial-gradient(
         circle at top,
-        #1c2026 0%,
-        var(--background) 50%);
+        var(--surface-light) 0%,
+        var(--background) 50%
+    );
 }
-
-/*Container*/
+/* Container */
 .waiting-container {
     width: 100%;
     max-width: 500px;
@@ -45,22 +28,20 @@ body {
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
     text-align: center;
 }
-
-/*Title*/
+/* Title */
 .waiting-container h1 {
     margin: 0 0 15px;
+    color: var(--text-primary);
     font-size: 38px;
 }
-
-/*Message*/
+/* Message */
 .waiting-message {
     margin: 0 0 30px;
     color: var(--text-secondary);
     font-size: 14px;
     line-height: 1.6;
 }
-
-/*Main Button*/
+/* Main button */
 .main-button {
     display: block;
     width: 100%;
@@ -71,26 +52,24 @@ body {
     font-size: 15px;
     font-weight: bold;
     text-decoration: none;
-    transition: 0.2s;
+    transition: background-color 0.2s, transform 0.2s, opacity 0.2s;
 }
 .main-button:hover {
-    background-color: var(--accent-hover);
+    background-color: var(--accent);
+    opacity: 0.85;
     transform: translateY(-1px);
 }
 .main-button:active {
     transform: translateY(0);
 }
 
-/*Responsive*/
+/* Responsive styles */
 @media (max-width: 550px) {
     .waiting-page {
         padding: 20px 15px;
     }
     .waiting-container {
         padding: 30px 20px;
-    }
-    .website-name {
-        font-size: 30px;
     }
     .waiting-container h1 {
         font-size: 25px;

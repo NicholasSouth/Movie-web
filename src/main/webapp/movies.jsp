@@ -8,8 +8,8 @@
     // Expects 'catalog' (or data list providers) and 'filter' passed from your controller/servlet
     // If you are using your merged Movies model as the filter object:
     Movies filter = (Movies) request.getAttribute("filter");
-    if (filter == null) filter = new Movies(); // Fallback default
-
+    if (filter == null) 
+   		filter = new Movies(); // Fallback default
     request.setAttribute("currentPage", "movies");
 %>
 <!DOCTYPE html>

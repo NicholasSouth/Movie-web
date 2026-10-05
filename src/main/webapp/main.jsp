@@ -7,6 +7,7 @@
         response.sendRedirect(request.getContextPath() + "/main_manager.jsp");
         return;
     }
+    request.setAttribute("currentPage", "home");
 %>
 <!DOCTYPE html>
 <html>

@@ -1,23 +1,40 @@
+/* Theme and variables */
+:root {
+    --font-family: Consolas, Menlo, Monaco, "Liberation Mono", "Lucida Console", monospace; /* Global Font Family */
+    --background: #0D0F12;
+    --body-bg: #141414;
+    --surface: #16191E; /* lighter background to separate the objects */
+    --surface-light: #1D2127; /* even lighter background to separate the objects */
+    --surface-hover: #22252A; /* background when we hover */
+    --accent: #E50914; /* deep red highlight, often use for navigation bar */
+    --accent-glow: rgba(229, 9, 20, 0.15); /* lighter transparent red highlight */
+    --danger: #FF6B6B; /* warning red color */
+    --text-primary: #F5F5F7; /* normal text color */
+    --text-secondary: #8A8F99; /* immutable text color often for private button */
+    --border: #2C2C2C; /* normal border color */
+    --border-light: #3A3A3A; /* lighter border color */
+    --border-hover: #444444; /* border when hover */
+    --border-focus: #666666; /* border when focus, like when clicking textbox */
+    --scrollbar-thumb: #2C2C2C; /* the part of the scrollbar that we drag to move up/down */
+    --scrollbar-thumb-hover: #444444; /* that thing but hover */
+}
+
+/* Base and reset styles */
 * {
     box-sizing: border-box;
 }
-
-/*Add body color so the furthest bg won't stand out*/
+/* Force all form elements to inherit the global font */
+input, textarea, select, button {
+    font-family: inherit;
+}
 body {
     margin: 0;
-    background-color: #141414;
+    font-family: var(--font-family);
+    background-color: var(--body-bg);
+    color: var(--text-primary);
 }
 
-/*Fixed theme*/
-:root {
-    --background: #0D0F12;
-    --surface: #16191E;
-    --accent: #E50914;
-    --text-primary: #F5F5F7;
-    --text-secondary: #8A8F99;
-}
-
-/*Main layout*/
+/* Layout structure */
 .Layout1 {
     width: 100%;
     height: 100vh;
@@ -28,7 +45,7 @@ body {
         "footer footer footer" auto
         / 220px minmax(0, 1fr) 250px;
     gap: 8px;
-    overflow: hidden; /*Prevent scrolling the whole page*/
+    overflow: hidden;
 }
 .Header,
 .LeftSidebar,
@@ -38,7 +55,7 @@ body {
     border-radius: 12px;
 }
 
-/*Header*/
+/* Header and navigation */
 .Header {
     position: relative;
     display: flex;
@@ -49,6 +66,7 @@ body {
     color: var(--text-primary);
     grid-area: header;
 }
+/* the clickable website's name */
 .website-name {
     color: var(--text-primary);
     font-size: 24px;
@@ -59,6 +77,7 @@ body {
 .website-name:hover {
     color: var(--accent);
 }
+/* The movie search bar for quick search */
 .search-container {
     flex: 1;
     display: flex;
@@ -68,7 +87,7 @@ body {
     width: 100%;
     max-width: 600px;
     padding: 10px 15px;
-    border: 1px solid #2C2C2C;
+    border: 1px solid var(--border);
     border-radius: 8px;
     background-color: var(--background);
     color: var(--text-primary);
@@ -81,14 +100,11 @@ body {
 .search-bar:focus {
     border-color: var(--accent);
 }
-
-/*Header menu*/
 .header-menu {
     position: relative;
     flex-shrink: 0;
 }
-
-/*Menu button*/
+/* The menu . . . button */
 .menu-button {
     width: 42px;
     height: 42px;
@@ -96,7 +112,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0;
-    border: 1px solid #3A3A3A;
+    border: 1px solid var(--border-light);
     border-radius: 12px;
     background-color: var(--background);
     color: var(--text-primary);
@@ -104,19 +120,18 @@ body {
     transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
 }
 .menu-button:hover {
-    background-color: #22252A;
+    background-color: var(--surface-hover);
     border-color: var(--accent);
 }
 .menu-button:active {
     transform: scale(0.95);
 }
-/*Three dots*/
 .menu-dots {
-    font-size: 25px;
+    font-size: 20px;
     line-height: 1;
     transform: translateY(-1px);
 }
-/*Menu dropdown*/
+/* the dropdown menu when click . . .  */
 .menu-dropdown {
     position: absolute;
     top: calc(100% + 10px);
@@ -124,20 +139,19 @@ body {
     width: 250px;
     padding: 10px;
     background-color: var(--surface);
-    border: 1px solid #2C2C2C;
+    border: 1px solid var(--border);
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); /* It's a shadow, not needed in root */
     z-index: 1000;
     display: none;
 }
 .menu-dropdown.show {
     display: block;
 }
-/*Guest menu, with the login/register button*/
+/* The guest menu has different style than the logged in menu so have difference design */
 .guest-menu {
     width: 100%;
 }
-/*Menu items*/
 .menu-item {
     display: flex;
     align-items: center;
@@ -155,23 +169,21 @@ body {
     background-color: var(--background);
     color: var(--text-primary);
 }
-/*Menu icons*/
+/* the login logout setting icon */
 .menu-item-icon {
     width: 20px;
     height: 20px;
     display: block;
     object-fit: contain;
-    /*Black PNG icons -> white*/
     filter: brightness(0) invert(1);
     flex-shrink: 0;
 }
-/*Menu divider*/
 .menu-divider {
     height: 1px;
     margin: 5px 0;
-    background-color: #2C2C2C;
+    background-color: var(--border);
 }
-/*Login*/
+/* This is the login button when GUEST click menu button . . . */
 .login-item {
     justify-content: center;
     background-color: var(--accent);
@@ -183,15 +195,14 @@ body {
     color: var(--text-primary);
     opacity: 0.85;
 }
-/*Logout*/
+/* When USER/MANAGER/ADMIN is in then there is the profile button and the logout button */
 .logout-item {
-    color: #FF6B6B;
+    color: var(--danger);
 }
 .logout-item:hover {
-    color: #FF6B6B;
+    color: var(--danger);
 }
-
-/*User information*/
+/* the profile card, user click it and is redirect to user_profile.jsp */
 .user-menu-header {
     display: flex;
     align-items: center;
@@ -206,7 +217,6 @@ body {
     text-decoration: none;
     color: inherit;
 }
-/*User avatar*/
 .user-avatar {
     width: 48px;
     height: 48px;
@@ -221,7 +231,7 @@ body {
     display: block;
     object-fit: cover;
 }
-/*Default avatar*/
+/* default avt with red bg and the full_name's inital incase no avt is shown */
 .default-avatar {
     width: 100%;
     height: 100%;
@@ -233,7 +243,6 @@ body {
     font-size: 20px;
     font-weight: bold;
 }
-/*User name / role*/
 .user-information {
     min-width: 0;
     display: flex;
@@ -257,7 +266,7 @@ body {
     line-height: 1.2;
 }
 
-/*LeftSidebar*/
+/* Left sidebar is the navigation bar*/
 .LeftSidebar {
     display: flex;
     flex-direction: column;
@@ -282,25 +291,24 @@ body {
     background-color: var(--background);
     color: var(--text-primary);
 }
+/* When user is in page main/movies/theaters/... the navigation bar glow to indicate */
 .nav-item.active {
     background-color: var(--accent);
     color: var(--text-primary);
 }
 
-/*MainBody*/
+/* Main body and movie grid, movie grid is also used in movies.jsp */
 .MainBody {
     padding: 25px;
     background-color: var(--background);
     color: var(--text-primary);
-    overflow-y: auto; /*Add scroll to body, not to whole page*/
+    overflow-y: auto;
     grid-area: body;
 }
 .MainBody h2 {
     margin-top: 0;
     margin-bottom: 20px;
 }
-
-/* Movie grid */
 .movie-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -344,7 +352,6 @@ body {
 .movie-card h3 a:hover {
     color: var(--accent);
 }
-/* Genre and tag containers */
 .movie-genres,
 .movie-tags {
     display: flex;
@@ -352,7 +359,6 @@ body {
     gap: 6px;
     margin-top: 10px;
 }
-/* Genre and tag links */
 .movie-genre,
 .movie-tag {
     display: inline-block;
@@ -365,12 +371,8 @@ body {
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
-/* Genres */
 .movie-genre {
     border: 1px solid rgb(229 9 20 / 30%);
     background-color: rgb(229 9 20 / 15%);
@@ -379,11 +381,10 @@ body {
 .movie-genre:hover {
     border-color: var(--accent);
     background-color: var(--accent);
-    color: white;
+    color: #FFFFFF;
 }
-/* Tags */
 .movie-tag {
-    border: 1px solid #2c2c2c;
+    border: 1px solid var(--border);
     background-color: rgb(255 255 255 / 6%);
     color: var(--text-secondary);
 }
@@ -393,7 +394,7 @@ body {
     color: var(--text-primary);
 }
 
-/*RightSidebar*/
+/* Right sidebar are for ads */
 .RightSidebar {
     display: flex;
     flex-direction: column;
@@ -403,8 +404,6 @@ body {
     grid-area: rightSide;
     overflow-y: auto;
 }
-
-/*Ads*/
 .ad {
     width: 100%;
     height: 150px;
@@ -419,7 +418,7 @@ body {
     opacity: 0.8;
 }
 
-/*Footer*/
+/* Footer */
 .footer {
     display: flex;
     justify-content: space-between;
@@ -429,17 +428,19 @@ body {
     color: var(--text-primary);
     grid-area: footer;
 }
-/*First section is slogan -> needs more space*/
-.footer-section:first-child {
-    flex: 2;
-}
 .footer-section {
     display: flex;
     flex-direction: column;
     gap: 8px;
     padding-right: 40px;
-    border-right: 1px solid #2C2C2C;
+    border-right: 1px solid var(--border);
     min-width: 0;
+}
+.footer-section:first-child {
+    flex: 2;
+}
+.footer-section:last-child {
+    border-right: none;
 }
 .footer-section h3 {
     margin-top: 0;
@@ -457,31 +458,53 @@ body {
 .footer-section a:hover {
     color: var(--accent);
 }
-/*Last section doesn't have column*/
-.footer-section:last-child {
-    border-right: none;
-}
 
-/*Scrollbars*/
-.MainBody::-webkit-scrollbar,
-.RightSidebar::-webkit-scrollbar {
-    width: 10px;
+/* Some other components */
+/* for the password toggle button and the div contain it and the textbox next to it */
+/* Only the password toggle button is reusable, the div aint */
+/* Input groups - the textboxes with password toggle button */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
-.MainBody::-webkit-scrollbar-track,
-.RightSidebar::-webkit-scrollbar-track {
-    background: var(--background);
+.input-group label {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: bold;
 }
-.MainBody::-webkit-scrollbar-thumb,
-.RightSidebar::-webkit-scrollbar-thumb {
-    background: #2C2C2C;
-    border-radius: 10px;
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
 }
-.MainBody::-webkit-scrollbar-thumb:hover,
-.RightSidebar::-webkit-scrollbar-thumb:hover {
-    background: #444444;
+.input-group label {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: bold;
 }
-
-/* Password Toggle */
+.input-group input {
+    width: 100%;
+    padding: 13px 15px;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-group input::placeholder {
+    color: var(--text-secondary);
+}
+.input-group input:hover {
+    border-color: var(--border-hover);
+}
+.input-group input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
 .password-wrapper {
     display: flex;
     align-items: center;
@@ -493,51 +516,44 @@ body {
     min-width: 0;
 }
 .password-toggle {
-    flex-shrink: 0;    
-    /* Lock the size completely so it never changes between Show/Hide */
+    flex-shrink: 0;
     width: 75px;
     min-width: 75px;
     max-width: 75px;
-    flex: 0 0 75px;  
+    flex: 0 0 75px;
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
     padding: 10px 14px;
-    border: 1px solid #3A3A3A;
+    border: 1px solid var(--border-light);
     border-radius: 8px;
     background-color: var(--surface);
     color: var(--text-secondary);
     font-size: 13px;
     cursor: pointer;
     white-space: nowrap;
-    transition:
-        background-color 0.2s,
-        border-color 0.2s,
-        color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
 }
 .password-toggle:hover {
     background-color: var(--background);
-    border-color: #666666;
+    border-color: var(--border-focus);
     color: var(--text-primary);
 }
-/* Password Visible */
 .password-toggle.password-visible {
     border-color: var(--accent);
     color: var(--accent);
 }
 .password-toggle.password-visible:hover {
-    background-color: rgba(229, 9, 20, 0.08);
+    background-color: var(--accent-glow);
     border-color: var(--accent);
     color: var(--accent);
 }
-
-/* Email Verification */
+/* the verification section div */
 .verification-section {
     margin-bottom: 25px;
     padding: 16px;
-
-    background-color: var(--surface-light, #1D2127);
+    background-color: var(--surface-light);
     border: 1px solid var(--border);
     border-radius: 8px;
 }
@@ -568,21 +584,19 @@ body {
     font-family: inherit;
     font-size: 15px;
     outline: none;
-    transition:
-        border-color 0.2s,
-        box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 .verification-row input::placeholder {
     color: var(--text-secondary);
 }
 .verification-row input:hover {
-    border-color: #444444;
+    border-color: var(--border-hover);
 }
 .verification-row input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.15);
+    box-shadow: 0 0 0 2px var(--accent-glow);
 }
-/* Send Verification Button */
+/* send email button */
 .send-button {
     flex-shrink: 0;
     padding: 0 15px;
@@ -594,17 +608,38 @@ body {
     font-size: 13px;
     font-weight: bold;
     cursor: pointer;
-    transition:
-        background-color 0.2s,
-        color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
 }
 .send-button:hover {
     background-color: var(--accent);
     color: #FFFFFF;
 }
 
-/*Responsive*/
-/*Layout*/
+/* Scrollbars for main and right sidebar*/
+.MainBody::-webkit-scrollbar,
+.RightSidebar::-webkit-scrollbar {
+    width: 10px;
+}
+.MainBody::-webkit-scrollbar-track,
+.RightSidebar::-webkit-scrollbar-track {
+    background: var(--background);
+}
+.MainBody::-webkit-scrollbar-thumb,
+.RightSidebar::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 10px;
+}
+.MainBody::-webkit-scrollbar-thumb:hover,
+.RightSidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+}
+
+/* Responsive media queries */
+@media (max-width: 900px) {
+    .movie-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
 @media (max-width: 700px) {
     .Layout1 {
         height: auto;
@@ -641,15 +676,7 @@ body {
         white-space: nowrap;
     }
     .movie-grid {
-        grid-template-columns:
-            repeat(2, minmax(150px, 1fr));
-    }
-}
-
-/*Movie grid*/
-@media (max-width: 900px) {
-    .movie-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(150px, 1fr));
     }
 }
 @media (max-width: 600px) {

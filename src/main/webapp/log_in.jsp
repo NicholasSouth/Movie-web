@@ -68,12 +68,9 @@
 		                        name="password"
 		                        placeholder="Enter your password"
 		                        required>
-		                    <button 
-		                    	type="button" 
-		                    	class="password-toggle" 
-		                    	onclick="togglePassword('password', this)">
-		                        Show
-		                    </button>
+		                    <jsp:include page="/components/password_toggle.jsp">
+        						<jsp:param name="inputId" value="password" />
+    						</jsp:include>
 		                </div>
 		            </div>
 		
