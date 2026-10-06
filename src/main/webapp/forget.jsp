@@ -17,6 +17,7 @@
 	<body>
 		<main class="forgot-page">
 		    <div class="forgot-container">
+		    
 		        <!-- Website Name -->
 		        <a href="${pageContext.request.contextPath}/main.jsp" class="website-name">
 		            PhnetPhlyx
@@ -38,22 +39,13 @@
 		        <% 
 		        	} 
 		        %>
-		
-		        <!-- Server Success -->
-		        <% 
-		        	if (request.getAttribute("message") != null) { 
-		        %>
-			            <div class="success-message">
-			                <%= request.getAttribute("message") %>
-			            </div>
-		        <% 
-		        	} 
-		        %>
+				       
 		        <form
 		            class="forgot-form"
 		            action="${pageContext.request.contextPath}/forgot-password"
 		            method="post"
 		            onsubmit="return validateForgotForm();">
+		            
 		            <!-- Account -->
 		            <div class="input-group">
 		                <label for="account">
@@ -67,7 +59,7 @@
 		                    required
 		                >
 		            </div>	
-		            <p class="verification-note">
+		            <p class="note">
 		                We will send the verification code to the email
 		                associated with your account.
 		            </p>
@@ -126,7 +118,9 @@
 		        <!-- Back to Login -->
 		        <p class="login-text">
 		            Remember your password?
-		            <a href="${pageContext.request.contextPath}/log_in.jsp" class="login-link">
+		            <a 
+		            	href="${pageContext.request.contextPath}/log_in.jsp" 
+		            	class="login-link">
 		                Back to Login
 		            </a>
 		        </p>
@@ -135,9 +129,6 @@
 		
 		<script
 			src="${pageContext.request.contextPath}/scripts/forget.js">		    
-		</script>
-		<script 
-			src="${pageContext.request.contextPath}/scripts/password_toggle.js">
-		</script>
+		</script>		
 	</body>
 </html>

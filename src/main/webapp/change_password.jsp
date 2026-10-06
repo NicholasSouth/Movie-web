@@ -53,24 +53,12 @@
 		                if (request.getAttribute("error") != null)
 		                {
 		            %>
-		                <div class="error-message">
-		                    <%= request.getAttribute("error") %>
-		                </div>
+			                <div class="error-message">
+			                    <%= request.getAttribute("error") %>
+			                </div>
 		            <%
 		                }
-		            %>
-		
-		            <!-- Success Message -->
-		            <%
-		                if (request.getAttribute("success") != null)
-		                {
-		            %>
-		                <div class="success-message">
-		                    <%= request.getAttribute("success") %>
-		                </div>
-		            <%
-		                }
-		            %>
+		            %>							
 		
 		            <!-- Change Password Form -->
 		            <form

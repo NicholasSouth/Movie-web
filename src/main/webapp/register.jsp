@@ -18,16 +18,14 @@
 	<body>
 		<main class="register-page">
 		    <div class="register-container">
+		    
 		        <!-- Website Name -->
 		        <a href="${pageContext.request.contextPath}/main.jsp" class="website-name">
 		            PhnetPhlyx
 		        </a>
-		
-		        <!-- Title -->
 		        <h1>
 		            Create an Account
-		        </h1>
-		
+		        </h1>	
 		        <p class="register-subtitle">
 		            Join PhnetPhlyx and start booking your movies.
 		        </p>
@@ -38,17 +36,6 @@
 		        %>
 			            <div class="error-message">
 			                <%= request.getAttribute("error") %>
-			            </div>
-		        <% 
-		        	} 
-		        %>
-		
-		        <!-- Server Success Message -->
-		        <% 
-		        	if (request.getAttribute("message") != null) { 
-		        %>
-			            <div class="success-message">
-			                <%= request.getAttribute("message") %>
 			            </div>
 		        <% 
 		        	} 
@@ -195,8 +182,10 @@
 		        <!-- Login -->
 		        <p class="login-text">
 		            Already have an account?
-		            <a href="${pageContext.request.contextPath}/log_in.jsp" class="login-link">
-		                Log in
+		            <a 
+		            	href="${pageContext.request.contextPath}/log_in.jsp"
+		             	class="login-link">
+		                Back to log in
 		            </a>
 		        </p>
 		    </div>
@@ -204,9 +193,6 @@
 		
 		<script 
 			src="${pageContext.request.contextPath}/scripts/register.js">
-		</script>
-		<script 
-			src="${pageContext.request.contextPath}/scripts/password_toggle.js">
 		</script>
 	</body>
 </html>

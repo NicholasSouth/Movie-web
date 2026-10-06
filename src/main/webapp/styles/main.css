@@ -17,6 +17,7 @@
     --border-focus: #666666; /* border when focus, like when clicking textbox */
     --scrollbar-thumb: #2C2C2C; /* the part of the scrollbar that we drag to move up/down */
     --scrollbar-thumb-hover: #444444; /* that thing but hover */
+    --boxshadow: rgba(0, 0, 0, 0.5); /* box shadow color */
 }
 
 /* Base and reset styles */
@@ -571,11 +572,12 @@ body {
 }
 .verification-row {
     display: flex;
-    gap: 10px;
+    gap: 12px; /* Guaranteed minimum pixel gap between input and button */
+    align-items: stretch;
 }
 .verification-row input {
     flex: 1;
-    min-width: 0;
+    min-width: 140px; /* Prevents the input from shrinking below 140px */
     padding: 13px 15px;
     background-color: var(--background);
     border: 1px solid var(--border);
@@ -596,9 +598,10 @@ body {
     border-color: var(--accent);
     box-shadow: 0 0 0 2px var(--accent-glow);
 }
-/* send email button */
+/* Send Email Button */
 .send-button {
     flex-shrink: 0;
+    min-width: 110px; /* Guarantees the button stays at least 110px wide so text never awkwardly wraps */
     padding: 0 15px;
     background-color: transparent;
     border: 1px solid var(--accent);
@@ -608,6 +611,7 @@ body {
     font-size: 13px;
     font-weight: bold;
     cursor: pointer;
+    white-space: nowrap;
     transition: background-color 0.2s, color 0.2s;
 }
 .send-button:hover {

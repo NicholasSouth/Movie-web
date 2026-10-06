@@ -12,3 +12,6 @@
     onclick="togglePassword('<%= request.getParameter("inputId") %>', this)">
     Show
 </button>
+<script 
+	src="${pageContext.request.contextPath}/scripts/password_toggle.js">
+</script>

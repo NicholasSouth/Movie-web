@@ -17,6 +17,7 @@ body {
         var(--background) 50%
     );
 }
+
 /* Container */
 .register-container {
     width: 100%;
@@ -25,10 +26,9 @@ body {
     background-color: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 15px 40px var(--boxshadow);
 }
-
-/* Website name override inside register container */
+/* Website name override */
 .register-container .website-name {
     display: block;
     margin-bottom: 25px;
@@ -50,25 +50,14 @@ body {
     line-height: 1.5;
     text-align: center;
 }
-
 /* Server messages */
 .error-message {
     margin-bottom: 20px;
     padding: 12px 15px;
-    background-color: rgba(255, 107, 107, 0.1);
+    background-color: var(--danger);
     border: 1px solid var(--danger);
     border-radius: 8px;
     color: var(--danger);
-    font-size: 13px;
-    text-align: center;
-}
-.success-message {
-    margin-bottom: 20px;
-    padding: 12px 15px;
-    background-color: rgba(40, 167, 69, 0.1);
-    border: 1px solid #28a745;
-    border-radius: 8px;
-    color: #28a745;
     font-size: 13px;
     text-align: center;
 }
@@ -78,15 +67,14 @@ body {
     display: flex;
     flex-direction: column;
 }
-
-/* Contact note */
+/* to notify user that email/username is forced, phone is optional */
 .contact-note {
     margin: -5px 0 20px;
     color: var(--text-secondary);
     font-size: 12px;
     line-height: 1.5;
 }
-/* Manager option */
+/* manager checkbox to notify admin */
 .manager-option {
     display: flex;
     align-items: flex-start;
@@ -123,7 +111,6 @@ body {
     font-size: 12px;
     line-height: 1.4;
 }
-
 /* Register button */
 .register-button {
     width: 100%;
@@ -131,7 +118,7 @@ body {
     background-color: var(--accent);
     border: none;
     border-radius: 8px;
-    color: #FFFFFF;
+    color: var(--text-primary);
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
@@ -145,8 +132,7 @@ body {
 .register-button:active {
     transform: translateY(0);
 }
-
-/* Login text */
+/* the clickable back to login text */
 .login-text {
     margin: 25px 0 0;
     color: var(--text-secondary);

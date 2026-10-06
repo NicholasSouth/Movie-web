@@ -16,7 +16,8 @@
 	</head>
 	<body>
 		<main class="login-page">
-		    <div class="login-container">	
+		    <div class="login-container">
+		    	
 		        <!-- Website Name -->
 		        <a href="${pageContext.request.contextPath}/main.jsp" class="website-name">
 		            PhnetPhlyx
@@ -25,7 +26,7 @@
 		            Sign in to continue to PhnetPhlyx
 		        </p>
 		
-		        <!-- Server Error Message -->
+		        <!-- Error Message -->
 		        <% 
 		        	if (request.getAttribute("error") != null) { 
 		        %>
@@ -41,6 +42,7 @@
 			        class="login-form" 
 			        action="${pageContext.request.contextPath}/login" 
 			        method="post">
+			        
 		            <!-- Email or Phone Number -->
 		            <div class="input-group">
 		                <label for="login">
@@ -105,9 +107,5 @@
 		        </p>
 		    </div>
 		</main>
-
-		<script 
-			src="${pageContext.request.contextPath}/scripts/password_toggle.js">
-		</script>
 	</body>
 </html>
