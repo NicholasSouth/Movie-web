@@ -1,0 +1,36 @@
+package com.movieweb.servlet;
+
+import java.io.IOException;
+import java.util.List;
+
+import com.movieweb.model.Theaters;
+import com.movieweb.model.Users;
+import com.movieweb.service.ManagerTheatersService;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+@WebServlet("/manager-theaters")
+public class ManagerTheatersServlet extends HttpServlet {
+    private final ManagerTheatersService managerTheatersService = new ManagerTheatersService();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        Users currentUser = (session == null) ? null : (Users) session.getAttribute("user");
+        if (currentUser == null || !"MANAGER".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/main.jsp");
+            return;
+        }
+
+        List<Theaters> theaters = managerTheatersService.getTheatersByManager(currentUser.getUserId());
+
+        request.setAttribute("theaters", theaters);
+        request.getRequestDispatcher("/manager_theaters.jsp").forward(request, response);
+    }
+}

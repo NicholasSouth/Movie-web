@@ -1,0 +1,59 @@
+package com.movieweb.servlet;
+
+import java.io.IOException;
+
+import com.movieweb.model.Theaters;
+import com.movieweb.model.Users;
+import com.movieweb.service.ManagerTheaterDetailsService;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+@WebServlet("/manager-theater-details")
+public class ManagerTheaterDetailsServlet extends HttpServlet {
+    private final ManagerTheaterDetailsService service = new ManagerTheaterDetailsService();
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+        Users currentUser = (session == null) ? null : (Users) session.getAttribute("user");
+        if (currentUser == null || !"MANAGER".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/main.jsp");
+            return;
+        }
+
+        int theaterId;
+        try {
+            theaterId = Integer.parseInt(request.getParameter("id"));
+        }
+        catch (NumberFormatException e) {
+            response.sendRedirect(request.getContextPath() + "/manager-theaters");
+            return;
+        }
+
+        Theaters theater = service.getManagedTheater(currentUser.getUserId(), theaterId);
+        if (theater == null) {
+            response.sendRedirect(request.getContextPath() + "/manager-theaters");
+            return;
+        }
+
+        request.setAttribute("theater", theater);
+        request.setAttribute("rooms", service.getRoomsByTheater(theaterId));
+        request.setAttribute("roomTypes", service.getRoomTypes());
+
+        for (String key : new String[] { "roomMessage", "roomError" }) {
+            Object value = session.getAttribute(key);
+            if (value != null) {
+                request.setAttribute(key, value);
+                session.removeAttribute(key);
+            }
+        }
+
+        request.getRequestDispatcher("/manager_theater_details.jsp").forward(request, response);
+    }
+}

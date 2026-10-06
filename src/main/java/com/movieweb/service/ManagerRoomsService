@@ -1,0 +1,98 @@
+package com.movieweb.service;
+
+import com.movieweb.DAO.Room_typesDAO;
+import com.movieweb.DAO.RoomsDAO;
+import com.movieweb.DAO.ShowtimesDAO;
+import com.movieweb.model.Rooms;
+
+public class ManagerRoomsService {
+    private final ManagerTheaterDetailsService theaterService = new ManagerTheaterDetailsService();
+    private final RoomsDAO roomsDAO = new RoomsDAO();
+    private final Room_typesDAO room_typesDAO = new Room_typesDAO();
+    private final ShowtimesDAO showtimesDAO = new ShowtimesDAO();
+
+    public String addRoom(int managerUserId, int theaterId, String roomName, int roomTypeId) {
+        if (theaterService.getManagedTheater(managerUserId, theaterId) == null) {
+            return "You do not have permission to manage this theater.";
+        }
+
+        String name = (roomName == null) ? "" : roomName.trim();
+        if (name.isEmpty()) return "Room name cannot be empty.";
+        if (roomsDAO.roomNameExists(theaterId, name)) {
+            return "A room with this name already exists in this theater.";
+        }
+
+        if (!room_typesDAO.roomTypeExists(roomTypeId)) return "Invalid room type.";
+
+        if (!roomsDAO.insertRoom(theaterId, name, roomTypeId)) {
+            return "Could not add the room. Please try again.";
+        }
+        return null;
+    }
+
+    public String editRoom(int managerUserId, int roomId, String roomName, int roomTypeId) {
+        Rooms room = roomsDAO.getRoomById(roomId);
+        if (room == null) {
+            return "Room not found.";
+        }
+        if (theaterService.getManagedTheater(managerUserId, room.getTheater_id()) == null) {
+            return "You do not have permission to manage this room.";
+        }
+
+        String name = (roomName == null) ? "" : roomName.trim();
+        if (name.isEmpty()) return "Room name cannot be empty.";
+        if (roomsDAO.roomNameExistsExcept(room.getTheater_id(), name, roomId)) {
+            return "A room with this name already exists in this theater.";
+        }
+
+        if (!room_typesDAO.roomTypeExists(roomTypeId)) return "Invalid room type.";
+
+        if (roomTypeId != room.getRoom_type_id() && showtimesDAO.hasUpcomingShowtimes(roomId)) {
+            return "Cannot change the room type while the room has upcoming showtimes.";
+        }
+
+        if (!roomsDAO.updateRoom(roomId, name, roomTypeId)) {
+            return "Could not update the room. Please try again.";
+        }
+        return null;
+    }
+
+    public Rooms getRoom(int roomId) {
+        return roomsDAO.getRoomById(roomId);
+    }
+
+    public String toggleRoom(int managerUserId, int roomId, boolean active) {
+        Rooms room = roomsDAO.getRoomById(roomId);
+        if (room == null) {
+            return "Room not found.";
+        }
+        if (theaterService.getManagedTheater(managerUserId, room.getTheater_id()) == null) {
+            return "You do not have permission to manage this room.";
+        }
+
+        if (!active && showtimesDAO.hasUpcomingShowtimes(roomId)) {
+            return "Cannot deactivate a room that has upcoming showtimes.";
+        }
+        if (!roomsDAO.updateRoomActive(roomId, active)) {
+            return "Could not update the room status. Please try again.";
+        }
+        return null;
+    }
+
+    public String deleteRoom(int managerUserId, int roomId) {
+        Rooms room = roomsDAO.getRoomById(roomId);
+        if (room == null) {
+            return "Room not found.";
+        }
+        if (theaterService.getManagedTheater(managerUserId, room.getTheater_id()) == null) {
+            return "You do not have permission to manage this room.";
+        }
+        if (showtimesDAO.hasUpcomingShowtimes(roomId)) {
+            return "Cannot delete a room that has upcoming showtimes.";
+        }
+        if (!roomsDAO.deleteRoom(roomId)) {
+            return "Could not delete the room. Please try again.";
+        }
+        return null;
+    }
+}

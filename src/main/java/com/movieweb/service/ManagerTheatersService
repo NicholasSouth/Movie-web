@@ -1,0 +1,17 @@
+package com.movieweb.service;
+
+import java.util.Collections;
+import java.util.List;
+
+import com.movieweb.DAO.ManagersDAO;
+import com.movieweb.model.Theaters;
+
+public class ManagerTheatersService {
+    private final ManagersDAO managersDAO = new ManagersDAO();
+
+    // Get the list of active theaters managed by the manager
+    public List<Theaters> getTheatersByManager(int managerUserId) {
+        List<Theaters> theaters = managersDAO.getTheatersByManagerId(managerUserId);
+        return theaters != null ? theaters : Collections.emptyList();
+    }
+}

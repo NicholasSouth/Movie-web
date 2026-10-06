@@ -1,0 +1,151 @@
+package com.movieweb.servlet;
+
+import java.io.IOException;
+
+import com.movieweb.model.Rooms;
+import com.movieweb.model.Users;
+import com.movieweb.service.ManagerRoomsService;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+@WebServlet({"/manager-rooms/add", "/manager-rooms/edit", "/manager-rooms/toggle", "/manager-rooms/delete"})
+public class ManagerRoomsServlet extends HttpServlet {
+    private final ManagerRoomsService service = new ManagerRoomsService();
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+
+        HttpSession session = request.getSession(false);
+        Users currentUser = (session == null) ? null : (Users) session.getAttribute("user");
+        if (currentUser == null || !"MANAGER".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/main.jsp");
+            return;
+        }
+
+        int theaterId;
+        switch (request.getServletPath()) {
+            case "/manager-rooms/add":
+                theaterId = handleAdd(request, session, currentUser.getUserId());
+                break;
+            case "/manager-rooms/edit":
+                theaterId = handleEdit(request, session, currentUser.getUserId());
+                break;
+            case "/manager-rooms/toggle":
+                theaterId = handleToggle(request, session, currentUser.getUserId());
+                break;
+            case "/manager-rooms/delete":
+                theaterId = handleDelete(request, session, currentUser.getUserId());
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+        }
+
+        if (theaterId < 0) {
+            response.sendRedirect(request.getContextPath() + "/manager-theaters");
+        }
+        else {
+            response.sendRedirect(request.getContextPath() + "/manager-theater-details?id=" + theaterId);
+        }
+    }
+
+    private int handleAdd(HttpServletRequest request, HttpSession session, int managerUserId) {
+        int theaterId;
+        int roomTypeId;
+        try {
+            theaterId = Integer.parseInt(request.getParameter("theaterId"));
+            roomTypeId = Integer.parseInt(request.getParameter("roomTypeId"));
+        }
+        catch (NumberFormatException e) {
+            return -1;
+        }
+
+        String error = service.addRoom(managerUserId, theaterId, request.getParameter("roomName"), roomTypeId);
+        if (error == null) {
+            session.setAttribute("roomMessage", "Room added successfully.");
+        }
+        else {
+            session.setAttribute("roomError", error);
+        }
+        return theaterId;
+    }
+
+    private int handleEdit(HttpServletRequest request, HttpSession session, int managerUserId) {
+        int theaterId;
+        int roomId;
+        int roomTypeId;
+        try {
+            theaterId = Integer.parseInt(request.getParameter("theaterId"));
+            roomId = Integer.parseInt(request.getParameter("roomId"));
+            roomTypeId = Integer.parseInt(request.getParameter("roomTypeId"));
+        }
+        catch (NumberFormatException e) {
+            return -1;
+        }
+
+        String error = service.editRoom(managerUserId, roomId, request.getParameter("roomName"), roomTypeId);
+        if (error == null) {
+            session.setAttribute("roomMessage", "Room updated successfully.");
+        }
+        else {
+            session.setAttribute("roomError", error);
+        }
+        return theaterId;
+    }
+
+    private int handleToggle(HttpServletRequest request, HttpSession session, int managerUserId) {
+        int roomId;
+        try {
+            roomId = Integer.parseInt(request.getParameter("roomId"));
+        }
+        catch (NumberFormatException e) {
+            return -1;
+        }
+        boolean active = Boolean.parseBoolean(request.getParameter("active"));
+
+        Rooms room = service.getRoom(roomId);
+        if (room == null) {
+            return -1;
+        }
+
+        String error = service.toggleRoom(managerUserId, roomId, active);
+        if (error == null) {
+            session.setAttribute("roomMessage", active ? "Room activated." : "Room deactivated.");
+        }
+        else {
+            session.setAttribute("roomError", error);
+        }
+        return room.getTheater_id();
+    }
+
+    private int handleDelete(HttpServletRequest request, HttpSession session, int managerUserId) {
+        int roomId;
+        try {
+            roomId = Integer.parseInt(request.getParameter("roomId"));
+        }
+        catch (NumberFormatException e) {
+            return -1;
+        }
+
+        Rooms room = service.getRoom(roomId);
+        if (room == null) {
+            return -1;
+        }
+
+        String error = service.deleteRoom(managerUserId, roomId);
+        if (error == null) {
+            session.setAttribute("roomMessage", "Room deleted.");
+        }
+        else {
+            session.setAttribute("roomError", error);
+        }
+        return room.getTheater_id();
+    }
+}

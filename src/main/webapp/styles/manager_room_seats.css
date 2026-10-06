@@ -1,0 +1,283 @@
+.seat,
+.seat.unavailable {
+    cursor: default;
+}
+
+/* Room name + back link block at the top */
+.manager-seat-top {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #fff;
+}
+.manager-seat-top a {
+    color: #8A8F99;
+    font-size: 14px;
+    text-decoration: none;
+}
+.manager-seat-top a:hover {
+    color: #E50914;
+}
+.manager-seat-top h1 {
+    font-size: 20px;
+    font-weight: 600;
+}
+.manager-seat-top span {
+    color: #8A8F99;
+    font-size: 13px;
+}
+
+.no-seats {
+    color: #8A8F99;
+    font-size: 14px;
+}
+
+/* Header: room info on the left, add button on the right */
+.manager-seat-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.add-seat-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: #0D0F12;
+    border: 1px solid #3A3A3A;
+    border-radius: 8px;
+    color: #F5F5F7;
+    font-family: inherit;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+.add-seat-btn:hover {
+    border-color: #E50914;
+}
+
+/* Add-seat dialog */
+.seat-dialog {
+    margin: auto;
+    width: min(380px, calc(100vw - 32px));
+    padding: 24px;
+    background: #171A20;
+    color: #fff;
+    border: 1px solid #2A2F38;
+    border-radius: 10px;
+}
+.seat-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.65);
+}
+.seat-dialog h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+.seat-dialog label {
+    display: block;
+    font-size: 13px;
+    color: #8A8F99;
+    margin: 14px 0 6px;
+}
+.seat-dialog input,
+.seat-dialog select {
+    width: 100%;
+    padding: 10px 12px;
+    font: inherit;
+    color: #fff;
+    background: #0D0F12;
+    border: 1px solid #2A2F38;
+    border-radius: 6px;
+    outline: none;
+}
+.seat-dialog input:focus,
+.seat-dialog select:focus {
+    border-color: #E50914;
+}
+.seat-dialog input.invalid {
+    border-color: #ff6b6b;
+}
+.field-hint {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #6B717C;
+}
+.field-error {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #ff6b6b;
+}
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+}
+.dialog-actions button {
+    font: inherit;
+    font-weight: 600;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.btn-cancel {
+    background: #2A2F38;
+    color: #C9CDD4;
+}
+.btn-primary {
+    background: #E50914;
+    color: #F5F5F7;
+}
+
+.alert {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+.alert-success {
+    background-color: rgba(46, 204, 113, 0.15);
+    color: #2ECC71;
+}
+.alert-error {
+    background-color: rgba(255, 107, 107, 0.15);
+    color: #FF6B6B;
+}
+
+/* Header tools */
+.seat-section-tools {
+    display: flex;
+    gap: 8px;
+}
+
+/* Edit mode button */
+.seat-section-tools .icon-button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: #0D0F12;
+    border: 1px solid #3A3A3A;
+    border-radius: 8px;
+    color: #F5F5F7;
+    font-family: inherit;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.seat-section-tools .icon-button:hover {
+    border-color: #E50914;
+}
+
+.seat-section-tools .icon-button.active {
+    background: #E50914;
+    border-color: #E50914;
+}
+
+/* Seat edit toolbar */
+.seat-edit-toolbar {
+    display: none;
+    position: sticky;
+    bottom: 12px;
+    z-index: 10;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    width: calc(100% - 2 * clamp(21px, 3vw, 160px));
+    padding: 12px 15px;
+    background: #171A20;
+    border: 1px solid #2A2F38;
+    border-radius: 8px;
+    color: #C9CDD4;
+    font-size: 14px;
+}
+.seat-edit-toolbar.visible {
+    display: flex;
+}
+.seat-edit-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.seat-action-btn {
+    padding: 7px 12px;
+    background: transparent;
+    border: 1px solid #3A3A3A;
+    border-radius: 7px;
+    color: #F5F5F7;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+.seat-action-btn:hover {
+    background: #22252A;
+    border-color: #E50914;
+}
+.seat-action-btn:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+.seat-action-danger {
+    border-color: #FF6B6B;
+    color: #FF6B6B;
+}
+.seat-action-danger:hover {
+    background: #FF6B6B;
+    color: #F5F5F7;
+}
+.seat-action-activate {
+    border-color: var(--seat-selected);
+    color: var(--seat-selected);
+}
+.seat-action-activate:hover {
+    background: var(--seat-selected);
+    border-color: var(--seat-selected);
+    color: #fff;
+}
+.seat-action-remove {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 16px;
+    background: #FF6B6B;
+    border-color: #FF6B6B;
+    color: #fff;
+    font-weight: 600;
+}
+.seat-action-remove:hover {
+    background: #E04F4F;
+    border-color: #E04F4F;
+}
+
+/* Seat selection */
+.seats.editing .seat {
+    cursor: pointer;
+}
+.seat.selected {
+    background: var(--seat-selected);
+}
+
+.btn-danger {
+    background: #FF6B6B;
+    color: #fff;
+}
+.dialog-summary {
+    margin-bottom: 4px;
+    font-size: 13px;
+    color: #C9CDD4;
+    line-height: 1.5;
+    word-break: break-word;
+}

@@ -1,0 +1,39 @@
+package com.movieweb.service;
+
+import java.util.Collections;
+import java.util.List;
+
+import com.movieweb.DAO.ManagersDAO;
+import com.movieweb.DAO.Room_typesDAO;
+import com.movieweb.DAO.RoomsDAO;
+import com.movieweb.model.Room_types;
+import com.movieweb.model.Rooms;
+import com.movieweb.model.Theaters;
+
+public class ManagerTheaterDetailsService {
+    private final ManagersDAO managersDAO = new ManagersDAO();
+    private final RoomsDAO roomsDAO = new RoomsDAO();
+    private final Room_typesDAO room_typesDAO = new Room_typesDAO();
+
+    public Theaters getManagedTheater(int managerUserId, int theaterId) {
+        List<Theaters> managedTheaters = managersDAO.getTheatersByManagerId(managerUserId);
+        if (managedTheaters == null) {
+            return null;
+        }
+        for (Theaters theater : managedTheaters) {
+            if (theater.getTheater_id() == theaterId) {
+                return theater;
+            }
+        }
+        return null;
+    }
+
+    public List<Rooms> getRoomsByTheater(int theaterId) {
+        List<Rooms> rooms = roomsDAO.getAllRoomsByTheaterId(theaterId);
+        return rooms != null ? rooms : Collections.emptyList();
+    }
+
+    public List<Room_types> getRoomTypes() {
+        return room_typesDAO.getAllRoomTypes();
+    }
+}

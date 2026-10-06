@@ -1,0 +1,136 @@
+package com.movieweb.servlet;
+
+import java.io.IOException;
+
+import com.movieweb.model.Users;
+import com.movieweb.service.ManagerSeatsService;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+@WebServlet({"/manager-seats/add", "/manager-seats/edit", "/manager-seats/toggle", "/manager-seats/remove"})
+public class ManagerSeatsServlet extends HttpServlet {
+    private final ManagerSeatsService service = new ManagerSeatsService();
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        Users currentUser = (session == null) ? null : (Users) session.getAttribute("user");
+        if (currentUser == null || !"MANAGER".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/main.jsp");
+            return;
+        }
+
+        int roomId;
+        try {
+            roomId = Integer.parseInt(request.getParameter("roomId"));
+        } catch (NumberFormatException e) {
+            response.sendRedirect(request.getContextPath() + "/manager-theaters");
+            return;
+        }
+
+        switch (request.getServletPath()) {
+            case "/manager-seats/add":
+                handleAdd(request, session, currentUser.getUserId(), roomId);
+                break;
+            case "/manager-seats/edit":
+                handleEdit(request, session, currentUser.getUserId(), roomId);
+                break;
+            case "/manager-seats/toggle":
+                handleToggle(request, session, currentUser.getUserId(), roomId);
+                break;
+            case "/manager-seats/remove":
+                handleRemove(request, session, currentUser.getUserId(), roomId);
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+        }
+        response.sendRedirect(request.getContextPath() + "/manager-room-seats?roomId=" + roomId);
+    }
+
+    private void handleAdd(HttpServletRequest request, HttpSession session, int managerUserId, int roomId) {
+        String seatName = request.getParameter("seatName");
+        seatName = (seatName == null) ? "" : seatName.trim().toUpperCase();
+
+        String error;
+        try {
+            int seatTypeId = Integer.parseInt(request.getParameter("seatTypeId"));
+            error = service.addSeat(managerUserId, roomId, seatName, seatTypeId);
+        } catch (NumberFormatException e) {
+            error = "Invalid seat type.";
+        }
+
+        if (error == null) {
+            session.setAttribute("seatMessage", "Seat " + seatName + " added.");
+        } else {
+            session.setAttribute("seatError", error);
+        }
+    }
+
+    private void handleEdit(HttpServletRequest request, HttpSession session, int managerUserId, int roomId) {
+        String namesParam = request.getParameter("seatNames");
+        String[] seatNames = (namesParam == null || namesParam.trim().isEmpty())
+                ? new String[0]
+                : namesParam.split(",");
+        String newName = request.getParameter("seatName");
+
+        String error;
+        try {
+            int seatTypeId = Integer.parseInt(request.getParameter("seatTypeId"));
+            error = service.editSeats(managerUserId, roomId, seatNames, newName, seatTypeId);
+        } catch (NumberFormatException e) {
+            error = "Invalid seat type.";
+        }
+
+        if (error == null) {
+            session.setAttribute("seatMessage",
+                    seatNames.length == 1 ? "Seat updated." : seatNames.length + " seats updated.");
+        } else {
+            session.setAttribute("seatError", error);
+        }
+    }
+
+    private void handleToggle(HttpServletRequest request, HttpSession session, int managerUserId, int roomId) {
+        String[] seatNames = parseSeatNames(request);
+        String activeParam = request.getParameter("active");
+        if (!"true".equals(activeParam) && !"false".equals(activeParam)) {
+            session.setAttribute("seatError", "Invalid request.");
+            return;
+        }
+        boolean active = "true".equals(activeParam);
+
+        String error = service.toggleSeats(managerUserId, roomId, seatNames, active);
+        if (error == null) {
+            String action = active ? "activated." : "deactivated.";
+            session.setAttribute("seatMessage",
+                    seatNames.length == 1 ? "Seat " + action : seatNames.length + " seats " + action);
+        } else {
+            session.setAttribute("seatError", error);
+        }
+    }
+
+    private void handleRemove(HttpServletRequest request, HttpSession session, int managerUserId, int roomId) {
+        String[] seatNames = parseSeatNames(request);
+
+        String error = service.removeSeats(managerUserId, roomId, seatNames);
+        if (error == null) {
+            session.setAttribute("seatMessage",
+                    seatNames.length == 1 ? "Seat removed." : seatNames.length + " seats removed.");
+        } else {
+            session.setAttribute("seatError", error);
+        }
+    }
+
+    private String[] parseSeatNames(HttpServletRequest request) {
+        String namesParam = request.getParameter("seatNames");
+        return (namesParam == null || namesParam.trim().isEmpty())
+                ? new String[0]
+                : namesParam.split(",");
+    }
+}

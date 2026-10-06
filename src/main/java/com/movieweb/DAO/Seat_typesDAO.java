@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.movieweb.model.Seat_types;
 import com.movieweb.util.DBConnection;
 
@@ -36,5 +39,31 @@ public class Seat_typesDAO
         }
         
         return null;
+    }
+
+    public List<Seat_types> getAllSeatTypes()
+    {
+        List<Seat_types> list = new ArrayList<>();
+        String sql = "SELECT seat_type_id, seat_type_name, price_modify FROM Seat_types ORDER BY seat_type_id";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery())
+        {
+            while (rs.next())
+            {
+                Seat_types seat_type = new Seat_types();
+                seat_type.setSeat_type_id(rs.getInt("seat_type_id"));
+                seat_type.setSeat_type_name(rs.getString("seat_type_name"));
+                seat_type.setPrice_modify(rs.getString("price_modify"));
+                list.add(seat_type);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 }
