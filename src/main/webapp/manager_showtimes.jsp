@@ -14,6 +14,12 @@
 <%@ page import="com.movieweb.model.Rooms" %>
 <%@ page import="com.movieweb.model.Showtimes" %>
 <%@ page import="com.movieweb.model.Theaters" %>
+<%!
+    private static String esc(String s) {
+        return s == null ? "" : s.replace("&", "&amp;").replace("<", "&lt;")
+                .replace(">", "&gt;").replace("\"", "&quot;");
+    }
+%>
 <%
     String contextPath = request.getContextPath();
     List<Rooms> rooms = (List<Rooms>) request.getAttribute("rooms");
@@ -80,6 +86,18 @@
         <%@ include file="components/manager_navigation.jsp" %>
         <main class="ManagerMain">
             <section class="theater-section">
+                <%
+                    String showtimeError = (String) session.getAttribute("showtimeError");
+                    String showtimeSuccess = (String) session.getAttribute("showtimeSuccess");
+                    session.removeAttribute("showtimeError");
+                    session.removeAttribute("showtimeSuccess");
+                %>
+                <% if (showtimeError != null) { %>
+                    <div class="showtime-message showtime-message-error"><%= showtimeError %></div>
+                <% } %>
+                <% if (showtimeSuccess != null) { %>
+                    <div class="showtime-message showtime-message-success"><%= showtimeSuccess %></div>
+                <% } %>
                 <div class="manager-showtimes-header">
                     <h2>Movies & Showtimes</h2>
                     <form method="get" action="<%= contextPath %>/manager-showtimes" class="manager-theater-selector">
@@ -115,8 +133,11 @@
                     <button type="button" class="add-showtime-button" id="openAddShowtimeDialog">
                         + Add Showtime
                     </button>
+                    <button type="button" class="delete-showtime-toggle" id="toggleDeleteMode">
+                        Delete Showtime
+                    </button>
                 </div>
-                <div class="schedule-table-wrapper">
+                <div class="schedule-table-wrapper" id="scheduleTableWrapper">
                     <table class="schedule-table">
                         <thead>
                             <tr>
@@ -167,16 +188,26 @@
                                                 continue;
                                             }
                                     %>
+                                        <%
+                                            String startText = showtime.getStart_at().toLocalDateTime().toLocalTime().format(timeFormatter);
+                                            String endText = showtime.getEnd_at().toLocalDateTime().toLocalTime().format(timeFormatter);
+                                        %>
                                         <td>
-                                            <a href="<%= contextPath %>/movie-details?id=<%= movie.getMovie_id() %>" class="schedule-movie">
-                                                <img src="<%= contextPath %>/<%= movie.getPoster_path() %>" alt="<%= movie.getMovie_name() %>">
-                                                <span class="schedule-movie-name"><%= movie.getMovie_name() %></span>
-                                                <span class="schedule-movie-time">
-                                                    <%= showtime.getStart_at().toLocalDateTime().toLocalTime().format(timeFormatter) %>
-                                                    -
-                                                    <%= showtime.getEnd_at().toLocalDateTime().toLocalTime().format(timeFormatter) %>
-                                                </span>
-                                            </a>
+                                            <div class="schedule-showtime">
+                                                <a href="<%= contextPath %>/movie-details?id=<%= movie.getMovie_id() %>" class="schedule-movie">
+                                                    <img src="<%= contextPath %>/<%= movie.getPoster_path() %>" alt="<%= esc(movie.getMovie_name()) %>">
+                                                    <span class="schedule-movie-name"><%= movie.getMovie_name() %></span>
+                                                    <span class="schedule-movie-time"><%= startText %> - <%= endText %></span>
+                                                </a>
+                                                <button type="button"
+                                                        class="delete-showtime-button"
+                                                        data-showtime-id="<%= showtime.getShowtime_id() %>"
+                                                        data-movie="<%= esc(movie.getMovie_name()) %>"
+                                                        data-room="<%= esc(room.getRoom_name()) %>"
+                                                        data-time="<%= startText %> - <%= endText %>">
+                                                    Delete
+                                                </button>
+                                            </div>
                                         </td>
                                     <%
                                         }
@@ -270,7 +301,19 @@
                     %>
                 </select>
             </div>
-
+            <div class="showtime-form-group">
+                <label for="showtimePrice">Price (VND)</label>
+                <input
+                    type="text"
+                    id="showtimePrice"
+                    name="price"
+                    placeholder="Normal ticket price"
+                    inputmode="numeric"
+                    pattern="[1-9][0-9]*"
+                    title="Enter a positive whole number"
+                    maxlength="9"
+                    required>
+            </div>
             <div class="showtime-dialog-actions">
                 <button
                     type="button"
@@ -284,6 +327,29 @@
                     class="showtime-save-button">
                     Add Showtime
                 </button>
+            </div>
+        </form>
+    </dialog>
+    <dialog class="showtime-dialog" id="deleteShowtimeDialog">
+        <div class="showtime-dialog-header">
+            <h2>Delete Showtime</h2>
+            <button type="button" class="showtime-dialog-close" id="closeDeleteShowtimeDialog">&times;</button>
+        </div>
+        <form class="showtime-form" id="deleteShowtimeForm" method="post"
+              action="<%= contextPath %>/manager-delete-showtime">
+            <input type="hidden" name="theaterId" value="<%= selectedTheaterId %>">
+            <input type="hidden" name="date" value="<%= selectedDate %>">
+            <input type="hidden" name="showtimeId" id="deleteShowtimeId">
+
+            <p class="delete-showtime-message">Are you sure you want to delete this showtime?</p>
+            <div class="delete-showtime-info">
+                <strong id="deleteShowtimeMovie"></strong>
+                <span id="deleteShowtimeDetail"></span>
+            </div>
+
+            <div class="showtime-dialog-actions">
+                <button type="button" class="showtime-cancel-button" id="cancelDeleteShowtime">Cancel</button>
+                <button type="submit" class="showtime-save-button">Delete</button>
             </div>
         </form>
     </dialog>

@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.movieweb.model.Showtimes;
 import com.movieweb.model.Theaters;
+import com.movieweb.model.Showtime_ticket_types;
 import com.movieweb.util.DBConnection;
 
 import java.util.Map;
@@ -18,6 +20,12 @@ import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
 public class ShowtimesDAO {
+    private static final String ACTIVE_BOOKING_CONDITION =
+            "b.delete_at IS NULL " +
+            "AND (UPPER(b.status) = 'CONFIRMED' " +
+            "OR (UPPER(b.status) = 'PENDING' " +
+            "AND b.book_at > DATEADD(MINUTE, -15, GETDATE())))";
+
     public Showtimes getShowtimeById(int showtime_id) {
         String sql = "SELECT * FROM Showtimes WHERE showtime_id = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -36,9 +44,7 @@ public class ShowtimesDAO {
     }
     
     //for theater_details.jsp
-    public List<Showtimes> getShowtimesByTheaterAndDate(
-            int theaterId,
-            LocalDate date) {
+    public List<Showtimes> getShowtimesByTheaterAndDate(int theaterId, LocalDate date) {
         List<Showtimes> showtimes = new ArrayList<>();
         String sql =
             "SELECT s.* " +
@@ -50,6 +56,7 @@ public class ShowtimesDAO {
             "AND t.isActive = 1 " +
             "AND t.deleted_at IS NULL " +
             "AND UPPER(s.status) = 'SCHEDULED' " +
+            "AND s.deleted_at IS NULL " +
             "AND s.start_at >= ? " +
             "AND s.start_at < ? " +
             "ORDER BY s.start_at ASC";
@@ -116,6 +123,7 @@ public class ShowtimesDAO {
                 "AND t.isActive = 1 " +
                 "AND t.deleted_at IS NULL " +
                 "AND UPPER(s.status) = 'SCHEDULED' " +
+                "AND s.deleted_at IS NULL " +
                 "AND s.start_at >= GETDATE() " +
                 "ORDER BY s.start_at ASC";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -163,6 +171,7 @@ public class ShowtimesDAO {
             "AND t.isActive = 1 " +
             "AND t.deleted_at IS NULL " +
             "AND UPPER(s.status) = 'SCHEDULED' " +
+            "AND s.deleted_at IS NULL " +
             "AND s.start_at >= GETDATE() " +
             "AND s.start_at < DATEADD(DAY, 7, CONVERT(date, GETDATE())) " +
             "ORDER BY t.theater_id";
@@ -214,6 +223,7 @@ public class ShowtimesDAO {
             "AND t.isActive = 1 " +
             "AND t.deleted_at IS NULL " +
             "AND UPPER(s.status) = 'SCHEDULED' " +
+            "AND s.deleted_at IS NULL " +
             "AND s.start_at >= ? " +
             "AND s.start_at < ? " +
             "ORDER BY s.start_at ASC";
@@ -236,7 +246,7 @@ public class ShowtimesDAO {
     }
 
     public boolean hasUpcomingShowtimes(int roomId) {
-        String sql = "SELECT 1 FROM Showtimes WHERE room_id = ? AND start_at > GETDATE()";
+        String sql = "SELECT 1 FROM Showtimes WHERE room_id = ? AND start_at > GETDATE() AND deleted_at IS NULL";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, roomId);
@@ -250,7 +260,7 @@ public class ShowtimesDAO {
         return false;
     }
 
-    public boolean hasOverlappingUpcomingShowtime(
+    public boolean hasOverlappingShowtime(
             int roomId,
             Timestamp startAt,
             Timestamp endAt) {
@@ -260,7 +270,7 @@ public class ShowtimesDAO {
                 "FROM Showtimes " +
                 "WHERE room_id = ? " +
                 "AND UPPER(status) = 'SCHEDULED' " +
-                "AND start_at > GETDATE() " +
+                "AND deleted_at IS NULL " +
                 "AND start_at < ? " +
                 "AND end_at > ?";
         try (
@@ -281,25 +291,101 @@ public class ShowtimesDAO {
         return false;
     }
 
-    public boolean insertShowtime(
-            int roomId,
-            int movieId,
-            Timestamp startAt,
-            Timestamp endAt) {
-
-        String sql =
+    public boolean insertShowtime(int roomId, int movieId, Timestamp startAt, Timestamp endAt, List<Showtime_ticket_types> ticketPrices) {
+        String insertShowtimeSql =
                 "INSERT INTO Showtimes " +
                 "(room_id, movie_id, start_at, end_at, status) " +
                 "VALUES (?, ?, ?, ?, 'SCHEDULED')";
+        String insertPriceSql =
+                "INSERT INTO Showtime_ticket_types " +
+                "(showtime_id, ticket_type_id, price) " +
+                "VALUES (?, ?, ?)";
+
+        try (Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                int showtimeId;
+                try (PreparedStatement stmt = conn.prepareStatement(
+                        insertShowtimeSql,
+                        Statement.RETURN_GENERATED_KEYS)) {
+                    stmt.setInt(1, roomId);
+                    stmt.setInt(2, movieId);
+                    stmt.setTimestamp(3, startAt);
+                    stmt.setTimestamp(4, endAt);
+                    stmt.executeUpdate();
+
+                    try (ResultSet keys = stmt.getGeneratedKeys()) {
+                        if (!keys.next()) {
+                            conn.rollback();
+                            return false;
+                        }
+                        showtimeId = keys.getInt(1);
+                    }
+                }
+
+                try (PreparedStatement stmt = conn.prepareStatement(insertPriceSql)) {
+                    for (Showtime_ticket_types ticketPrice : ticketPrices) {
+                        stmt.setInt(1, showtimeId);
+                        stmt.setInt(2, ticketPrice.getTicket_type_id());
+                        stmt.setInt(3, ticketPrice.getPrice());
+                        stmt.addBatch();
+                    }
+                    stmt.executeBatch();
+                }
+
+                conn.commit();
+                return true;
+            }
+            catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
+            finally {
+                conn.setAutoCommit(true);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean hasActiveBooking(int showtimeId) {
+        String sql =
+                "SELECT 1 " +
+                "FROM Booking_showtimes b " +
+                "WHERE b.showtime_id = ? " +
+                "AND " + ACTIVE_BOOKING_CONDITION;
         try (
                 Connection conn = DBConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)
         ) {
-            stmt.setInt(1, roomId);
-            stmt.setInt(2, movieId);
-            stmt.setTimestamp(3, startAt);
-            stmt.setTimestamp(4, endAt);
+            stmt.setInt(1, showtimeId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 
+    public boolean softDeleteShowtime(int showtimeId) {
+        String sql =
+                "UPDATE Showtimes " +
+                "SET deleted_at = GETDATE() " +
+                "WHERE showtime_id = ? " +
+                "AND deleted_at IS NULL " +
+                "AND NOT EXISTS (" +
+                "    SELECT 1 FROM Booking_showtimes b " +
+                "    WHERE b.showtime_id = Showtimes.showtime_id " +
+                "    AND " + ACTIVE_BOOKING_CONDITION + ")";
+        try (
+                Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            stmt.setInt(1, showtimeId);
             return stmt.executeUpdate() > 0;
         }
         catch (SQLException e) {
@@ -315,7 +401,8 @@ public class ShowtimesDAO {
         showtime.setMovie_id(rs.getInt("movie_id"));
         showtime.setStart_at(rs.getTimestamp("start_at"));
         showtime.setEnd_at(rs.getTimestamp("end_at"));
-        showtime.setStatus(rs.getString("status")); // Add this line
+        showtime.setStatus(rs.getString("status"));
+        showtime.setDeleted_at(rs.getTimestamp("deleted_at"));
         return showtime;
     }
 }

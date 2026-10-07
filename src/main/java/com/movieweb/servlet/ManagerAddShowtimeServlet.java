@@ -33,18 +33,13 @@ public class ManagerAddShowtimeServlet extends HttpServlet {
 
         HttpSession session = req.getSession(false);
         if (session == null) {
-            resp.sendRedirect(
-                    req.getContextPath() + "/login.jsp"
-            );
+            resp.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
         }
 
-        Users currentUser =
-                (Users) session.getAttribute("user");
+        Users currentUser = (Users) session.getAttribute("user");
         if (currentUser == null) {
-            resp.sendRedirect(
-                    req.getContextPath() + "/login.jsp"
-            );
+            resp.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
         }
 
@@ -61,25 +56,14 @@ public class ManagerAddShowtimeServlet extends HttpServlet {
             theaterId = Integer.parseInt(theaterText);
         }
         catch (Exception e) {
-            setError(
-                    req,
-                    "Invalid room or theater."
-            );
-            redirectBack(
-                    req,
-                    resp,
-                    theaterText,
-                    null
-            );
+            setError(req, "Invalid room or theater.");
+            redirectBack(req, resp, theaterText, null);
             return;
         }
 
         LocalDate selectedDate;
         try {
-            selectedDate =
-                    LocalDate.parse(
-                            req.getParameter("date")
-                    );
+            selectedDate = LocalDate.parse(req.getParameter("date"));
         }
         catch (Exception e) {
             selectedDate = LocalDate.now();
@@ -88,82 +72,44 @@ public class ManagerAddShowtimeServlet extends HttpServlet {
         Timestamp startAt;
         Timestamp endAt;
         try {
-            LocalTime startTime =
-                    LocalTime.parse(startText);
+            LocalTime startTime = LocalTime.parse(startText);
+            LocalTime endTime = LocalTime.parse(endText);
 
-            LocalTime endTime =
-                    LocalTime.parse(endText);
-
-            startAt =
-                    Timestamp.valueOf(
-                            LocalDateTime.of(
-                                    selectedDate,
-                                    startTime
-                            )
-                    );
-
-            endAt =
-                    Timestamp.valueOf(
-                            LocalDateTime.of(
-                                    selectedDate,
-                                    endTime
-                            )
-                    );
+            startAt = Timestamp.valueOf(LocalDateTime.of(selectedDate, startTime));
+            endAt = Timestamp.valueOf(LocalDateTime.of(selectedDate, endTime));
         }
         catch (Exception e) {
-            setError(
-                    req,
-                    "Invalid start or end time."
-            );
-            redirectBack(
-                    req,
-                    resp,
-                    theaterText,
-                    selectedDate
-            );
+            setError(req, "Invalid start or end time.");
+            redirectBack(req, resp, theaterText, selectedDate);
             return;
         }
 
-        String error =
-                service.addShowtime(
-                        currentUser.getUserId(),
-                        movieName,
-                        roomId,
-                        startAt,
-                        endAt
-                );
+        int price;
+        try {
+            price = Integer.parseInt(req.getParameter("price").trim());
+        }
+        catch (Exception e) {
+            setError(req, "Invalid price.");
+            redirectBack(req, resp, theaterText, selectedDate);
+            return;
+        }
+
+        String error = service.addShowtime(currentUser.getUserId(), movieName, roomId, startAt,
+                                            endAt, price);
         if (error != null) {
             setError(req, error);
-
-            redirectBack(
-                    req,
-                    resp,
-                    theaterText,
-                    selectedDate
-            );
+            redirectBack(req, resp, theaterText, selectedDate);
             return;
         }
 
-        req.getSession().setAttribute(
-                "showtimeSuccess",
-                "Showtime added successfully."
-        );
-
-        redirectBack(
-                req,
-                resp,
-                theaterText,
-                selectedDate
-        );
+        req.getSession().setAttribute("showtimeSuccess", "Showtime added successfully.");
+        redirectBack(req, resp, theaterText, selectedDate);
     }
 
     private void setError(
             HttpServletRequest req,
             String message) {
-        req.getSession().setAttribute(
-                "showtimeError",
-                message
-        );
+        req.getSession().setAttribute("showtimeError", message);
     }
 
     private void redirectBack(
@@ -172,10 +118,7 @@ public class ManagerAddShowtimeServlet extends HttpServlet {
             String theaterId,
             LocalDate date)
             throws IOException {
-        StringBuilder url =
-                new StringBuilder(
-                        req.getContextPath()
-                ).append("/manager-showtimes");
+        StringBuilder url = new StringBuilder(req.getContextPath()).append("/manager-showtimes");
 
         boolean hasParameter = false;
         if (theaterId != null && !theaterId.trim().isEmpty()) {

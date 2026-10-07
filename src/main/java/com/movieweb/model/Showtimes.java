@@ -1,5 +1,4 @@
 package com.movieweb.model;
-
 import java.sql.Timestamp;
 
 public class Showtimes 
@@ -10,6 +9,7 @@ public class Showtimes
     private Timestamp start_at;
     private Timestamp end_at;
     private String status;
+    private Timestamp deleted_at;
 
     public Showtimes() {
     }
@@ -49,4 +49,6 @@ public class Showtimes
     public void setStatus(String status) {
         this.status = status;
     }
+    public Timestamp getDeleted_at() {return deleted_at;}
+    public void setDeleted_at(Timestamp deleted_at) {this.deleted_at = deleted_at;}
 }

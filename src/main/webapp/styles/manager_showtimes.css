@@ -49,6 +49,7 @@
     display: flex;
     justify-content: flex-start;
     margin: 0 0 15px 0;
+    gap: 10px;
 }
 
 .add-showtime-button {
@@ -69,6 +70,79 @@
 .add-showtime-button:hover {
     opacity: 0.85;
     transform: translateY(-1px);
+}
+
+.showtime-message {
+    padding: 10px 14px;
+    margin: 0 0 15px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.showtime-message-error {
+    background-color: rgba(229, 9, 20, 0.12);
+    border: 1px solid var(--accent);
+}
+
+.showtime-message-success {
+    background-color: rgba(46, 160, 67, 0.12);
+    border: 1px solid #2EA043;
+}
+
+.delete-showtime-toggle {
+    padding: 10px 16px;
+    background-color: transparent;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.delete-showtime-toggle:hover {
+    background-color: rgba(229, 9, 20, 0.12);
+    transform: translateY(-1px);
+}
+
+.delete-showtime-toggle.active {
+    background-color: var(--accent);
+    color: var(--text-primary);
+}
+
+.schedule-showtime {
+    position: relative;
+}
+
+.delete-showtime-button {
+    display: none;
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    padding: 6px 12px;
+    background-color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.delete-showtime-button:hover {
+    opacity: 0.85;
+}
+
+.delete-mode .delete-showtime-button {
+    display: block;
+}
+
+.delete-mode .schedule-movie {
+    pointer-events: none;
+    padding-bottom: 44px;
 }
 
 .showtime-dialog {
@@ -197,6 +271,32 @@
 
 .showtime-save-button:hover {
     opacity: 0.85;
+}
+
+.delete-showtime-message {
+    margin: 0 0 14px 0;
+    color: var(--text-primary);
+    font-size: 15px;
+}
+
+.delete-showtime-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    background-color: var(--background);
+    border: 1px solid #2C2C2C;
+    border-radius: 8px;
+}
+
+.delete-showtime-info strong {
+    color: var(--text-primary);
+    font-size: 15px;
+}
+
+.delete-showtime-info span {
+    color: var(--text-secondary);
+    font-size: 13px;
 }
 
 @media (max-width: 600px) {
