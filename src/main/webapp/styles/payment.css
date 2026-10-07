@@ -2,14 +2,16 @@
 .PaymentPage {
     min-height: 70vh;
     padding: 40px 24px 65px;
-    background: var(--background, #0D0F12);
-    color: var(--text-primary, #F5F5F7);
+    background: var(--background);
+    color: var(--text-primary);
 }
 .PaymentContainer {
     width: 100%;
     max-width: 1180px;
     margin: 0 auto;
 }
+
+/* Page heading */
 .PaymentHeading {
     display: flex;
     justify-content: space-between;
@@ -20,7 +22,7 @@
 .PaymentEyebrow,
 .PanelEyebrow {
     margin: 0 0 8px;
-    color: var(--accent, #E50914);
+    color: var(--accent);
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 1.8px;
@@ -32,7 +34,7 @@
 }
 .PaymentSubtitle {
     margin: 10px 0 0;
-    color: var(--text-secondary, #8A8F99);
+    color: var(--text-secondary);
     line-height: 1.6;
 }
 .PaymentSecureLabel {
@@ -40,26 +42,30 @@
     align-items: center;
     gap: 8px;
     padding: 10px 14px;
-    border: 1px solid #30343C;
+    border: 1px solid var(--border-light);
     border-radius: 999px;
-    color: #C4C8D0;
+    color: var(--text-secondary);
     font-size: 13px;
     white-space: nowrap;
 }
+/* Main payment layout */
 .PaymentLayout {
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     align-items: start;
     gap: 24px;
 }
+/* the page is split into 2 panel, left is briefing the seats booked */
+/* right is listing the payment method */
 .PaymentPanel {
     min-width: 0;
     padding: 26px;
-    background: var(--surface, #16191E);
-    border: 1px solid #292D35;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 16px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 12px 32px var(--boxshadow);
 }
+/* the heading in each panel indicate which part is it */
 .PanelHeading {
     display: flex;
     justify-content: space-between;
@@ -72,21 +78,24 @@
     font-size: 21px;
     font-weight: 750;
 }
-
+/* to show the booking_id in the left panel */
 .BookingId {
     padding: 7px 10px;
-    border: 1px solid #343943;
+    border: 1px solid var(--border-light);
     border-radius: 8px;
-    color: #B6BBC5;
+    color: var(--text-secondary);
     font-size: 12px;
     white-space: nowrap;
 }
-
+/* movie summary */
 .MovieSummary {
     display: flex;
     align-items: center;
     gap: 16px;
 }
+/* this is the frame for the movie, because the database became too big
+we have to replace the movie's picture with emoji &#127916; of the ariel font
+which is the movie emoji */
 .MoviePlaceholder {
     display: flex;
     flex: 0 0 76px;
@@ -95,10 +104,15 @@
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    background: linear-gradient(145deg, #292D35, #17191E);
-    border: 1px solid #373B44;
+    background: linear-gradient(
+        145deg,
+        var(--surface-hover),
+        var(--surface)
+    );
+    border: 1px solid var(--border-light);
     font-size: 30px;
 }
+/* the text right next to the picture frame briefly show the movies' details */
 .MovieSummaryText {
     min-width: 0;
 }
@@ -109,24 +123,53 @@
 }
 .MovieSummaryText p {
     margin: 5px 0;
-    color: var(--text-secondary, #8A8F99);
+    color: var(--text-secondary);
     font-size: 13px;
 }
 .MovieSummaryText .ShowtimeDate {
     margin-top: 12px;
-    color: #E6E7EB;
+    color: var(--text-primary);
 }
 .MovieSummaryText .ShowtimeTime {
-    color: #E6E7EB;
+    color: var(--text-primary);
     font-weight: 700;
 }
-
+/* this divider shows the seat chosen and the total price */
 .SummaryDivider {
     height: 1px;
     margin: 24px 0;
-    background: #30343C;
+    background: var(--border-light);
 }
-
+/* Promotion code showing */
+.PromotionRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 1px dashed var(--border-hover);
+    border-radius: 10px;
+    background: var(--surface-light);
+}
+.PromotionRow span {
+    color: var(--text-secondary);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.PromotionRow span strong {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+.PromotionDiscount {
+    color: var(--success);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: right;
+    white-space: nowrap;
+}
+/* Seat summary */
 .SeatSummaryHeading {
     display: flex;
     justify-content: space-between;
@@ -139,7 +182,7 @@
     font-size: 15px;
 }
 .SeatSummaryHeading > span {
-    color: var(--text-secondary, #8A8F99);
+    color: var(--text-secondary);
     font-size: 12px;
 }
 .SeatList {
@@ -167,9 +210,9 @@
     align-items: center;
     justify-content: center;
     padding: 0 7px;
-    border: 1px solid #4A4F59;
+    border: 1px solid var(--border-hover);
     border-radius: 7px;
-    background: #20242B;
+    background: var(--surface-light);
     font-size: 13px;
     font-weight: 800;
 }
@@ -177,25 +220,29 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: 0;
 }
 .SeatItemInfo strong {
     font-size: 13px;
+    overflow-wrap: anywhere;
 }
 .SeatSubtext {
-    color: var(--text-secondary, #8A8F99);
+    color: var(--text-secondary);
     font-size: 12px;
 }
+/* price */
 .SeatPrice {
     font-size: 13px;
     font-weight: 650;
     text-align: right;
     white-space: nowrap;
 }
+/* empty seat incase bugs */
 .EmptySeats {
-    color: #FCA5A5;
+    color: var(--danger);
     font-size: 13px;
 }
-
+/* Total */
 .TotalRow {
     display: flex;
     justify-content: space-between;
@@ -203,29 +250,30 @@
     gap: 12px;
 }
 .TotalRow > span {
-    color: #C4C8D0;
+    color: var(--text-secondary);
     font-size: 14px;
 }
 .TotalRow strong {
-    color: #FFFFFF;
+    color: var(--text-primary);
     font-size: clamp(18px, 2.5vw, 23px);
     text-align: right;
     overflow-wrap: anywhere;
 }
-
 .BookingFootnote {
     margin: 16px 0 0;
-    color: var(--text-secondary, #8A8F99);
+    color: var(--text-secondary);
     font-size: 12px;
     line-height: 1.6;
 }
+/* VISA */
+/* visa logo color is hard coded */
 .VisaLogo {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 5px 9px;
     border-radius: 5px;
-    background: #FFFFFF;
+    background: var(--text-primary);
     color: #173D8F;
     font-size: 15px;
     font-weight: 900;
@@ -234,7 +282,7 @@
 }
 .PaymentMethodDescription {
     margin: -7px 0 20px;
-    color: var(--text-secondary, #8A8F99);
+    color: var(--text-secondary);
     font-size: 13px;
     line-height: 1.6;
 }
@@ -260,19 +308,30 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 17px 19px;
-    border: 1px solid #393E48;
+    border: 1px solid var(--border-hover);
     border-radius: 13px;
-    background: linear-gradient(135deg, #292E38, #171A20 70%);
-    transition: border-color 0.18s, box-shadow 0.18s;
+    background: linear-gradient(
+        135deg,
+        var(--surface-light),
+        var(--surface) 70%
+    );
+    transition:
+        border-color 0.18s,
+        box-shadow 0.18s,
+        transform 0.18s;
+}
+.VisaCardOption:hover .VisaCardVisual {
+    border-color: var(--border-focus);
 }
 .VisaCardOption > input:checked + .VisaCardVisual {
-    border-color: var(--accent, #E50914);
-    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.17);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
 }
 .VisaCardOption > input:focus-visible + .VisaCardVisual {
-    outline: 2px solid #FFFFFF;
+    outline: 2px solid var(--text-primary);
     outline-offset: 3px;
 }
+/* the card top line is the part containing the visa logo and the cardchip */
 .CardTopLine,
 .CardBottomLine {
     display: flex;
@@ -280,31 +339,33 @@
     align-items: center;
     gap: 10px;
 }
+/* the card chip - the grey rectangle thing is also hard coded */
 .CardChip {
     display: block;
     width: 30px;
     height: 22px;
     border: 1px solid #A6A8AB;
     border-radius: 5px;
-    background: linear-gradient(135deg, #D5D6D8, #777D86);
+    background: linear-gradient(
+        135deg,
+        #D5D6D8,
+        #777D86
+    );
 }
 .CardNumber {
     margin: 16px 0;
     font-size: clamp(16px, 2vw, 19px);
     font-weight: 650;
     letter-spacing: 1.2px;
+    overflow-wrap: anywhere;
 }
+/* this is the expired date text */
 .CardBottomLine {
-    color: #B8BDC7;
+    color: var(--text-secondary);
     font-size: 11px;
 }
-.CardRadioText {
-    display: block;
-    margin: 9px 2px 0;
-    color: #C3C7D0;
-    font-size: 12px;
-}
-
+/* Demo payment notice */
+/* the yellow color is also hard coded */
 .DemoPaymentNotice {
     margin: 20px 0;
     padding: 14px 15px;
@@ -322,6 +383,7 @@
     font-size: 12px;
     line-height: 1.6;
 }
+/* Payment button */
 .PayButton {
     display: flex;
     width: 100%;
@@ -332,17 +394,23 @@
     padding: 14px 18px;
     border: none;
     border-radius: 9px;
-    background: var(--accent, #E50914);
-    color: #FFFFFF;
+    background: var(--accent);
+    color: var(--text-primary);
     font-size: 15px;
     font-weight: 750;
     text-decoration: none;
     cursor: pointer;
-    transition: background 0.18s, transform 0.18s, opacity 0.18s;
+    transition:
+        background 0.18s,
+        transform 0.18s,
+        opacity 0.18s;
 }
 .PayButton:hover:not(:disabled) {
-    background: #C90812;
+    background: var(--accent);
     transform: translateY(-1px);
+}
+.PayButton:active:not(:disabled) {
+    transform: translateY(0);
 }
 .PayButton:disabled {
     opacity: 0.7;
@@ -350,15 +418,15 @@
 }
 .PaymentTerms {
     margin: 12px 0 0;
-    color: var(--text-secondary, #8A8F99);
+    color: var(--text-secondary);
     font-size: 11px;
     line-height: 1.6;
     text-align: center;
 }
-
+/* No saved cards */
 .NoCardsNotice {
     padding: 25px 15px;
-    border: 1px dashed #3A3F49;
+    border: 1px dashed var(--border-light);
     border-radius: 12px;
     text-align: center;
 }
@@ -371,7 +439,7 @@
 }
 .NoCardsNotice p {
     margin: 0 0 18px;
-    color: var(--text-secondary, #8A8F99);
+    color: var(--text-secondary);
     font-size: 13px;
     line-height: 1.6;
 }
@@ -379,17 +447,21 @@
     display: inline-flex;
     justify-content: center;
     padding: 10px 14px;
-    border: 1px solid #444A55;
+    border: 1px solid var(--border-hover);
     border-radius: 8px;
-    color: #F5F5F7;
+    color: var(--text-primary);
     font-size: 13px;
     font-weight: 650;
     text-decoration: none;
+    transition:
+        border-color 0.18s,
+        background-color 0.18s;
 }
 .SecondaryButton:hover {
-    border-color: var(--accent, #E50914);
+    border-color: var(--accent);
+    background-color: var(--accent-glow);
 }
-
+/* after clicking pay, if success or fail, a message will appeare */
 .PaymentNotice {
     display: flex;
     align-items: flex-start;
@@ -408,42 +480,30 @@
     font-size: 13px;
     line-height: 1.6;
 }
-.PaymentNoticeError {
-    border-color: #71343A;
-    background: #28191C;
-    color: #F4C5C8;
+.PaymentNotice.PaymentNoticeError {
+    border-color: var(--danger);
+    color: var(--danger);
 }
-.PaymentNoticeSuccess {
-    border-color: #285D45;
-    background: #17271F;
-    color: #C4F0D7;
-}
-.PaymentSuccessIcon {
-    display: flex;
-    flex: 0 0 30px;
-    width: 30px;
-    height: 30px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #285D45;
-    color: #D7FFE8;
-    font-weight: 800;
+.PaymentNotice.PaymentNoticeSuccess {
+    border-color: var(--success);
+    color: var(--success);
 }
 .TransactionCode {
     overflow-wrap: anywhere;
 }
 .TransactionCode strong {
-    color: #FFFFFF;
+    color: var(--text-primary);
 }
 .PaymentUnavailableText {
     padding: 14px;
     border-radius: 8px;
-    background: #211F1A;
-    color: #E7D4A8;
+    background: var(--surface-light);
+    color: (--text-secondary);
     font-size: 13px;
     line-height: 1.6;
 }
+/* after successfully paid, on the right panel, this is what being shown
+showing payment method and amount paid */
 .PaymentSuccessDetails {
     margin: 22px 0;
 }
@@ -451,23 +511,23 @@
     display: flex;
     justify-content: space-between;
     gap: 12px;
-    color: #C4C8D0;
+    color: var(--success);
     font-size: 13px;
 }
 .PaymentSuccessDetails strong {
-    color: #FFFFFF;
+    color: var(--success);
 }
 .SuccessReturnButton {
     box-sizing: border-box;
     justify-content: center;
 }
 
+/* Responsive */
 @media (max-width: 850px) {
     .PaymentLayout {
         grid-template-columns: 1fr;
     }
 }
-
 @media (max-width: 540px) {
     .PaymentPage {
         padding: 26px 14px 42px;
@@ -492,5 +552,12 @@
     }
     .PaymentSecureLabel {
         font-size: 12px;
+    }
+    .PaymentNotice {
+        padding: 15px;
+    }
+    .CardNumber {
+        font-size: 16px;
+        letter-spacing: 0.8px;
     }
 }

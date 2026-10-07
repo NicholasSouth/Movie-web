@@ -1,15 +1,17 @@
 package com.movieweb.model;
 
+import java.sql.Timestamp;
+
 public class Promotions {
-	private int promotion_id;
+    private int promotion_id;
     private String promotion_code;
     private String description;
     private String price_modify;
-    private String start_at;
-    private String end_at;
+    private Timestamp start_at;
+    private Timestamp end_at;
     private int usage_limit;
     private boolean isActive;
-    //
+
     public Promotions() {
     }
     public int getPromotion_id() {
@@ -36,16 +38,16 @@ public class Promotions {
     public void setPrice_modify(String price_modify) {
         this.price_modify = price_modify;
     }
-    public String getStart_at() {
+    public Timestamp getStart_at() {
         return start_at;
     }
-    public void setStart_at(String start_at) {
+    public void setStart_at(Timestamp start_at) {
         this.start_at = start_at;
     }
-    public String getEnd_at() {
+    public Timestamp getEnd_at() {
         return end_at;
     }
-    public void setEnd_at(String end_at) {
+    public void setEnd_at(Timestamp end_at) {
         this.end_at = end_at;
     }
     public int getUsage_limit() {

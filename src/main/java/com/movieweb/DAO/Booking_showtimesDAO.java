@@ -138,4 +138,54 @@ public class Booking_showtimesDAO
             throw new SQLException("Could not retrieve generated booking_id.");
         }
     }
+
+    //to put the booking infor into payment.jsp
+    public Map<String, Object> getCheckoutBooking(int userId, int bookingId) 
+    		throws SQLException {
+        String sql =
+                "SELECT b.booking_id, b.user_id, b.showtime_id, " +
+                "       b.book_at, b.status AS booking_status, b.price, " +
+                "       b.promotion_id, " +
+                "       b.delete_at, " +
+                "       CASE WHEN b.status = 'PENDING' " +
+                "                 AND (b.delete_at IS NOT NULL " +
+                "                      OR DATEADD(MINUTE, 15, b.book_at) <= GETDATE()) " +
+                "            THEN 1 ELSE 0 END AS is_expired, " +
+                "       m.movie_name, s.start_at, s.end_at, " +
+                "       s.status AS showtime_status, " +
+                "       r.room_name, t.theater_name, " +
+                "       p.status AS payment_status, p.transaction_code " +
+                "FROM Booking_showtimes b " +
+                "INNER JOIN Showtimes s ON s.showtime_id = b.showtime_id " +
+                "INNER JOIN Movies m ON m.movie_id = s.movie_id " +
+                "INNER JOIN Rooms r ON r.room_id = s.room_id " +
+                "INNER JOIN Theaters t ON t.theater_id = r.theater_id " +
+                "LEFT JOIN Payments p ON p.booking_id = b.booking_id " +
+                "WHERE b.booking_id = ? AND b.user_id = ?";
+        Map<String, Object> booking = null;
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, bookingId);
+            stmt.setInt(2, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    booking = new HashMap<>();
+                    booking.put("bookingId", rs.getInt("booking_id"));
+                    booking.put("bookingStatus", rs.getString("booking_status"));
+                    booking.put("bookingPrice", rs.getInt("price"));
+                    booking.put("promotionId", rs.getInt("promotion_id"));
+                    booking.put("isExpired", rs.getInt("is_expired") == 1);
+                    booking.put("movieName", rs.getString("movie_name"));
+                    booking.put("showtimeStart", rs.getTimestamp("start_at"));
+                    booking.put("showtimeEnd", rs.getTimestamp("end_at"));
+                    booking.put("showtimeStatus", rs.getString("showtime_status"));
+                    booking.put("roomName", rs.getString("room_name"));
+                    booking.put("theaterName", rs.getString("theater_name"));
+                    booking.put("paymentStatus", rs.getString("payment_status"));
+                    booking.put("transactionCode", rs.getString("transaction_code"));
+                }
+            }
+        }
+        return booking;
+    }
 }

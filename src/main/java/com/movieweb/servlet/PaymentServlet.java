@@ -3,17 +3,20 @@ package com.movieweb.servlet;
 
 import com.movieweb.model.Users;
 import com.movieweb.service.PaymentService;
-import com.movieweb.util.DBConnection;
+import com.movieweb.DAO.PromotionsDAO;
+import com.movieweb.model.Promotions;
+import com.movieweb.DAO.Booking_showtimesDAO;
+import com.movieweb.DAO.Booking_seatsDAO;
+
+import com.movieweb.DAO.Payment_methodsDAO;
+import com.movieweb.model.Payment_methods;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +29,10 @@ import javax.servlet.http.HttpSession;
 public class PaymentServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final PaymentService paymentService = new PaymentService();
+    private final PromotionsDAO promotionsDAO = new PromotionsDAO();
+    private final Booking_showtimesDAO bookingDAO = new Booking_showtimesDAO(); 
+    private final Booking_seatsDAO bookingSeatsDAO = new Booking_seatsDAO(); 
+    private final Payment_methodsDAO paymentMethodsDAO = new Payment_methodsDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -107,101 +114,52 @@ public class PaymentServlet extends HttpServlet {
             throw new ServletException("Unable to reload checkout details.", e);
         }
     }
+    
     private boolean loadCheckoutData(HttpServletRequest request, int userId, int bookingId)
-            throws SQLException {
-        String bookingSql =
-                "SELECT b.booking_id, b.user_id, b.showtime_id, " +
-                "       b.book_at, b.status AS booking_status, b.price, " +
-                "       b.delete_at, " +
-                "       CASE WHEN b.status = 'PENDING' " +
-                "                 AND (b.delete_at IS NOT NULL " +
-                "                      OR DATEADD(MINUTE, 15, b.book_at) <= GETDATE()) " +
-                "            THEN 1 ELSE 0 END AS is_expired, " +
-                "       m.movie_name, s.start_at, s.end_at, " +
-                "       s.status AS showtime_status, " +
-                "       r.room_name, t.theater_name, " +
-                "       p.status AS payment_status, p.transaction_code " +
-                "FROM Booking_showtimes b " +
-                "INNER JOIN Showtimes s ON s.showtime_id = b.showtime_id " +
-                "INNER JOIN Movies m ON m.movie_id = s.movie_id " +
-                "INNER JOIN Rooms r ON r.room_id = s.room_id " +
-                "INNER JOIN Theaters t ON t.theater_id = r.theater_id " +
-                "LEFT JOIN Payments p ON p.booking_id = b.booking_id " +
-                "WHERE b.booking_id = ? AND b.user_id = ?";
-        try (Connection conn = DBConnection.getConnection()) {
-            try (PreparedStatement stmt = conn.prepareStatement(bookingSql)) {
-                stmt.setInt(1, bookingId);
-                stmt.setInt(2, userId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (!rs.next()) {
-                        return false;
-                    }
-                    request.setAttribute("bookingId", rs.getInt("booking_id"));
-                    request.setAttribute("bookingStatus", rs.getString("booking_status"));
-                    request.setAttribute("bookingPrice", rs.getInt("price"));
-                    request.setAttribute("isExpired", rs.getInt("is_expired") == 1);
-                    request.setAttribute("movieName", rs.getString("movie_name"));
-                    request.setAttribute("showtimeStart", rs.getTimestamp("start_at"));
-                    request.setAttribute("showtimeEnd", rs.getTimestamp("end_at"));
-                    request.setAttribute("showtimeStatus", rs.getString("showtime_status"));
-                    request.setAttribute("roomName", rs.getString("room_name"));
-                    request.setAttribute("theaterName", rs.getString("theater_name"));
-                    request.setAttribute("paymentStatus", rs.getString("payment_status"));
-                    request.setAttribute("transactionCode", rs.getString("transaction_code"));
-                }
-            }
-            List<Map<String, Object>> seats = new ArrayList<>();
-            String seatsSql =
-                    "SELECT s.seat_row, s.seat_col, " +
-                    "       st.seat_type_name, tt.ticket_type_name, " +
-                    "       bs.final_price " +
-                    "FROM Booking_seats bs " +
-                    "INNER JOIN Seats s ON s.seat_id = bs.seat_id " +
-                    "INNER JOIN Seat_types st ON st.seat_type_id = s.seat_type_id " +
-                    "INNER JOIN Ticket_types tt ON tt.ticket_type_id = bs.ticket_type_id " +
-                    "WHERE bs.booking_id = ? " +
-                    "ORDER BY s.seat_row, s.seat_col";
-            try (PreparedStatement stmt = conn.prepareStatement(seatsSql)) {
-                stmt.setInt(1, bookingId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    while (rs.next()) {
-                        Map<String, Object> seat = new HashMap<>();
-                        seat.put("seatRow", rs.getObject("seat_row"));
-                        seat.put("seatCol", rs.getObject("seat_col"));
-                        seat.put("seatType", rs.getString("seat_type_name"));
-                        seat.put("ticketType", rs.getString("ticket_type_name"));
-                        seat.put("finalPrice", rs.getInt("final_price"));
-                        seats.add(seat);
-                    }
-                }
-            }
-            request.setAttribute("bookingSeats", seats);
-            List<Map<String, Object>> cards = new ArrayList<>();
-            String cardsSql =
-                    "SELECT payment_method_id, card_number, expired_date " +
-                    "FROM Payment_methods " +
-                    "WHERE user_id = ? AND isActive = 1 AND method = 'VISA' " +
-                    "ORDER BY created_at DESC";
-            try (PreparedStatement stmt = conn.prepareStatement(cardsSql)) {
-                stmt.setInt(1, userId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    while (rs.next()) {
-                        Map<String, Object> card = new HashMap<>();
-                        card.put("paymentMethodId", rs.getInt("payment_method_id"));
-                        String cardNumber = rs.getString("card_number");
-                        String lastFour = cardNumber == null
-                                ? "----"
-                                : cardNumber.substring(
-                                        Math.max(0, cardNumber.length() - 4));
-                        card.put("maskedNumber", "•••• •••• •••• " + lastFour);
-                        card.put("expiredDate", rs.getObject("expired_date"));
-                        cards.add(card);
-                    }
-                }
-            }
-            request.setAttribute("visaCards", cards);
-            return true;
+            throws SQLException 
+    {
+    	Map<String, Object> booking = bookingDAO.getCheckoutBooking(userId, bookingId);
+        if (booking == null) 
+        {
+            return false; 
         }
+        request.setAttribute("bookingId", booking.get("bookingId"));
+        request.setAttribute("bookingStatus", booking.get("bookingStatus"));
+        request.setAttribute("bookingPrice", booking.get("bookingPrice"));
+        int promotionId = (Integer) booking.get("promotionId");
+        if (promotionId > 0) 
+        {
+            Promotions promotion = promotionsDAO.getPromotionById(promotionId);
+            request.setAttribute("promotion", promotion);
+        }
+        List<Map<String, Object>> bookingSeats = bookingSeatsDAO.getBookedSeats(bookingId);
+        request.setAttribute("bookingSeats", bookingSeats);
+        List<Payment_methods> paymentMethods = paymentMethodsDAO.getPaymentMethodsByUserId(userId);
+        List<Map<String, Object>> visaCards = new ArrayList<>();
+        for (Payment_methods paymentMethod : paymentMethods)
+        {
+            Map<String, Object> card = new HashMap<>();
+            card.put("paymentMethodId", paymentMethod.getPayment_method_id());
+            String cardNumber = paymentMethod.getCard_number();
+            String lastFour = cardNumber == null
+                    ? "----"
+                    : cardNumber.substring(
+                            Math.max(0, cardNumber.length() - 4));
+            card.put("maskedNumber", "•••• •••• •••• " + lastFour);
+            card.put("expiredDate", paymentMethod.getExpired_date());
+            visaCards.add(card);
+        }
+        request.setAttribute("visaCards", visaCards);
+        request.setAttribute("isExpired", booking.get("isExpired"));
+        request.setAttribute("movieName", booking.get("movieName"));
+        request.setAttribute("showtimeStart", booking.get("showtimeStart"));
+        request.setAttribute("showtimeEnd", booking.get("showtimeEnd"));
+        request.setAttribute("showtimeStatus", booking.get("showtimeStatus"));
+        request.setAttribute("roomName", booking.get("roomName"));
+        request.setAttribute("theaterName", booking.get("theaterName"));
+        request.setAttribute("paymentStatus", booking.get("paymentStatus"));
+        request.setAttribute("transactionCode", booking.get("transactionCode"));
+        return true;
     }
 
     private Users getLoggedInUser(HttpServletRequest request) {

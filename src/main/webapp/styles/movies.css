@@ -10,16 +10,14 @@
     margin: 0;
     color: var(--text-secondary);
 }
-
-/*Movie Search & Filters*/
+/*this contain the search bar and the filters and the apply button*/
 .movie-filters {
     margin-bottom: 25px;
     padding: 20px;
     background-color: var(--surface);
     border-radius: 12px;
 }
-
-/* Search */
+/* Search textbox */
 .movie-search {
     display: flex;
     gap: 10px;
@@ -29,7 +27,7 @@
     flex: 1;
     min-width: 0;
     padding: 12px 15px;
-    border: 1px solid #2c2c2c;
+    border: 1px solid var(--border);
     border-radius: 8px;
     outline: none;
     background-color: var(--background);
@@ -55,15 +53,13 @@
 .movie-search button:hover {
     opacity: 0.85;
 }
-
-/*Filter Options*/
+/*Filters container*/
 .movie-filter-options {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 15px;
 }
-
-/* Individual Filter */
+/* Individual Filter card */
 .movie-filter {
     display: flex;
     flex-direction: column;
@@ -79,7 +75,7 @@
     box-sizing: border-box;
     width: 100%;
     padding: 11px 12px;
-    border: 1px solid #2c2c2c;
+    border: 1px solid var(--border);
     border-radius: 8px;
     outline: none;
     background-color: var(--background);
@@ -93,8 +89,7 @@
 .movie-filter input:focus {
     border-color: var(--accent);
 }
-
-/*Filter Buttons*/
+/*apply/clear filter Buttons*/
 .movie-filter-actions {
     display: flex;
     gap: 10px;
@@ -127,20 +122,20 @@
     border-color: var(--accent);
 }
 .apply-filter:hover {
-    background-color: #c70812;
-    border-color: #c70812;
+    background-color: var(--accent);
+    border-color: var(--accent);
     transform: translateY(-1px);
 }
 /* Clear Filters */
 .clear-filter {
     background-color: transparent;
     color: var(--text-secondary);
-    border-color: #2c2f35;
+    border-color: var(--border-light);
 }
 .clear-filter:hover {
     background-color: var(--surface);
     color: var(--text-primary);
-    border-color: #555a63;
+    border-color: var(--border-hover);
     transform: translateY(-1px);
 }
 .apply-filter:active,
@@ -167,36 +162,10 @@
     color: var(--text-primary);
     font-size: 24px;
 }
+/* count movies in each sections */
 .movie-count {
     color: var(--text-secondary);
     font-size: 14px;
-}
-
-.filter-group {
-    margin-bottom: 24px;
-}
-.filter-group h4 {
-    margin: 0 0 12px;
-    color: var(--text-primary);
-    font-size: 14px;
-}
-.filter-checkbox {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-    color: var(--text-secondary);
-    font-size: 13px;
-    cursor: pointer;
-}
-.filter-checkbox input[type="checkbox"] {
-    width: 15px;
-    height: 15px;
-    accent-color: var(--accent);
-    cursor: pointer;
-}
-.filter-checkbox:hover {
-    color: var(--text-primary);
 }
 
 /*Responsive Layout*/

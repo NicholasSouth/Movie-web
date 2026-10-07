@@ -1,10 +1,8 @@
 .profile-page {
-    /* MainBody already provides:
-    background, color, padding and scrolling */
     min-width: 0;
 }
 
-/* Profile header */
+/* this include banner, avt, username, name, role, setting button if ur viewing ur own page */
 .profile-header {
     width: 100%;
     margin-bottom: 24px;
@@ -12,7 +10,6 @@
     border-radius: 12px;
     overflow: hidden;
 }
-
 /* Banner */
 .profile-banner {
     width: 100%;
@@ -26,8 +23,7 @@
     display: block;
     object-fit: cover;
 }
-
-/* Default banner */
+/* Default banner, hard coded */
 .default-banner {
     width: 100%;
     height: 100%;
@@ -37,8 +33,7 @@
         var(--background)
     );
 }
-
-/* Profile header infor */
+/* this is store the avt and user infors */
 .profile-header-info {
     position: relative;
     display: flex;
@@ -46,7 +41,6 @@
     min-height: 130px;
     padding: 0 28px 28px;
 }
-
 /* Avatar */
 .profile-avatar {
     width: 120px;
@@ -64,7 +58,6 @@
     display: block;
     object-fit: cover;
 }
-
 /* Default avatar */
 .profile-default-avatar {
     width: 100%;
@@ -77,8 +70,7 @@
     font-size: 42px;
     font-weight: bold;
 }
-
-/* Profile setting */
+/* user information like username, role, name */
 .profile-identity {
     min-width: 0;
     margin-left: 20px;
@@ -101,14 +93,13 @@
     display: inline-block;
     padding: 4px 10px;
     border-radius: 5px;
-    background-color: #2A2E35;
+    background-color: var(--surface-hover);
     color: var(--text-primary);
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
 }
-
-/* Setting button */
+/* Setting button if ur viewing ur own page */
 .profile-actions {
     margin-left: auto;
     flex-shrink: 0;
@@ -118,7 +109,7 @@
     align-items: center;
     gap: 8px;
     padding: 10px 16px;
-    border: 1px solid #343941;
+    border: 1px solid var(--border-light);
     border-radius: 7px;
     background-color: var(--background);
     color: var(--text-primary);
@@ -128,7 +119,7 @@
     transition: background-color 0.2s, border-color 0.2s;
 }
 .profile-settings-button:hover {
-    background-color: #22252A;
+    background-color: var(--surface-hover);
     border-color: var(--accent);
 }
 .profile-settings-button img {
@@ -139,7 +130,7 @@
     filter: brightness(0) invert(1);
 }
 
-/* profile section */
+/* profile section contain favourites and bookings */
 .profile-section {
     width: 100%;
     margin-bottom: 24px;
@@ -147,8 +138,7 @@
     background-color: var(--surface);
     border-radius: 12px;
 }
-
-/* profile header */
+/* header indicate which ssection is it */
 .section-header {
     display: flex;
     align-items: center;
@@ -166,8 +156,7 @@
     color: var(--text-secondary);
     font-size: 14px;
 }
-
-/* public/private */
+/* public/private button */
 .visibility-button {
     display: inline-grid; /* Uses grid so text states can overlap and share space */
     grid-template-columns: 1fr; /* Forces single track */
@@ -176,7 +165,7 @@
     grid-auto-flow: column; /* Puts icon and text side-by-side */
     gap: 7px;
     padding: 8px 13px;
-    border: 1px solid #343941;
+    border: 1px solid var(--border-light);
     border-radius: 6px;
     background-color: var(--background);
     color: var(--text-primary);
@@ -187,10 +176,9 @@
     transition: background-color 0.2s, border-color 0.2s;
 }
 .visibility-button:hover {
-    background-color: #22252A;
+    background-color: var(--surface-hover);
     border-color: var(--accent);
 }
-
 /* Public / Private icon */
 .visibility-icon {
     width: 18px;
@@ -204,7 +192,6 @@
     min-width: 50px; /* Ensures space for "Private" */
     text-align: left;
 }
-
 /* Booking fixed private label*/
 .private-label {
     flex-shrink: 0;
@@ -215,7 +202,7 @@
     font-size: 13px;
     font-weight: 600;
 }
-
+/* when no booking, a text shows indicate it */
 .booking-placeholder {
     min-height: 150px;
     display: flex;
@@ -224,6 +211,7 @@
     justify-content: center;
     text-align: center;
 }
+/* when viewing other's page, bookings shows a text indicate all user's booking is private */
 .booking-lock {
     margin-bottom: 8px;
     font-size: 30px;
@@ -238,7 +226,7 @@
     color: var(--text-secondary);
     font-size: 14px;
 }
-/* Booking history */
+/* this is the booking card holder */
 .booking-history-list {
     display: flex;
     flex-direction: column;
@@ -247,7 +235,7 @@
 .booking-card {
     padding: 16px;
     background: var(--surface);
-    border: 1px solid #292d34;
+    border: 1px solid var(--border);
     border-radius: 12px;
 }
 .booking-card-main {
@@ -306,25 +294,25 @@
     display: inline-block;
     padding: 4px 9px;
     border-radius: 5px;
-    background: #292d34;
+    background: var(--surface-light);
     color: var(--text-primary);
     font-size: 12px;
     font-weight: 600;
 }
 .booking-status.confirmed,
 .booking-status.completed {
-    color: #86d9a0;
+    color: var(--success);
 }
 .booking-status.pending {
-    color: #f3ce78;
+    color: var(--pending);
 }
 .booking-status.cancelled,
 .booking-status.refunded {
-    color: #f08a8a;
+    color: var(--danger);
 }
 .booking-details {
     margin-top: 14px;
-    border-top: 1px solid #292d34;
+    border-top: 1px solid var(--border);
     padding-top: 12px;
 }
 .booking-details summary {

@@ -1,8 +1,10 @@
 <%@ page import="java.util.List,java.util.Map,java.text.NumberFormat,java.text.SimpleDateFormat,java.util.Locale,java.sql.Timestamp" %>
+<%@ page import="com.movieweb.model.Promotions" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     Integer bookingId = (Integer) request.getAttribute("bookingId");
     Integer bookingPrice = (Integer) request.getAttribute("bookingPrice");
+    Promotions promotion = (Promotions) request.getAttribute("promotion");
     Boolean isExpired = (Boolean) request.getAttribute("isExpired");
     String bookingStatus = (String) request.getAttribute("bookingStatus");
     String showtimeStatus = (String) request.getAttribute("showtimeStatus");
@@ -24,7 +26,7 @@
     boolean canPay = "PENDING".equalsIgnoreCase(bookingStatus) && !expired && !showtimeUnavailable;
 %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
 	    <meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,7 +70,6 @@
 		            if (paymentSuccessful) {
 		        %>
 				        <div class="PaymentNotice PaymentNoticeSuccess">
-				            <div class="PaymentSuccessIcon">&#10003;</div>
 				            <div>
 				                <h2>Payment successful!</h2>
 				                <p>Your booking has been confirmed.</p>
@@ -191,13 +192,40 @@
 		                <%
 		                    }
 		                %>
+		                
 		                <div class="SummaryDivider"></div>
-		                <div class="TotalRow">
-		                    <span>Total amount</span>
-		                    <strong>
-		                        <%= currencyFormat.format(bookingPrice == null ? 0 : bookingPrice) %> VND
-		                    </strong>
-		                </div>
+						<%
+						    if (promotion != null) {
+						%>
+						        <div class="PromotionRow">
+						            <span>
+						                Promotion
+						                <strong>
+						                	<%= promotion.getPromotion_code() %>
+						                </strong>
+						            </span>
+						            <strong class="PromotionDiscount">
+						                <%= promotion.getPrice_modify() %>
+						                <%
+						                    if (promotion.getPrice_modify() != null
+					                            && !promotion.getPrice_modify().endsWith("%")) {
+						                %>
+						                    	,000 VND
+						                <%
+						                    }
+						                %>
+						            </strong>
+						        </div>
+						        <div class="SummaryDivider"></div>
+						<%
+						    }
+						%>			
+						<div class="TotalRow">
+						    <span>Total amount</span>
+						    <strong>
+						        <%= currencyFormat.format(bookingPrice == null ? 0 : bookingPrice) %> VND
+						    </strong>
+						</div>
 		                <p class="BookingFootnote">
 		                    Your seats are held for 15 minutes after the booking is created.
 		                </p>
@@ -248,11 +276,7 @@
 								                                        <%= card.get("expiredDate") %>
 								                                    </span>
 								                                </span>
-								                            </span>
-								
-								                            <span class="CardRadioText">
-								                                Select this card
-								                            </span>
+								                            </span>							
 								                        </label>
 						                        <%
 						                            }
@@ -344,6 +368,19 @@
 		            payButton.classList.add("PayButtonLoading");
 		            payButton.innerHTML = "<span>Processing payment...</span>";
 		        });
+		    }
+		</script>
+		
+		<!-- Remove the text 
+		"Choose one of your saved VISA cards to complete this simulated payment."
+		after paying successfully -->
+		<script>
+		    const paymentSuccessful = <%= paymentSuccessful %>;
+		    if (paymentSuccessful) {
+		        const paymentDescription = document.querySelector(".PaymentMethodDescription");
+		        if (paymentDescription) {
+		            paymentDescription.remove();
+		        }
 		    }
 		</script>
 	</body>

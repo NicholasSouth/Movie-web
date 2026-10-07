@@ -50,6 +50,9 @@
 		                }
 		            %>
 		
+					<!-- In payment method we actually need success message 
+						cuz we don't get redirect elsewhere after successfully 
+						added a payment method -->
 		            <!-- Success Message -->
 		            <%
 		                if (success != null) {

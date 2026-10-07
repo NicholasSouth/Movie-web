@@ -35,20 +35,27 @@ public class Payment_methodsDAO {
 
     public List<Payment_methods> getPaymentMethodsByUserId(int user_id) {
         List<Payment_methods> paymentMethods = new ArrayList<>();
-        String sql = "SELECT * FROM Payment_methods WHERE user_id = ? ORDER BY created_at DESC";
+        String sql =
+                "SELECT * FROM Payment_methods " +
+                "WHERE user_id = ? " +
+                "AND isActive = 1 " +
+                "ORDER BY created_at DESC";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, user_id);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Payment_methods payment_method = new Payment_methods();
-                payment_method.setPayment_method_id(rs.getInt("payment_method_id"));
-                payment_method.setUser_id(rs.getInt("user_id"));
-                payment_method.setMethod(rs.getString("method"));
-                payment_method.setCard_number(rs.getString("card_number"));
-                payment_method.setExpired_date(rs.getDate("expired_date"));
-                payment_method.setCreated_at(rs.getTimestamp("created_at"));
-                payment_method.setActive(rs.getBoolean("isActive"));
-                paymentMethods.add(payment_method);
+            try (ResultSet rs = stmt.executeQuery()) 
+            {
+                while (rs.next()) 
+                {
+                    Payment_methods payment_method = new Payment_methods();
+                    payment_method.setPayment_method_id(rs.getInt("payment_method_id"));
+                    payment_method.setUser_id(rs.getInt("user_id"));
+                    payment_method.setMethod(rs.getString("method"));
+                    payment_method.setCard_number(rs.getString("card_number"));
+                    payment_method.setExpired_date(rs.getDate("expired_date"));
+                    payment_method.setCreated_at(rs.getTimestamp("created_at"));
+                    payment_method.setActive(rs.getBoolean("isActive"));
+                    paymentMethods.add(payment_method);
+                }
             }
         } 
         catch (SQLException e) {
