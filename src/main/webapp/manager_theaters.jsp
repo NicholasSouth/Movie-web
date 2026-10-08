@@ -1,6 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.movieweb.model.Users" %>
 <%@ page import="com.movieweb.model.Theaters" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%
     Users currentUser = (Users) session.getAttribute("user");
     if (currentUser == null || !"MANAGER".equalsIgnoreCase(currentUser.getRole())) {
@@ -12,6 +13,12 @@
     List<Theaters> theaters = (List<Theaters>) request.getAttribute("theaters");
     String searchParam = request.getParameter("search");
     boolean hasSearch = searchParam != null && !searchParam.trim().isEmpty();
+    List<Theaters> requestableTheaters = (List<Theaters>) request.getAttribute("requestableTheaters");
+    boolean canRequest = requestableTheaters != null && !requestableTheaters.isEmpty();
+    String requestSuccess = (String) session.getAttribute("theaterRequestSuccess");
+    String requestError = (String) session.getAttribute("theaterRequestError");
+    session.removeAttribute("theaterRequestSuccess");
+    session.removeAttribute("theaterRequestError");
 %>
 <!DOCTYPE html>
 <html>
@@ -31,8 +38,22 @@
 
 		    <main class="ManagerMain">
 		        <div class="theater-header">
-		            <h1>Theater Management</h1>
-		            <p>Theaters you are managing.</p>
+		            <div class="theater-header-top">
+                        <div class="theater-header-info">
+                            <h1>Theater Management</h1>
+                            <p>Theaters you are managing.</p>
+                        </div>
+                        <button type="button" class="request-theater-button" data-open-request>
+                            + Request Theater
+                        </button>
+                    </div>
+
+                    <% if (requestSuccess != null) { %>
+                        <div class="request-message request-success"><c:out value="<%= requestSuccess %>"/></div>
+                    <% } %>
+                    <% if (requestError != null) { %>
+                        <div class="request-message request-error"><c:out value="<%= requestError %>"/></div>
+                    <% } %>
 
 		            <form class="theater-search" action="<%= request.getContextPath() %>/manager-theaters" method="get">
 		                <input
@@ -71,9 +92,16 @@
 				                                }
 				                            %>
 				                        </div>
-				                        <a href="<%= request.getContextPath() %>/manager-theater-details?id=<%= theater.getTheater_id() %>" class="theater-button">
-				                            View Theater
-				                        </a>
+				                        <div class="theater-actions">
+                                            <a href="<%= request.getContextPath() %>/manager-theater-details?id=<%= theater.getTheater_id() %>" class="theater-button">
+                                                View Theater
+                                            </a>
+                                            <button type="button" class="leave-theater-button"
+                                                    data-leave-id="<%= theater.getTheater_id() %>"
+                                                    data-leave-name="<c:out value="<%= theater.getTheater_name() %>"/>">
+                                                Stop Managing
+                                            </button>
+                                        </div>
 				                    </div>
 				                </article>
 		            <%
@@ -82,13 +110,68 @@
 		                else {
 		            %>
 			                <p class="no-theaters">
-			                    <%= hasSearch ? "No theaters found matching your search." : "You are not managing any theater yet." %>
-			                </p>
+                                <%= hasSearch ? "No theaters found matching your search." : "You are not managing any theater yet." %>
+                                <% if (!hasSearch) { %>
+                                    <br>
+                                    <button type="button" class="request-theater-button" data-open-request>
+                                        + Request Theater
+                                    </button>
+                                <% } %>
+                            </p>
 		            <%
 		                }
 		            %>
 		        </section>
+		        <dialog class="request-dialog" id="requestDialog">
+                    <form method="post" action="<%= request.getContextPath() %>/manager-request-theater">
+                        <h3>Request to manage a theater</h3>
+                        <p class="request-dialog-note">
+                            Your request will be reviewed by an administrator.
+                        </p>
+
+                        <label for="requestTheater">Theater</label>
+                        <select id="requestTheater" name="theaterId" required <%= canRequest ? "" : "disabled" %>>
+                            <% if (canRequest) { %>
+                                <option value="" disabled selected>Select a theater</option>
+                                <% for (Theaters t : requestableTheaters) { %>
+                                    <option value="<%= t.getTheater_id() %>">
+                                        <c:out value="<%= t.getTheater_name() %>"/> - <c:out value="<%= t.getTheater_address() %>"/>
+                                    </option>
+                                <% } %>
+                            <% } else { %>
+                                <option>No theater available to request</option>
+                            <% } %>
+                        </select>
+
+                        <div class="request-dialog-actions">
+                            <button type="button" class="request-cancel" id="closeRequestDialog">Cancel</button>
+                            <button type="submit" class="request-submit" <%= canRequest ? "" : "disabled" %>>Send Request</button>
+                        </div>
+                    </form>
+                </dialog>
+                <dialog class="request-dialog" id="leaveDialog">
+                    <form method="post" action="<%= request.getContextPath() %>/manager-leave-theater">
+                        <h3>Stop managing this theater?</h3>
+                        <p class="request-dialog-note">
+                            Your request will be reviewed by an administrator.
+                            You keep access to this theater until it is approved.
+                        </p>
+
+                        <input type="hidden" name="theaterId" id="leaveTheaterId">
+                        <div class="leave-theater-name" id="leaveTheaterName"></div>
+
+                        <label for="leaveReason">Reason (optional)</label>
+                        <textarea id="leaveReason" name="reason" rows="4" maxlength="500"
+                                  placeholder="Tell the administrator why you want to stop managing this theater..."></textarea>
+
+                        <div class="request-dialog-actions">
+                            <button type="button" class="request-cancel" id="closeLeaveDialog">Cancel</button>
+                            <button type="submit" class="request-submit">Send Request</button>
+                        </div>
+                    </form>
+                </dialog>
 		    </main>
 		</section>
+		<script src="${pageContext.request.contextPath}/scripts/manager_theaters.js"></script>
 	</body>
 </html>

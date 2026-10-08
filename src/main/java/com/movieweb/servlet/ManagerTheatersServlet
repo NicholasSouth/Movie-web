@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.movieweb.model.Theaters;
 import com.movieweb.model.Users;
+import com.movieweb.service.ManagerTheaterRequestService;
 import com.movieweb.service.ManagerTheatersService;
 
 import jakarta.servlet.ServletException;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet("/manager-theaters")
 public class ManagerTheatersServlet extends HttpServlet {
     private final ManagerTheatersService managerTheatersService = new ManagerTheatersService();
+    private final ManagerTheaterRequestService requestService = new ManagerTheaterRequestService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -28,9 +30,13 @@ public class ManagerTheatersServlet extends HttpServlet {
             return;
         }
 
-        List<Theaters> theaters = managerTheatersService.getTheatersByManager(currentUser.getUserId());
+        String search = request.getParameter("search");
+        List<Theaters> theaters = managerTheatersService.getTheatersByManager(
+                currentUser.getUserId(), search);
 
         request.setAttribute("theaters", theaters);
+        request.setAttribute("requestableTheaters",
+                requestService.getRequestableTheaters(currentUser.getUserId()));
         request.getRequestDispatcher("/manager_theaters.jsp").forward(request, response);
     }
 }

@@ -2,6 +2,7 @@ package com.movieweb.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.movieweb.DAO.ManagersDAO;
 import com.movieweb.model.Theaters;
@@ -10,8 +11,20 @@ public class ManagerTheatersService {
     private final ManagersDAO managersDAO = new ManagersDAO();
 
     // Get the list of active theaters managed by the manager
-    public List<Theaters> getTheatersByManager(int managerUserId) {
+    public List<Theaters> getTheatersByManager(int managerUserId, String search) {
         List<Theaters> theaters = managersDAO.getTheatersByManagerId(managerUserId);
-        return theaters != null ? theaters : Collections.emptyList();
+        if (theaters == null) return Collections.emptyList();
+        if (search == null || search.trim().isEmpty()) return theaters;
+
+        String keyword = search.trim().toLowerCase();
+        List<Theaters> result = new ArrayList<>();
+        for (Theaters theater : theaters) {
+            String name = theater.getTheater_name() == null
+                    ? "" : theater.getTheater_name().toLowerCase();
+            String address = theater.getTheater_address() == null
+                    ? "" : theater.getTheater_address().toLowerCase();
+            if (name.contains(keyword) || address.contains(keyword)) result.add(theater);
+        }
+        return result;
     }
 }

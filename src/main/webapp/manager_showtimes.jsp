@@ -27,25 +27,15 @@
     Map<Integer, Movies> scheduleMovies = (Map<Integer, Movies>) request.getAttribute("scheduleMovies");
     List<LocalDate> weekDates = (List<LocalDate>) request.getAttribute("weekDates");
     LocalDate selectedDate = (LocalDate) request.getAttribute("selectedDate");
-    if (rooms == null) {
-        rooms = new ArrayList<>();
-    }
-    if (scheduleShowtimes == null) {
-        scheduleShowtimes = new ArrayList<>();
-    }
-    if (scheduleMovies == null) {
-        scheduleMovies = new LinkedHashMap<>();
-    }
-    if (weekDates == null) {
-        weekDates = new ArrayList<>();
-    }
-    List<Theaters> managerTheaters =
-            (List<Theaters>) request.getAttribute("managerTheaters");
-    Integer selectedTheaterId =
-            (Integer) request.getAttribute("selectedTheaterId");
-    if (managerTheaters == null) {
-        managerTheaters = new ArrayList<>();
-    }
+    if (rooms == null) rooms = new ArrayList<>();
+    if (scheduleShowtimes == null) scheduleShowtimes = new ArrayList<>();
+    if (scheduleMovies == null) scheduleMovies = new LinkedHashMap<>();
+    if (weekDates == null) weekDates = new ArrayList<>();
+    List<Theaters> managerTheaters = (List<Theaters>) request.getAttribute("managerTheaters");
+    List<Movies> deletableMovies = (List<Movies>) request.getAttribute("deletableMovies");
+    if (deletableMovies == null) deletableMovies = new ArrayList<>();
+    Integer selectedTheaterId = (Integer) request.getAttribute("selectedTheaterId");
+    if (managerTheaters == null) managerTheaters = new ArrayList<>();
     DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     Set<LocalTime> timeSet = new LinkedHashSet<>();
@@ -59,13 +49,10 @@
     for (LocalTime time : scheduleTimes) {
         Map<Integer, Showtimes> roomShowtimes = new LinkedHashMap<>();
         for (Showtimes showtime : scheduleShowtimes) {
-            if (showtime.getStart_at() == null) {
-                continue;
-            }
+            if (showtime.getStart_at() == null) continue;
+
             LocalTime showtimeStart = showtime.getStart_at().toLocalDateTime().toLocalTime();
-            if (showtimeStart.equals(time)) {
-                roomShowtimes.put(showtime.getRoom_id(), showtime);
-            }
+            if (showtimeStart.equals(time)) roomShowtimes.put(showtime.getRoom_id(), showtime);
         }
         scheduleTable.put(time.format(timeFormatter), roomShowtimes);
     }
@@ -136,6 +123,25 @@
                     <button type="button" class="delete-showtime-toggle" id="toggleDeleteMode">
                         Delete Showtime
                     </button>
+                    <button type="button" class="request-movie-button" id="openRequestMovieDialog">
+                        Request Movie
+                    </button>
+                </div>
+                <div class="delete-movie-panel" id="deleteMoviePanel" hidden
+                     data-summary-url="<%= contextPath %>/manager-movie-showtimes-summary">
+                    <label for="deleteMovieSelect">Delete all upcoming showtimes of a movie</label>
+                    <div class="delete-movie-row">
+                        <select id="deleteMovieSelect">
+                            <option value="">Select movie</option>
+                            <% for (Movies m : deletableMovies) { %>
+                                <option value="<%= m.getMovie_id() %>"><%= esc(m.getMovie_name()) %></option>
+                            <% } %>
+                        </select>
+                        <div class="delete-movie-summary" id="deleteMovieSummary" hidden>
+                            <span id="deleteMovieSummaryText"></span>
+                            <button type="button" class="delete-movie-button" id="openDeleteMovieDialog"></button>
+                        </div>
+                    </div>
                 </div>
                 <div class="schedule-table-wrapper" id="scheduleTableWrapper">
                     <table class="schedule-table">
@@ -172,9 +178,7 @@
                                             Showtimes showtime = roomShowtimes.get(room.getRoom_id());
                                             if (showtime == null) {
                                     %>
-                                        <td>
-                                            <div class="schedule-empty">No showtime</div>
-                                        </td>
+                                        <td></td>
                                     <%
                                                 continue;
                                             }
@@ -349,6 +353,56 @@
 
             <div class="showtime-dialog-actions">
                 <button type="button" class="showtime-cancel-button" id="cancelDeleteShowtime">Cancel</button>
+                <button type="submit" class="showtime-save-button">Delete</button>
+            </div>
+        </form>
+    </dialog>
+    <dialog class="showtime-dialog" id="requestMovieDialog">
+        <div class="showtime-dialog-header">
+            <h2>Request Movie</h2>
+            <button type="button" class="showtime-dialog-close" id="closeRequestMovieDialog">&times;</button>
+        </div>
+        <form class="showtime-form" method="post"
+              action="<%= contextPath %>/manager-request-movie">
+            <input type="hidden" name="theaterId" value="<%= selectedTheaterId %>">
+            <input type="hidden" name="date" value="<%= selectedDate %>">
+
+            <div class="showtime-form-group">
+                <label for="requestMovieName">Movie name</label>
+                <input type="text" id="requestMovieName" name="movieName"
+                       placeholder="Movie name" maxlength="150" required>
+            </div>
+
+            <div class="showtime-form-group">
+                <label for="requestTrailerUrl">Trailer link</label>
+                <input type="url" id="requestTrailerUrl" name="trailerUrl"
+                       placeholder="https://..." maxlength="300" required>
+            </div>
+
+            <div class="showtime-dialog-actions">
+                <button type="button" class="showtime-cancel-button" id="cancelRequestMovie">Cancel</button>
+                <button type="submit" class="showtime-save-button">Send Request</button>
+            </div>
+        </form>
+    </dialog>
+    <dialog class="showtime-dialog" id="deleteMovieShowtimesDialog">
+        <div class="showtime-dialog-header">
+            <h2>Delete Movie Showtimes</h2>
+            <button type="button" class="showtime-dialog-close" id="closeDeleteMovieDialog">&times;</button>
+        </div>
+        <form class="showtime-form" method="post"
+              action="<%= contextPath %>/manager-delete-movie-showtimes">
+            <input type="hidden" name="theaterId" value="<%= selectedTheaterId %>">
+            <input type="hidden" name="date" value="<%= selectedDate %>">
+            <input type="hidden" name="movieId" id="deleteMovieId">
+
+            <p class="delete-showtime-message">
+                Delete all upcoming showtimes of "<strong id="deleteMovieName"></strong>"
+                in every theater you manage?
+            </p>
+
+            <div class="showtime-dialog-actions">
+                <button type="button" class="showtime-cancel-button" id="cancelDeleteMovie">Cancel</button>
                 <button type="submit" class="showtime-save-button">Delete</button>
             </div>
         </form>

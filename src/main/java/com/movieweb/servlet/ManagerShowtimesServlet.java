@@ -151,6 +151,8 @@ public class ManagerShowtimesServlet extends HttpServlet {
         req.setAttribute("today", today);
         req.setAttribute("selectedDate", selectedDate);
         req.setAttribute("weekDates", weekDates);
+        req.setAttribute("deletableMovies",
+                managerShowtimesService.getDeletableMovies(userId));
         req.getRequestDispatcher("/manager_showtimes.jsp").forward(req, resp);
     }
 }

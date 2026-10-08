@@ -25,6 +25,17 @@ public class ShowtimesDAO {
             "AND (UPPER(b.status) = 'CONFIRMED' " +
             "OR (UPPER(b.status) = 'PENDING' " +
             "AND b.book_at > DATEADD(MINUTE, -15, GETDATE())))";
+    private static final String MANAGED_UPCOMING_SHOWTIMES =
+            "FROM Showtimes s " +
+            "INNER JOIN Rooms r ON r.room_id = s.room_id " +
+            "INNER JOIN Theaters t ON t.theater_id = r.theater_id " +
+            "INNER JOIN Managers m ON m.theater_id = t.theater_id " +
+            "WHERE m.user_id = ? " +
+            "AND t.isActive = 1 " +
+            "AND t.deleted_at IS NULL " +
+            "AND UPPER(s.status) = 'SCHEDULED' " +
+            "AND s.deleted_at IS NULL " +
+            "AND s.start_at > GETDATE() ";
 
     public Showtimes getShowtimeById(int showtime_id) {
         String sql = "SELECT * FROM Showtimes WHERE showtime_id = ?";
@@ -392,6 +403,76 @@ public class ShowtimesDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    // Movies that still have upcoming showtimes in the manager's theaters (filter list)
+    public List<Integer> getUpcomingMovieIdsByManager(int userId) {
+        List<Integer> movieIds = new ArrayList<>();
+        String sql = "SELECT DISTINCT s.movie_id " + MANAGED_UPCOMING_SHOWTIMES;
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) movieIds.add(rs.getInt("movie_id"));
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return movieIds;
+    }
+
+    // One query: {deletable, blocked} upcoming showtimes of a movie, or null on error
+    public int[] getMovieShowtimeCountsByManager(int userId, int movieId) {
+        String sql =
+                "SELECT " +
+                "COALESCE(SUM(CASE WHEN x.has_booking = 0 THEN 1 ELSE 0 END), 0) AS deletable, " +
+                "COALESCE(SUM(x.has_booking), 0) AS blocked " +
+                "FROM (" +
+                "    SELECT CASE WHEN EXISTS (" +
+                "        SELECT 1 FROM Booking_showtimes b " +
+                "        WHERE b.showtime_id = s.showtime_id " +
+                "        AND " + ACTIVE_BOOKING_CONDITION + ") THEN 1 ELSE 0 END AS has_booking " +
+                MANAGED_UPCOMING_SHOWTIMES +
+                "    AND s.movie_id = ?" +
+                ") x";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            stmt.setInt(2, movieId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new int[] { rs.getInt("deletable"), rs.getInt("blocked") };
+                }
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Delete the movie's upcoming showtimes in the
+    // manager's theaters that have no active booking. Returns deleted count, -1 on error.
+    public int softDeleteMovieShowtimesByManager(int userId, int movieId) {
+        String sql =
+                "UPDATE s SET deleted_at = GETDATE() " +
+                MANAGED_UPCOMING_SHOWTIMES +
+                "AND s.movie_id = ? " +
+                "AND NOT EXISTS (" +
+                "    SELECT 1 FROM Booking_showtimes b " +
+                "    WHERE b.showtime_id = s.showtime_id " +
+                "    AND " + ACTIVE_BOOKING_CONDITION + ")";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            stmt.setInt(2, movieId);
+            return stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     private Showtimes mapShowtime(ResultSet rs) throws SQLException {

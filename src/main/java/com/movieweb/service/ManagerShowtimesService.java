@@ -3,6 +3,7 @@ package com.movieweb.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
 
 import com.movieweb.DAO.ManagersDAO;
 import com.movieweb.DAO.MoviesDAO;
@@ -74,6 +75,13 @@ public class ManagerShowtimesService {
         if (movies == null) {
             return new ArrayList<>();
         }
+        return movies;
+    }
+
+    public List<Movies> getDeletableMovies(int userId) {
+        List<Integer> movieIds = showtimesDAO.getUpcomingMovieIdsByManager(userId);
+        List<Movies> movies = new ArrayList<>(getMoviesByIds(movieIds));
+        movies.sort(Comparator.comparing(Movies::getMovie_name, String.CASE_INSENSITIVE_ORDER));
         return movies;
     }
 }

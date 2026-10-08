@@ -47,6 +47,7 @@
 
 .manager-showtime-action {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-start;
     margin: 0 0 15px 0;
     gap: 10px;
@@ -84,11 +85,13 @@
 .showtime-message-error {
     background-color: rgba(229, 9, 20, 0.12);
     border: 1px solid var(--accent);
+    color: var(--accent);
 }
 
 .showtime-message-success {
     background-color: rgba(46, 160, 67, 0.12);
     border: 1px solid #2EA043;
+    color: #2EA043;
 }
 
 .delete-showtime-toggle {
@@ -111,6 +114,28 @@
 .delete-showtime-toggle.active {
     background-color: var(--accent);
     color: var(--text-primary);
+}
+
+.request-movie-button {
+    margin-left: auto;
+    padding: 10px 16px;
+    background-color: transparent;
+    border: 1px solid #3A3A3A;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+            background-color 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease;
+}
+
+.request-movie-button:hover {
+    background-color: #22252A;
+    border-color: #555A63;
+    transform: translateY(-1px);
 }
 
 .schedule-showtime {
@@ -297,6 +322,71 @@
 .delete-showtime-info span {
     color: var(--text-secondary);
     font-size: 13px;
+}
+
+.delete-movie-panel {
+    margin: 0 0 15px 0;
+    padding: 14px 16px;
+    background-color: var(--background);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+}
+.delete-movie-panel[hidden],
+.delete-movie-summary[hidden] {
+    display: none;
+}
+
+.delete-movie-panel > label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+}
+.delete-movie-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.delete-movie-summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.delete-movie-row select {
+    flex: 1;
+    min-width: 220px;
+    max-width: 360px;
+    padding: 10px 12px;
+    background-color: var(--surface);
+    border: 1px solid #2C2C2C;
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+}
+.delete-movie-row select:focus {
+    border-color: var(--accent);
+}
+
+.delete-movie-button {
+    padding: 10px 16px;
+    background-color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.delete-movie-button:hover {
+    opacity: 0.85;
 }
 
 @media (max-width: 600px) {
