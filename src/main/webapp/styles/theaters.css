@@ -1,222 +1,397 @@
+/* Theaters page */
 .theater-header {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 .theater-header h1 {
-    margin: 0 0 8px 0;
+    margin: 0 0 8px;
     color: var(--text-primary);
-    font-size: 32px;
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
 }
-.theater-header p {
-    margin: 0;
+.theater-header > p {
+    margin: 0 0 24px;
     color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
 
-/*Theater Grid*/
-.theater-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-/*Theater Card*/
-.theater-card {
-    background-color: var(--surface);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.2s;
-}
-.theater-card:hover {
-    transform: translateY(-5px);
-}
-
-/*Theater Image*/
-.theater-image img {
-    width: 100%;
-    height: 200px;
-    display: block;
-    object-fit: cover;
-}
-
-/*Theater Content*/
-.theater-content {
-    padding: 20px;
-}
-.theater-content h2 {
-    margin: 0 0 10px 0;
-    color: var(--text-primary);
-    font-size: 22px;
-}
-
-/*Theater Address*/
-.theater-address {
-    margin: 0 0 15px 0;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
-
-/*Theater Information*/
-.theater-info {
+/* Search form */
+.theater-search {
     display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-    color: var(--text-secondary);
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 22px;
 }
-
-/*View Theater Button*/
-.theater-button {
-    display: inline-block;
-    padding: 10px 16px;
-    background-color: var(--accent);
+.theater-search input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px 16px;
+    font-family: var(--font-family);
+    font-size: 0.9rem;
     color: var(--text-primary);
+    background: var(--surface);
+    border: 1px solid var(--border-light);
     border-radius: 8px;
-    text-decoration: none;
-    transition: opacity 0.2s;
+    outline: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
-.theater-button:hover {
+.theater-search input::placeholder {
+    color: var(--text-secondary);
     opacity: 0.85;
 }
-
-/*No Theaters*/
-.no-theaters {
-    color: var(--text-secondary);
-    padding: 20px 0;
+.theater-search input:hover {
+    border-color: var(--border-hover);
 }
-
-/* Theater Search */
-.theater-search {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	width: 100%;
-	margin-top: 20px;
+.theater-search input:focus {
+    border-color: var(--accent);
+    background: var(--surface-light);
+    box-shadow: 0 0 0 3px var(--accent-glow);
 }
-.theater-search input[type="search"] {
-	flex: 1;
-	min-width: 0;
-	height: 44px;
-	padding: 0 14px;
-	background: #16191E;
-	color: #F5F5F7;
-	border: 1px solid #30343B;
-	border-radius: 8px;
-	font-size: 14px;
-	outline: none;
-	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.theater-search button,
+.theater-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    font-family: var(--font-family);
+    font-size: 0.88rem;
+    font-weight: 700;
+    line-height: 1.4;
+    text-decoration: none;
+    text-align: center;
+    color: var(--text-primary);
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
-.theater-search input[type="search"]::placeholder {
-  	color: #8A8F99;
-}
-.theater-search input[type="search"]:focus {
-	border-color: #E50914;
-	box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.15);
-}
-
-/* Search Button */
 .theater-search button {
-	height: 44px;
-	padding: 0 20px;
-	background: #E50914;
-	color: #F5F5F7;
-	border: none;
-	border-radius: 8px;
-	font-size: 14px;
-	font-weight: 600;
-	cursor: pointer;
-	transition: background 0.2s ease, transform 0.2s ease;
+    min-width: 115px;
 }
-.theater-search button:hover {
-  	background: #B80710;
+.theater-search button:hover,
+.theater-button:hover {
+    background: color-mix(in srgb, var(--accent) 82%, black);
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px var(--accent-glow);
+    transform: translateY(-1px);
 }
-.theater-search button:active {
-  	transform: scale(0.97);
+.theater-search button:active,
+.theater-button:active {
+    transform: translateY(0);
+}
+.theater-search button:focus-visible,
+.theater-button:focus-visible {
+    outline: 2px solid var(--text-primary);
+    outline-offset: 3px;
 }
 
-/* Nearby Theater Row & Find Button */
+/* Find nearby theater */
 .theater-header-row {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 15px;
-	margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
 }
 .theater-header-row p {
-	margin: 0;
-	color: #8A8F99;
-	font-size: 14px;
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 0.92rem;
+    line-height: 1.6;
 }
-#find-near-btn {
-	flex-shrink: 0;
-	height: 40px;
-	padding: 0 18px;
-	background: transparent;
-	color: #F5F5F7;
-	border: 1px solid #E50914;
-	border-radius: 8px;
-	font-size: 14px;
-	font-weight: 600;
-	cursor: pointer;
-	transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
-}
-#find-near-btn:hover {
-  	background: #E50914;
-  	color: #F5F5F7;
-}
-#find-near-btn:active {
-  	transform: scale(0.97);
-}
-#find-near-btn:disabled {
-	opacity: 0.6;
-	cursor: not-allowed;
-	transform: none;
+.theater-header-row .theater-button {
+    flex-shrink: 0;
 }
 .find-near-status {
-	display: inline-block;
-	margin-top: 10px;
-	color: #8A8F99;
-	font-size: 13px;
+    display: block;
+    margin-top: 14px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+.find-near-status.error {
+    color: var(--danger);
+}
+.find-near-status.success {
+    color: var(--success);
 }
 
-/* Nearest Theater & Search Results */
-#nearest-theater-result {
-  	margin-top: 30px;
+/* Section headings */
+.theater-section {
+    margin: 26px 0 32px;
+}
+.nearest-title,
+.all-theaters-title {
+    margin: 0 0 16px;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.5;
 }
 .nearest-title {
-	margin: 0 0 15px;
-	color: #F5F5F7;
-	font-size: 20px;
-	font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-.nearest-card {
-  	border: 1px solid #E50914;
-}
-.theater-distance {
-  	color: #E50914;
-  	font-weight: 600;
+.nearest-title::before {
+    content: "";
+    display: block;
+    flex-shrink: 0;
+    width: 4px;
+    height: 22px;
+    background: var(--accent);
+    border-radius: 4px;
 }
 .all-theaters-title {
-	margin-top: 35px;
-	margin-bottom: 15px;
-	color: #F5F5F7;
-	font-size: 20px;
-	font-weight: 600;
+    margin-top: 30px;
 }
 
-/*Mobile*/
-@media (max-width: 700px) {
+/* Theater grid */
+.theater-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 235px), 1fr));
+    gap: 18px;
+    align-items: stretch;
+}
+
+/* Theater card */
+.theater-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 5px 18px var(--boxshadow);
+    transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+.theater-card:hover {
+    background: var(--surface-light);
+    border-color: var(--border-hover);
+    box-shadow: 0 10px 26px var(--boxshadow);
+    transform: translateY(-3px);
+}
+
+/* Theater image */
+.theater-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--background);
+}
+.theater-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease, filter 0.3s ease;
+}
+.theater-card:hover .theater-image img {
+    transform: scale(1.04);
+}
+.theater-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+}
+.theater-content h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.02rem;
+    font-weight: 800;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.theater-address {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.83rem;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+
+/* Opening hours and distance */
+.theater-info {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    width: 100%;
+    margin-top: auto;
+}
+.theater-info span {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+.theater-info span:first-child::before {
+    content: "◷";
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+.theater-info .theater-distance {
+    color: var(--success);
+}
+.theater-info .theater-distance::before {
+    content: "⌖";
+    flex-shrink: 0;
+    color: var(--success);
+    font-size: 1rem;
+}
+
+/* View theater button */
+.theater-content > .theater-button {
+    align-self: flex-start;
+    margin-top: 4px;
+    padding: 9px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+.theater-content > .theater-button::after {
+    content: "→";
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+}
+.theater-content > .theater-button:hover::after {
+    transform: translateX(3px);
+}
+
+/* Nearest theater card */
+#nearest-theater-result {
+    padding: 0;
+}
+#nearest-theater-result .theater-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+}
+#nearest-theater-result .nearest-card {
+    display: grid;
+    grid-template-columns: minmax(180px, 34%) minmax(0, 1fr);
+    align-items: stretch;
+    border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+}
+#nearest-theater-result .nearest-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+}
+#nearest-theater-result .nearest-card .theater-image {
+    height: 100%;
+    min-height: 210px;
+    aspect-ratio: auto;
+}
+#nearest-theater-result .nearest-card .theater-content {
+    padding: 20px;
+    gap: 12px;
+}
+#nearest-theater-result .nearest-card .theater-content h2 {
+    font-size: 1.1rem;
+}
+#nearest-theater-result .nearest-card .theater-address {
+    font-size: 0.86rem;
+}
+
+/* Empty search results */
+.no-theaters {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 30px 20px;
+    color: var(--text-secondary);
+    background: var(--surface);
+    border: 1px dashed var(--border-light);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    text-align: center;
+}
+
+/* Responsive layout */
+@media (min-width: 1500px) {
     .theater-grid {
-        grid-template-columns: minmax(250px, 1fr);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+@media (max-width: 1000px) {
+    .theater-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+    #nearest-theater-result .nearest-card {
+        grid-template-columns: minmax(150px, 35%) minmax(0, 1fr);
+    }
+}
+@media (max-width: 650px) {
+    .theater-header {
+        margin-bottom: 24px;
     }
     .theater-search {
-    	gap: 8px;
-  	}
-	.theater-search button {
-		padding: 0 14px;
-	}
-	.theater-header-row {
-	  	align-items: flex-start;
-	  	flex-direction: column;
-	}
-	#find-near-btn {
-	  	width: 100%;
-	}
+        flex-direction: column;
+        gap: 10px;
+    }
+    .theater-search button {
+        width: 100%;
+    }
+    .theater-header-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+    .theater-header-row .theater-button {
+        width: 100%;
+    }
+    .theater-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+    #nearest-theater-result .nearest-card {
+        display: flex;
+        flex-direction: column;
+    }
+    #nearest-theater-result .nearest-card .theater-image {
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 16 / 9;
+    }
+    #nearest-theater-result .nearest-card .theater-content {
+        padding: 16px;
+    }
+    .theater-content {
+        padding: 14px;
+    }
+    .theater-section {
+        margin-bottom: 26px;
+    }
+    .nearest-title,
+    .all-theaters-title {
+        font-size: 1.1rem;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .theater-card,
+    .theater-image img,
+    .theater-button,
+    .theater-search button,
+    .theater-search input,
+    .theater-content > .theater-button::after {
+        transition: none;
+    }
+    .theater-card:hover,
+    .theater-search button:hover,
+    .theater-button:hover {
+        transform: none;
+    }
 }

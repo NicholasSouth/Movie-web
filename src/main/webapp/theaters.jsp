@@ -23,10 +23,6 @@
 		    <!-- Header -->
 		    <%@ include file="components/header.jsp" %>
 		
-		     <!--Left Sidebar-->
-		    <%
-		        request.setAttribute("currentPage", "theaters");
-		    %>
 		    <%@ include file="components/left_sidebar.jsp" %>
 		
 		    <!-- Main Body -->

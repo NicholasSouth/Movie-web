@@ -172,6 +172,106 @@
     border-color: var(--accent);
     box-shadow: 0 0 0 2px var(--accent-glow);
 }
+/* Refund search & filter */
+.RefundFilter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.RefundFilter label {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+.RefundFilter input,
+.RefundFilter select {
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid var(--text-secondary);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+.RefundFilter input {
+    flex: 1 1 220px;
+    min-width: 180px;
+}
+.RefundFilter select {
+    min-width: 190px;
+    cursor: pointer;
+}
+.RefundFilter input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+.RefundFilter input:focus,
+.RefundFilter select:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-color: var(--accent);
+}
+.RefundFilterButton {
+    min-height: 42px;
+    padding: 10px 18px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+.RefundFilterButton:hover {
+    background: color-mix(in srgb, var(--accent) 82%, black);
+    border-color: color-mix(in srgb, var(--accent) 82%, black);
+}
+/* styling the page for showing refund card */
+.RefundPagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 28px;
+    padding: 8px 0;
+}
+.RefundPagination a,
+.RefundPagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: 1px solid var(--text-secondary);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.RefundPagination a:hover {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+}
+.RefundPagination .active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--text-primary);
+    font-weight: 700;
+}
+.RefundPagination a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
 
 /* Booking cards */
 .RefundBookingList {
@@ -428,5 +528,29 @@
     .RefundInfoGrid,
     .RefundPayment {
         grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 640px) {
+    .RefundFilter {
+        align-items: stretch;
+        flex-direction: column;
+    }
+    .RefundFilter label {
+        margin-bottom: -6px;
+    }
+    .RefundFilter input,
+    .RefundFilter select,
+    .RefundFilterButton {
+        width: 100%;
+        min-width: 0;
+    }
+    .RefundPagination {
+        gap: 6px;
+    }
+    .RefundPagination a,
+    .RefundPagination span {
+        min-width: 36px;
+        min-height: 36px;
+        padding: 7px 9px;
     }
 }

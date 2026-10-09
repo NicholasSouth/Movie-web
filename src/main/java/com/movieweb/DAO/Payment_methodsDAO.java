@@ -143,4 +143,21 @@ public class Payment_methodsDAO {
         }
         return false;
     }
+    public boolean deactivatePaymentMethod(int payment_method_id, int user_id) {
+        String sql =
+                "UPDATE Payment_methods "
+                + "SET isActive = 0 "
+                + "WHERE payment_method_id = ? "
+                + "AND user_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, payment_method_id);
+            stmt.setInt(2, user_id);
+            return stmt.executeUpdate() > 0;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

@@ -361,4 +361,202 @@ public class Booking_showtimesDAO
 	    }
 	    return refundHistory;
 	}
+
+
+    // Get one page of POS booking history, optionally filtered by transaction code
+    public List<Map<String, Object>> getBookingHistoryByTheaterId(
+            int theater_id,
+            String transactionCode,
+            int offset,
+            int pageSize) throws SQLException {
+        List<Map<String, Object>> bookingHistory = new ArrayList<>();
+        String search = transactionCode == null ? "" : transactionCode.trim();
+        String sql =
+            "SELECT " +
+            "    b.booking_id, b.showtime_id, b.book_at, " +
+            "    b.status AS booking_status, b.price, " +
+            "    m.movie_name, s.start_at, s.end_at, " +
+            "    r.room_name, s.status AS showtime_status, " +
+            "    t.theater_name, p.status AS payment_status, " +
+            "    p.method AS payment_method, p.amount AS payment_amount, " +
+            "    p.transaction_code " +
+            "FROM Booking_showtimes b " +
+            "INNER JOIN Showtimes s ON s.showtime_id = b.showtime_id " +
+            "INNER JOIN Movies m ON m.movie_id = s.movie_id " +
+            "INNER JOIN Rooms r ON r.room_id = s.room_id " +
+            "INNER JOIN Theaters t ON t.theater_id = r.theater_id " +
+            "LEFT JOIN Payments p ON p.booking_id = b.booking_id " +
+            "WHERE b.delete_at IS NULL " +
+            "AND t.theater_id = ? ";
+        if (!search.isEmpty()) {
+            sql += "AND p.transaction_code LIKE ? ";
+        }
+        sql +=
+            "ORDER BY b.book_at DESC, b.booking_id DESC " +
+            "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        Booking_seatsDAO bookingSeatsDAO = new Booking_seatsDAO();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            int paramIndex = 1;
+            stmt.setInt(paramIndex++, theater_id);
+            if (!search.isEmpty()) {
+                stmt.setString(paramIndex++, "%" + search + "%");
+            }
+            stmt.setInt(paramIndex++, offset);
+            stmt.setInt(paramIndex, pageSize);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, Object> booking = new HashMap<>();
+                    int bookingId = rs.getInt("booking_id");
+                    booking.put("bookingId", bookingId);
+                    booking.put("showtimeId", rs.getInt("showtime_id"));
+                    booking.put("bookAt", rs.getTimestamp("book_at"));
+                    booking.put("bookingStatus", rs.getString("booking_status"));
+                    booking.put("price", rs.getInt("price"));
+                    booking.put("movieName", rs.getString("movie_name"));
+                    booking.put("startAt", rs.getTimestamp("start_at"));
+                    booking.put("endAt", rs.getTimestamp("end_at"));
+                    booking.put("showtimeStatus", rs.getString("showtime_status"));
+                    booking.put("roomName", rs.getString("room_name"));
+                    booking.put("theaterName", rs.getString("theater_name"));
+                    booking.put("paymentStatus", rs.getString("payment_status"));
+                    booking.put("paymentMethod", rs.getString("payment_method"));
+                    booking.put("paymentAmount", rs.getObject("payment_amount"));
+                    booking.put("transactionCode", rs.getString("transaction_code"));
+
+                    // Only load seats for bookings on this page
+                    booking.put("seats", bookingSeatsDAO.getBookedSeats(bookingId));
+                    bookingHistory.add(booking);
+                }
+            }
+        }
+        return bookingHistory;
+    }
+
+    // Count all matching POS bookings for pagination
+    public int countBookingHistoryByTheaterId(
+            int theater_id,
+            String transactionCode) throws SQLException {
+        String search = transactionCode == null ? "" : transactionCode.trim();
+        String sql =
+            "SELECT COUNT(*) " +
+            "FROM Booking_showtimes b " +
+            "INNER JOIN Showtimes s ON s.showtime_id = b.showtime_id " +
+            "INNER JOIN Rooms r ON r.room_id = s.room_id " +
+            "INNER JOIN Theaters t ON t.theater_id = r.theater_id " +
+            "LEFT JOIN Payments p ON p.booking_id = b.booking_id " +
+            "WHERE b.delete_at IS NULL " +
+            "AND t.theater_id = ? ";
+        if (!search.isEmpty()) {
+            sql += "AND p.transaction_code LIKE ?";
+        }
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, theater_id);
+            if (!search.isEmpty()) {
+                stmt.setString(2, "%" + search + "%");
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
+    //For refund page to show 5 refund at a time, incase lagging, similar implementation as paging in pos.jsp
+	public int countRefundHistoryByTheaterId(
+	        int theater_id,
+	        String status,
+	        String transactionCode) throws SQLException {
+	    String sql =
+	        "SELECT COUNT(*) " +
+	        "FROM Booking_showtimes b " +
+	        "INNER JOIN Showtimes s ON b.showtime_id = s.showtime_id " +
+	        "INNER JOIN Movies m ON s.movie_id = m.movie_id " +
+	        "INNER JOIN Rooms r ON s.room_id = r.room_id " +
+	        "INNER JOIN Theaters t ON r.theater_id = t.theater_id " +
+	        "LEFT JOIN Payments p ON b.booking_id = p.booking_id " +
+	        "WHERE b.delete_at IS NULL " +
+	        "AND t.theater_id = ? " +
+	        "AND b.status IN ('REFUNDED', 'CANCELLED') " +
+	        "AND (? = 'ALL' OR b.status = ?) " +
+	        "AND (? = '' OR p.transaction_code LIKE ?)";
+	    try (Connection conn = DBConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, theater_id);
+	        stmt.setString(2, status);
+	        stmt.setString(3, status);
+	        stmt.setString(4, transactionCode);
+	        stmt.setString(5, "%" + transactionCode + "%");
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	                return rs.getInt(1);
+	            }
+	        }
+	    }
+	    return 0;
+	}
+
+	public List<Map<String, Object>> getRefundHistoryByTheaterId(
+	        int theater_id,
+	        String status,
+	        String transactionCode,
+	        int offset,
+	        int pageSize) throws SQLException {
+	    List<Map<String, Object>> refundHistory = new ArrayList<>();
+	    String sql =
+	        "SELECT b.booking_id, b.book_at, " +
+	        "b.status AS booking_status, b.price, " +
+	        "m.movie_name, s.start_at, s.end_at, " +
+	        "r.room_name, t.theater_name, " +
+	        "p.status AS payment_status, " +
+	        "p.method AS payment_method, " +
+	        "p.amount AS payment_amount, " +
+	        "p.transaction_code " +
+	        "FROM Booking_showtimes b " +
+	        "INNER JOIN Showtimes s ON b.showtime_id = s.showtime_id " +
+	        "INNER JOIN Movies m ON s.movie_id = m.movie_id " +
+	        "INNER JOIN Rooms r ON s.room_id = r.room_id " +
+	        "INNER JOIN Theaters t ON r.theater_id = t.theater_id " +
+	        "LEFT JOIN Payments p ON b.booking_id = p.booking_id " +
+	        "WHERE b.delete_at IS NULL " +
+	        "AND t.theater_id = ? " +
+	        "AND b.status IN ('REFUNDED', 'CANCELLED') " +
+	        "AND (? = 'ALL' OR b.status = ?) " +
+	        "AND (? = '' OR p.transaction_code LIKE ?) " +
+	        "ORDER BY b.book_at DESC, b.booking_id DESC " +
+	        "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+	    try (Connection conn = DBConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, theater_id);
+	        stmt.setString(2, status);
+	        stmt.setString(3, status);
+	        stmt.setString(4, transactionCode);
+	        stmt.setString(5, "%" + transactionCode + "%");
+	        stmt.setInt(6, offset);
+	        stmt.setInt(7, pageSize);
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            while (rs.next()) {
+	                Map<String, Object> booking = new HashMap<>();
+	                booking.put("bookingId", rs.getInt("booking_id"));
+	                booking.put("bookAt", rs.getTimestamp("book_at"));
+	                booking.put("bookingStatus", rs.getString("booking_status"));
+	                booking.put("price", rs.getInt("price"));
+	                booking.put("movieName", rs.getString("movie_name"));
+	                booking.put("startAt", rs.getTimestamp("start_at"));
+	                booking.put("endAt", rs.getTimestamp("end_at"));
+	                booking.put("roomName", rs.getString("room_name"));
+	                booking.put("theaterName", rs.getString("theater_name"));
+	                booking.put("paymentStatus", rs.getString("payment_status"));
+	                booking.put("paymentMethod", rs.getString("payment_method"));
+	                booking.put("paymentAmount", rs.getObject("payment_amount"));
+	                booking.put("transactionCode", rs.getString("transaction_code"));
+	                refundHistory.add(booking);
+	            }
+	        }
+	    }
+	    return refundHistory;
+	}
 }

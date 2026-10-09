@@ -125,6 +125,73 @@
     font-size: 12px;
     white-space: nowrap;
 }
+/* Search bar and page number stuffs */
+.POSSearchForm {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 16px 0 22px;
+}
+.POSSearchForm input {
+    flex: 1;
+    min-width: 220px;
+    padding: 11px 14px;
+    color: var(--text-primary);
+    background: var(--surface);
+    border: 1px solid var(--text-secondary);
+    border-radius: 8px;
+    font: inherit;
+}
+.POSSearchForm input:focus {
+    outline: 1px solid var(--accent);
+    border-color: var(--accent);
+}
+.POSSearchForm button,
+.POSSearchForm a,
+.POSPagination a,
+.POSPagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 13px;
+    border: 1px solid color-mix(in srgb, var(--text-secondary) 40%, transparent);
+    border-radius: 8px;
+    font: inherit;
+    text-decoration: none;
+}
+.POSSearchForm button {
+    color: var(--text-primary);
+    background: var(--accent);
+    border-color: var(--accent);
+    cursor: pointer;
+}
+.POSSearchForm a,
+.POSPagination a {
+    color: var(--text-primary);
+    background: var(--surface);
+}
+.POSSearchForm a:hover,
+.POSPagination a:hover {
+    border-color: var(--accent);
+}
+.POSPagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 24px 0;
+}
+.POSPagination .PaginationCurrent {
+    color: var(--text-primary);
+    background: var(--accent);
+    border-color: var(--accent);
+}
+.POSPagination .PaginationDisabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
 /* Booking List contain the booking cards */
 .POSBookingList {
     display: flex;
@@ -184,12 +251,22 @@
 }
 .BookingStatusSuccess {
     border-color: var(--success);
+    background: color-mix(in srgb, var(--success) 15%, transparent);
     color: var(--success);
 }
 .BookingStatusDefault {
     border-color: var(--border-light);
-    background-color: var(--surface-light);
     color: var(--text-secondary);
+}
+.BookingStatusPending {
+    color: var(--pending);
+    background: color-mix(in srgb, var(--pending) 15%, transparent);
+    border-color: var(--pending);
+}
+.BookingStatusRefunded {
+    color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 15%, transparent);
+    border-color: var(--danger);
 }
 
 /* Booking Information */

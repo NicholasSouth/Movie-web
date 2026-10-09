@@ -433,17 +433,17 @@
 .DemoPaymentNotice {
     margin: 20px 0;
     padding: 14px 15px;
-    border: 1px solid #49402D;
+    border: 1px solid var(--pending);
     border-radius: 10px;
-    background: #211F1A;
+    background: color-mix(in srgb, var(--pending) 12%, var(--surface));
 }
 .DemoPaymentNotice strong {
-    color: #F0CB80;
+    color: var(--pending);
     font-size: 13px;
 }
 .DemoPaymentNotice p {
     margin: 6px 0 0;
-    color: #C8BFAE;
+    color: var(--text-secondary);
     font-size: 12px;
     line-height: 1.6;
 }
@@ -477,7 +477,7 @@
     padding: 10px;
     border: 1px solid var(--border-light);
     border-radius: 10px;
-    background: #ffffff; /* Ensures the QR code stands out clearly with high contrast */
+    background: var(--text-primary); /* Ensures the QR code stands out clearly with high contrast */
     box-shadow: 0 4px 12px var(--boxshadow);
 }
 /* Payment button */
