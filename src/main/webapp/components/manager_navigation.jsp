@@ -19,14 +19,14 @@
                 PROCESS ORDERS
             </div>
             <a
-                href="${pageContext.request.contextPath}/manager-sales"
+                href="${pageContext.request.contextPath}/sales-bookings"
                 class="manager-nav-item <%= "sales".equals(currentManagerPage) ? "active" : "" %>">
                 Sales & Bookings
             </a>
             <a
-                href="${pageContext.request.contextPath}/manager-payments"
-                class="manager-nav-item <%= "payments".equals(currentManagerPage) ? "active" : "" %>">
-                Payments
+                href="${pageContext.request.contextPath}/pos-payment-method"
+                class="manager-nav-item <%= "payment-method".equals(currentManagerPage) ? "active" : "" %>">
+                Payment Methods
             </a>
             <a
                 href="${pageContext.request.contextPath}/manager-refunds"

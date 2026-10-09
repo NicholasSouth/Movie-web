@@ -42,4 +42,35 @@ public class PaymentsDAO
         
         return null;
     }
+
+    //for pos.jsp and main_manager to show daily revenue
+    public int getDailyRevenueByTheaterId(int theater_id)
+            throws SQLException {
+        String sql =
+            "SELECT COALESCE(SUM(p.amount), 0) " +
+            "FROM Payments p " +
+            "INNER JOIN Booking_showtimes b " +
+            "    ON b.booking_id = p.booking_id " +
+            "INNER JOIN Showtimes s " +
+            "    ON s.showtime_id = b.showtime_id " +
+            "INNER JOIN Rooms r " +
+            "    ON r.room_id = s.room_id " +
+            "INNER JOIN Theaters t " +
+            "    ON t.theater_id = r.theater_id " +
+            "WHERE p.status = 'SUCCESS' " +
+            "AND b.delete_at IS NULL " +
+            "AND t.theater_id = ? " +
+            "AND CAST(p.paid_at AS date) = " +
+            "    CAST(GETDATE() AS date)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, theater_id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
 }

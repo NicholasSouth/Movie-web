@@ -143,4 +143,40 @@ public class EmailService
             return false;
         }
     }
+
+    //Send refund request email
+	public boolean sendRefundRequest(
+	        int bookingId,
+	        String movieName,
+	        String theaterName,
+	        String roomName) {
+	    try {
+	        Session session = createMailSession();
+	        Message message = new MimeMessage(session);
+	        message.setFrom(new InternetAddress(SENDER_EMAIL));
+	        message.setRecipients(
+	            Message.RecipientType.TO,
+	            InternetAddress.parse(SENDER_EMAIL)
+	        );
+	        message.setSubject(
+	            "PhnetPhlyx - Refund Request #" + bookingId
+	        );
+	        String content =
+	            "A manager has submitted a refund request.\n\n" +
+	            "Booking ID: " + bookingId + "\n" +
+	            "Movie: " + movieName + "\n" +
+	            "Theater: " + theaterName + "\n" +
+	            "Room: " + roomName + "\n\n" +
+	            "Current booking status: REFUNDED\n" +
+	            "Action required: Review the request in the admin panel.\n";
+	        message.setText(content);
+	        Transport.send(message);
+	        return true;
+	    } 
+	    catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
 }

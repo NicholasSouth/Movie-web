@@ -215,39 +215,6 @@ body {
     color: var(--text-primary);
 }
 
-/* Filter Button */
-.manager-filter-button {
-    padding: 9px 15px;
-    background-color: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s, border-color 0.2s, opacity 0.2s;
-}
-.manager-filter-button:hover {
-    opacity: 0.85;
-}
-
-/* Reset Button */
-.manager-reset-button {
-    padding: 9px 12px;
-    background-color: transparent;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-secondary);
-    font-size: 13px;
-    text-decoration: none;
-    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-}
-.manager-reset-button:hover {
-    background-color: var(--surface-hover);
-    border-color: var(--border-hover);
-    color: var(--text-primary);
-}
-
 /* Manager Summary */
 .manager-summary {
     display: grid;

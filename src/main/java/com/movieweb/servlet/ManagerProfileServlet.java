@@ -71,7 +71,6 @@ public class ManagerProfileServlet extends HttpServlet {
         request.setAttribute("profileUser", profileUser);
         request.setAttribute("assignedTheaters", assignedTheaters);
         request.setAttribute("theaterLoadError", false);
-        request.setAttribute("currentManagerPage", "profile");
 
         // Prevent cached profile information.
         response.setHeader("Cache-Control", "no-store");

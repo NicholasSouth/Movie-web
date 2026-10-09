@@ -94,4 +94,25 @@ public class ManagersDAO {
         }
         return false;
     }
+
+    // Check whether a manager is assigned to a theater
+    public boolean isManagerAssignedToTheater(int user_id, int theater_id) {
+        String sql =
+            "SELECT 1 " +
+            "FROM Managers " +
+            "WHERE user_id = ? " +
+            "AND theater_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user_id);
+            stmt.setInt(2, theater_id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

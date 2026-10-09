@@ -188,4 +188,177 @@ public class Booking_showtimesDAO
         }
         return booking;
     }
+
+    //get booking history for pos
+    public List<Map<String, Object>> getBookingHistoryByTheaterId(
+            int theater_id) throws SQLException {
+        List<Map<String, Object>> bookingHistory = new ArrayList<>();
+        String sql =
+            "SELECT " +
+            "    b.booking_id, " +
+            "    b.showtime_id, " +
+            "    b.book_at, " +
+            "    b.status AS booking_status, " +
+            "    b.price, " +
+            "    m.movie_name, " +
+            "    s.start_at, " +
+            "    s.end_at, " +
+            "    r.room_name, " +
+            "    s.status AS showtime_status, " +
+            "    t.theater_name, " +
+            "    p.status AS payment_status, " +
+            "    p.method AS payment_method, " +
+            "    p.amount AS payment_amount, " +
+            "    p.transaction_code " +
+            "FROM Booking_showtimes b " +
+            "INNER JOIN Showtimes s " +
+            "    ON s.showtime_id = b.showtime_id " +
+            "INNER JOIN Movies m " +
+            "    ON m.movie_id = s.movie_id " +
+            "INNER JOIN Rooms r " +
+            "    ON r.room_id = s.room_id " +
+            "INNER JOIN Theaters t " +
+            "    ON t.theater_id = r.theater_id " +
+            "LEFT JOIN Payments p " +
+            "    ON p.booking_id = b.booking_id " +
+            "WHERE b.delete_at IS NULL " +
+            "AND t.theater_id = ? " +
+            "ORDER BY b.book_at DESC, b.booking_id DESC";
+        Booking_seatsDAO bookingSeatsDAO = new Booking_seatsDAO();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, theater_id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, Object> booking = new HashMap<>();
+                    int bookingId = rs.getInt("booking_id");
+                    booking.put("bookingId", bookingId);
+                    booking.put("showtimeId", rs.getInt("showtime_id"));
+                    booking.put("bookAt", rs.getTimestamp("book_at"));
+                    booking.put("bookingStatus", rs.getString("booking_status"));
+                    booking.put("price", rs.getInt("price"));
+                    booking.put("movieName", rs.getString("movie_name"));
+                    booking.put("startAt", rs.getTimestamp("start_at"));
+                    booking.put("endAt", rs.getTimestamp("end_at"));
+                    booking.put("showtimeStatus", rs.getString("showtime_status"));
+                    booking.put("roomName", rs.getString("room_name"));
+                    booking.put("theaterName", rs.getString("theater_name"));
+                    booking.put("paymentStatus", rs.getString("payment_status"));
+                    booking.put("paymentMethod", rs.getString("payment_method"));
+                    booking.put("paymentAmount", rs.getObject("payment_amount"));
+                    booking.put("transactionCode", rs.getString("transaction_code"));
+                    booking.put("seats", bookingSeatsDAO.getBookedSeats(bookingId));
+                    bookingHistory.add(booking);
+                }
+            }
+        }
+        return bookingHistory;
+    }
+
+    //REFUNDED -> CANCELLED, this method search CONFIRMED showtimes to set REFUNDED
+    public boolean requestRefund(int booking_id, int theater_id)
+        throws SQLException {
+	    String sql =
+	        "UPDATE b " +
+	        "SET b.status = 'REFUNDED' " +
+	        "FROM Booking_showtimes b " +
+	        "WHERE b.booking_id = ? " +
+	        "AND b.status = 'CONFIRMED' " +
+	        "AND b.delete_at IS NULL " +
+	        "AND EXISTS ( " +
+	        "    SELECT 1 " +
+	        "    FROM Showtimes s " +
+	        "    INNER JOIN Rooms r ON s.room_id = r.room_id " +
+	        "    WHERE s.showtime_id = b.showtime_id " +
+	        "    AND r.theater_id = ? " +
+	        ") " +
+	        "AND EXISTS ( " +
+	        "    SELECT 1 " +
+	        "    FROM Payments p " +
+	        "    WHERE p.booking_id = b.booking_id " +
+	        "    AND p.status = 'SUCCESS' " +
+	        ")";
+	    try (Connection conn = DBConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, booking_id);
+	        stmt.setInt(2, theater_id);
+	        return stmt.executeUpdate() == 1;
+	    }
+    }
+
+    //Get infor for refunding email to admin
+	public Map<String, Object> getRefundEmailDetails(int booking_id, int theater_id) throws SQLException {
+	    String sql =
+	        "SELECT m.movie_name, t.theater_name, r.room_name " +
+	        "FROM Booking_showtimes b " +
+	        "INNER JOIN Showtimes s ON b.showtime_id = s.showtime_id " +
+	        "INNER JOIN Movies m ON s.movie_id = m.movie_id " +
+	        "INNER JOIN Rooms r ON s.room_id = r.room_id " +
+	        "INNER JOIN Theaters t ON r.theater_id = t.theater_id " +
+	        "WHERE b.booking_id = ? " +
+	        "AND t.theater_id = ? " +
+	        "AND b.status = 'REFUNDED' " +
+	        "AND b.delete_at IS NULL";
+	    try (Connection conn = DBConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, booking_id);
+	        stmt.setInt(2, theater_id);
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	                Map<String, Object> details = new HashMap<>();
+	                details.put("movieName", rs.getString("movie_name"));
+	                details.put("theaterName", rs.getString("theater_name"));
+	                details.put("roomName", rs.getString("room_name"));
+	                return details;
+	            }
+	        }
+	    }
+	    return null;
+	}
+
+	//Get refund history for the selected theater
+	public List<Map<String, Object>> getRefundHistoryByTheaterId(int theater_id)
+	        throws SQLException {
+	    List<Map<String, Object>> refundHistory = new ArrayList<>();
+	    String sql =
+	        "SELECT b.booking_id, b.book_at, b.status AS booking_status, b.price, " +
+	        "m.movie_name, s.start_at, s.end_at, " +
+	        "r.room_name, t.theater_name, " +
+	        "p.status AS payment_status, p.method AS payment_method, " +
+	        "p.amount AS payment_amount, p.transaction_code " +
+	        "FROM Booking_showtimes b " +
+	        "INNER JOIN Showtimes s ON b.showtime_id = s.showtime_id " +
+	        "INNER JOIN Movies m ON s.movie_id = m.movie_id " +
+	        "INNER JOIN Rooms r ON s.room_id = r.room_id " +
+	        "INNER JOIN Theaters t ON r.theater_id = t.theater_id " +
+	        "LEFT JOIN Payments p ON b.booking_id = p.booking_id " +
+	        "WHERE b.delete_at IS NULL " +
+	        "AND t.theater_id = ? " +
+	        "AND b.status IN ('REFUNDED', 'CANCELLED') " +
+	        "ORDER BY b.book_at DESC, b.booking_id DESC";
+	    try (Connection conn = DBConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, theater_id);
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            while (rs.next()) {
+	                Map<String, Object> booking = new HashMap<>();
+	                booking.put("bookingId", rs.getInt("booking_id"));
+	                booking.put("bookAt", rs.getTimestamp("book_at"));
+	                booking.put("bookingStatus", rs.getString("booking_status"));
+	                booking.put("price", rs.getInt("price"));
+	                booking.put("movieName", rs.getString("movie_name"));
+	                booking.put("startAt", rs.getTimestamp("start_at"));
+	                booking.put("endAt", rs.getTimestamp("end_at"));
+	                booking.put("roomName", rs.getString("room_name"));
+	                booking.put("theaterName", rs.getString("theater_name"));
+	                booking.put("paymentStatus", rs.getString("payment_status"));
+	                booking.put("paymentMethod", rs.getString("payment_method"));
+	                booking.put("paymentAmount", rs.getObject("payment_amount"));
+	                booking.put("transactionCode", rs.getString("transaction_code"));
+	                refundHistory.add(booking);
+	            }
+	        }
+	    }
+	    return refundHistory;
+	}
 }

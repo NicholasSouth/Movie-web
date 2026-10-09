@@ -1,0 +1,432 @@
+/* POS refund history */
+.POSRefundPage {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px;
+    color: var(--text-primary);
+}
+
+/* Page header - matched with POSPage header style */
+.RefundPageHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 28px;
+}
+.RefundPageHeader > div {
+    min-width: 0;
+}
+.RefundBreadcrumb {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+.RefundPageHeader h1 {
+    margin: 0 0 8px;
+    color: var(--text-primary);
+    font-size: 28px;
+    font-weight: 700;
+}
+.RefundPageHeader p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Nicer Back to Sales button (inspired by POSCreateButton) */
+.RefundBackButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 18px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background-color: var(--surface);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.RefundBackButton:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--border-hover);
+    transform: translateY(-1px);
+}
+
+.RefundFilterButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 10px 14px;
+    background: var(--surface);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+.RefundFilterButton:hover {
+    border-color: var(--accent);
+    background: var(--surface-hover);
+}
+
+/* Status guide */
+.RefundStatusGuide {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+}
+.RefundGuideItem {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+}
+.RefundGuideItem p {
+    margin: 12px 0 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Section */
+.RefundSection {
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--background);
+}
+.RefundSectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+.RefundSectionHeader h2 {
+    margin: 0 0 8px;
+    font-size: 21px;
+}
+.RefundSectionHeader p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+}
+.RefundCount {
+    flex-shrink: 0;
+    padding: 7px 11px;
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+/* Filter */
+.RefundFilter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+}
+.RefundFilter label {
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+}
+.RefundFilter select {
+    min-width: 220px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 7px;
+    outline: none;
+    background: var(--background);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.RefundFilter select:hover {
+    border-color: var(--border-hover);
+}
+.RefundFilter select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+/* Booking cards */
+.RefundBookingList {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.RefundBookingCard {
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    transition: border-color 0.2s;
+}
+.RefundBookingCard:hover {
+    border-color: var(--border-hover);
+}
+.RefundCardHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+.RefundBookingId {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+}
+.RefundCardHeader h3 {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Status labels */
+.RefundStatus {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 7px 10px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+.RefundStatusPending {
+    border-color: var(--pending);
+    background: color-mix(in srgb, var(--pending) 15%, transparent);
+    color: var(--pending);
+}
+.RefundStatusCancelled {
+    border-color: var(--success);
+    background: color-mix(in srgb, var(--success) 15%, transparent);
+    color: var(--success);
+}
+
+/* Booking details */
+.RefundInfoGrid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+}
+.RefundInfoItem,
+.RefundPaymentDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+}
+.RefundInfoItem > span,
+.RefundFieldLabel {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+.RefundInfoItem strong,
+.RefundPaymentDetails strong {
+    max-width: 100%;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+/* Payment details */
+.RefundPayment {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(150px, auto);
+    align-items: center;
+    gap: 20px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+}
+.RefundPaymentStatus {
+    display: inline-block;
+    padding: 6px 9px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    background: var(--surface-light);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+.RefundPaymentStatusComplete {
+    border-color: var(--success);
+    background: color-mix(in srgb, var(--success) 15%, transparent);
+    color: var(--success);
+}
+.RefundTotal {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    min-width: 0;
+}
+.RefundTotal span {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+.RefundTotal strong {
+    color: var(--text-primary);
+    font-size: 19px;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+/* Explanatory note */
+.RefundCardNote {
+    margin-top: 18px;
+    padding: 13px 15px;
+    border-left: 3px solid;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.7;
+}
+.RefundCardNotePending {
+    border-left-color: var(--pending);
+    background: color-mix(in srgb, var(--pending) 8%, transparent);
+    color: var(--pending);
+}
+.RefundCardNoteComplete {
+    border-left-color: var(--success);
+    background: color-mix(in srgb, var(--success) 8%, transparent);
+    color: var(--success);
+}
+
+/* Messages */
+.RefundMessage {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+.RefundMessageError {
+    border: 1px solid var(--danger);
+    background: color-mix(in srgb, var(--danger) 12%, transparent);
+    color: var(--danger);
+}
+
+/* Empty state */
+.RefundEmptyState {
+    padding: 52px 20px;
+    border: 1px dashed var(--border-light);
+    border-radius: 10px;
+    text-align: center;
+}
+.RefundEmptyIcon {
+    margin-bottom: 14px;
+    color: var(--text-secondary);
+    font-size: 30px;
+}
+.RefundEmptyState h3 {
+    margin: 0 0 10px;
+    font-size: 17px;
+}
+.RefundEmptyState p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+    .RefundPageHeader {
+        flex-direction: column;
+    }
+    .RefundBackButton {
+        width: 100%;
+    }
+}
+@media (max-width: 1100px) {
+    .RefundInfoGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .RefundPayment {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .RefundTotal {
+        align-items: flex-start;
+    }
+    .RefundTotal strong {
+        text-align: left;
+    }
+}
+@media (max-width: 700px) {
+    .POSRefundPage {
+        padding: 18px;
+    }
+    .RefundStatusGuide {
+        grid-template-columns: 1fr;
+    }
+    .RefundSection {
+        padding: 16px;
+    }
+    .RefundSectionHeader {
+        align-items: flex-start;
+    }
+    .RefundCardHeader {
+        flex-direction: column;
+    }
+    .RefundInfoGrid,
+    .RefundPayment {
+        grid-template-columns: 1fr 1fr;
+        gap: 18px 12px;
+    }
+    .RefundFilter {
+        align-items: stretch;
+        flex-direction: column;
+    }
+    .RefundFilter select {
+        width: 100%;
+        min-width: 0;
+    }
+    .RefundFilterButton {
+        width: 100%;
+    }
+    .RefundBookingCard {
+        padding: 16px;
+    }
+}
+@media (max-width: 420px) {
+    .RefundInfoGrid,
+    .RefundPayment {
+        grid-template-columns: 1fr;
+    }
+}

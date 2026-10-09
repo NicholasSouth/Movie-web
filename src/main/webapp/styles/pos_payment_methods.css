@@ -1,0 +1,298 @@
+.payment-method-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px;
+}
+
+/* Page header */
+.payment-method-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 28px;
+}
+.payment-method-header > div {
+    min-width: 0;
+}
+.payment-method-breadcrumb {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+.payment-method-header h2 {
+    margin: 0 0 8px;
+    color: var(--text-primary);
+    font-size: 28px;
+    font-weight: 700;
+}
+.payment-method-header p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Error and success messages */
+.error-message {
+    margin-bottom: 25px;
+    padding: 15px 20px;
+    border: 1px solid var(--danger);
+    background: color-mix(in srgb, var(--danger) 12%, transparent);
+    border-radius: 8px;
+    color: var(--danger);
+    font-size: 14px;
+    font-weight: bold;
+}
+.success-message {
+    margin-bottom: 25px;
+    padding: 15px 20px;
+    border: 1px solid var(--success);
+    background: color-mix(in srgb, var(--success) 12%, transparent);
+    border-radius: 8px;
+    color: var(--success);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* input card number and expire date section */
+.payment-section {
+    margin-bottom: 30px;
+}
+.payment-section-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+/* Saved visa*/
+.payment-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    margin-bottom: 15px;
+    padding: 20px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: border-color 0.2s;
+}
+.payment-card:hover {
+    border-color: var(--border-hover);
+}
+.payment-card:last-child {
+    margin-bottom: 0;
+}
+.payment-card-information {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+    flex: 1;
+}
+/* VISA label */
+.payment-card-brand {
+    width: 54px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: var(--background);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+/* visa card details */
+.payment-card-details {
+    min-width: 0;
+}
+.payment-card-details h4 {
+    margin: 0 0 4px;
+    color: var(--text-primary);
+    font-size: 15px;
+    font-weight: bold;
+}
+.payment-card-details p {
+    margin: 0 0 4px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: var(--font-family);
+    letter-spacing: 1px;
+}
+.payment-card-details span {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+.payment-card-action {
+    flex-shrink: 0;
+}
+/* deactivate button */
+.payment-delete-button {
+    min-width: 110px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border: 1px solid var(--danger);
+    border-radius: 8px;
+    background-color: var(--background);
+    color: var(--danger);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s;
+}
+.payment-delete-button:hover {
+    background-color: color-mix(in srgb, var(--danger) 15%, transparent);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+/* no visa added state */
+.no-payment-method {
+    padding: 25px 20px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-align: center;
+}
+.no-payment-method p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* the form containing the two textboxes to add card number and expire date */
+.payment-form-card {
+    padding: 25px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+.payment-form-description {
+    margin: 0 0 20px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Input group styling to match form controls if used */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.input-group label {
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: bold;
+}
+.input-group input,
+.payment-form-input {
+    width: 100%;
+    height: 44px;
+    padding: 0 15px;
+    background-color: var(--background);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-group input:focus,
+.payment-form-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+/* Simulation notice cuz this visa thing is fake */
+.payment-information {
+    padding: 15px 18px;
+    background-color: var(--surface-light);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+}
+.payment-information p {
+    margin: 0 0 4px;
+}
+.payment-information p:last-child {
+    margin-bottom: 0;
+}
+.payment-information strong {
+    color: var(--text-primary);
+}
+/* Submit visa button */
+.payment-form-actions {
+    display: flex;
+    justify-content: flex-start;
+}
+.payment-submit-button {
+    min-width: 140px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background-color: var(--accent);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition:
+        background-color 0.2s,
+        opacity 0.2s,
+        transform 0.2s;
+}
+.payment-submit-button:hover {
+    background-color: var(--accent);
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+/* Responsive design */
+@media (max-width: 700px) {
+    .payment-method-container {
+        padding: 18px;
+        max-width: none;
+    }
+    .payment-card {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .payment-card-action {
+        width: 100%;
+    }
+    .payment-delete-button {
+        width: 100%;
+    }
+}
+@media (max-width: 400px) {
+    .payment-form-card {
+        padding: 15px;
+    }
+}

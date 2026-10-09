@@ -4,16 +4,17 @@
 
 <%
     Users currentUser = (Users) session.getAttribute("user");
-    if (currentUser == null || !"MANAGER".equalsIgnoreCase(currentUser.getRole())) {
+    if (currentUser == null
+        || !"MANAGER".equalsIgnoreCase(currentUser.getRole())) {
         response.sendRedirect(request.getContextPath() + "/main.jsp");
         return;
     }
     request.setAttribute("currentManagerPage", "dashboard");
-    List<Theaters> theaters = (List<Theaters>) request.getAttribute("theaters"); 
-    String selectedTheaterId = request.getParameter("theaterId"); 
-    if (selectedTheaterId == null) { 
-    	selectedTheaterId = ""; 
-    }
+    List<Theaters> theaters = (List<Theaters>)request.getAttribute("theaters");
+    Integer currentTheaterId = (Integer)request.getAttribute("currentTheaterId");
+    String selectedTheaterId = currentTheaterId == null
+            ? ""
+            : String.valueOf(currentTheaterId);
 %>
 <!DOCTYPE html>
 <html>
@@ -38,36 +39,38 @@
 		            <p>
 		                Welcome back, <strong><%= currentUser.getFullName() %></strong>.
 		            </p>
-		            <form 
-						class="manager-theater-filter" 
-						method="get" 
-						action="${pageContext.request.contextPath}/main_manager.jsp">
-					    <label for="theater-filter">Theater</label>
-					    <select id="theater-filter" name="theaterId">
-					        <option value="">All Theaters</option>
+		            <form
+					    class="manager-theater-filter"
+					    method="get"
+					    action="${pageContext.request.contextPath}/manager-theater">
+					
+					    <label for="theater-filter">
+					        Theater
+					    </label>
+					
+					    <select
+					        id="theater-filter"
+					        name="theaterId"
+					        onchange="this.form.submit()">
+					
 					        <%
 					            if (theaters != null) {
 					                for (Theaters theater : theaters) {
 					        %>
-					                    <option value="<%= theater.getTheater_id() %>" <%= String.valueOf(theater.getTheater_id()).equals(selectedTheaterId) ? "selected" : "" %>>
-					                        <%= theater.getTheater_name() %>
-					                    </option>
+							            <option
+							                value="<%= theater.getTheater_id() %>"
+							                <%= String.valueOf(
+							                        theater.getTheater_id())
+							                        .equals(selectedTheaterId)
+							                        ? "selected"
+							                        : "" %>>
+							                <%= theater.getTheater_name() %>
+							            </option>
 					        <%
 					                }
 					            }
 					        %>
 					    </select>
-					    <button type="submit" class="manager-filter-button">Filter</button>
-					    <%
-					        if (!selectedTheaterId.isEmpty()) {
-					    %>
-					            <a 
-					            	href="${pageContext.request.contextPath}/main_manager.jsp" 
-					            	class="manager-reset-button">
-					            	Reset</a>
-					    <%
-					        }
-					    %>
 					</form>
 		        </div>
 				
