@@ -524,7 +524,6 @@
 				</div>
 			</div>
 		</main>
-		<%@ include file="/components/footer.jsp" %>
 		<script 
 			src="<%= request.getContextPath() %>/scripts/pos_payment.js">
 		</script>

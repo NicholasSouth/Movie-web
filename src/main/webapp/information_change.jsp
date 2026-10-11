@@ -86,7 +86,7 @@
 						        name="banner"
 						        class="file-input-hidden"
 						        accept=".jpg,.jpeg,.png,.webp">
-						    <label for="avatar" class="custom-file-button">
+						    <label for="banner" class="custom-file-button">
 						        <img 
 							        src="${pageContext.request.contextPath}/pictures/assessments/upload.png" 
 							        alt="Upload Icon" 

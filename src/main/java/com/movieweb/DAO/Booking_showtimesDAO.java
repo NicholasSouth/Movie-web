@@ -9,6 +9,7 @@ import com.movieweb.util.DBConnection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -559,4 +560,78 @@ public class Booking_showtimesDAO
 	    }
 	    return refundHistory;
 	}
+
+    // Dashboard: count confirmed bookings made today for the selected theater.
+    public int getTodayConfirmedBookingCountByTheaterId(int theaterId) {
+        String sql =
+            "SELECT COUNT(*) " +
+            "FROM Booking_showtimes b " +
+            "INNER JOIN Showtimes s ON s.showtime_id = b.showtime_id " +
+            "INNER JOIN Rooms r ON r.room_id = s.room_id " +
+            "WHERE r.theater_id = ? " +
+            "AND b.delete_at IS NULL " +
+            "AND UPPER(b.status) = 'CONFIRMED' " +
+            "AND CAST(b.book_at AS date) = CAST(GETDATE() AS date)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, theaterId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } 
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Dashboard: five latest bookings, without loading each booking's seats.
+    // Manager-created bookings are classified as POS using Users.role.
+    public List<Map<String, Object>> getRecentBookingsByTheaterId(int theaterId) {
+        List<Map<String, Object>> bookings = new ArrayList<>();
+        String sql =
+            "SELECT TOP 5 " +
+            "b.booking_id AS bookingId, " +
+            "b.book_at AS bookAt, " +
+            "b.status AS bookingStatus, " +
+            "m.movie_name AS movieName, " +
+            "u.full_name AS customerName, " +
+            "CASE WHEN UPPER(u.role) = 'MANAGER' " +
+            "     THEN 'POS' ELSE 'Customer' END AS bookingSource, " +
+            "p.transaction_code AS transactionCode, " +
+            "p.status AS paymentStatus " +
+            "FROM Booking_showtimes b " +
+            "INNER JOIN Showtimes s ON s.showtime_id = b.showtime_id " +
+            "INNER JOIN Rooms r ON r.room_id = s.room_id " +
+            "INNER JOIN Movies m ON m.movie_id = s.movie_id " +
+            "LEFT JOIN Users u ON u.user_id = b.user_id " +
+            "LEFT JOIN Payments p ON p.booking_id = b.booking_id " +
+            "WHERE r.theater_id = ? " +
+            "AND b.delete_at IS NULL " +
+            "ORDER BY b.book_at DESC, b.booking_id DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, theaterId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, Object> row = new LinkedHashMap<>();
+                    row.put("bookingId", rs.getInt("bookingId"));
+                    row.put("bookAt", rs.getTimestamp("bookAt"));
+                    row.put("bookingStatus", rs.getString("bookingStatus"));
+                    row.put("movieName", rs.getString("movieName"));
+                    row.put("customerName", rs.getString("customerName"));
+                    row.put("bookingSource", rs.getString("bookingSource"));
+                    row.put("transactionCode", rs.getString("transactionCode"));
+                    row.put("paymentStatus", rs.getString("paymentStatus"));
+                    bookings.add(row);
+                }
+            }
+        } 
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
 }

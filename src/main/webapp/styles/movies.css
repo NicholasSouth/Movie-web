@@ -45,7 +45,7 @@
     border: none;
     border-radius: 8px;
     background-color: var(--accent);
-    color: var(--text-primary);
+    color: var(--text-on-accent);
     font-size: 15px;
     cursor: pointer;
     transition: opacity 0.2s ease;
@@ -118,12 +118,12 @@
 /* Apply Filters */
 .apply-filter {
     background-color: var(--accent);
-    color: var(--text-primary);
+    color: var(--text-on-accent);
     border-color: var(--accent);
 }
 .apply-filter:hover {
-    background-color: var(--accent);
-    border-color: var(--accent);
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
     transform: translateY(-1px);
 }
 /* Clear Filters */
@@ -133,7 +133,7 @@
     border-color: var(--border-light);
 }
 .clear-filter:hover {
-    background-color: var(--surface);
+    background-color: var(--surface-hover);
     color: var(--text-primary);
     border-color: var(--border-hover);
     transform: translateY(-1px);

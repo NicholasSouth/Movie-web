@@ -105,9 +105,6 @@
 						</div>
 						<!-- Search and Status Filter -->
 						<form class="RefundFilter" action="<%= contextPath %>/manager-refunds" method="get">
-							<label for="transactionCode">
-								Transaction code
-							</label>
 							<input 
 								type="text" 
 								id="transactionCode" 
@@ -118,6 +115,9 @@
 														.replace("<", "&lt;")
 														.replace(">", "&gt;") %>"
 							/>
+							<button type="submit" class="RefundFilterButton">
+								Search
+							</button>
 							<label for="statusFilter">
 								Booking status
 							</label>
@@ -132,9 +132,6 @@
 									Cancelled
 								</option>
 							</select>
-							<button type="submit" class="RefundFilterButton">
-								Search
-							</button>
 						</form>
 						<div class="RefundBookingList">
 							<%

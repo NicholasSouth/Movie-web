@@ -62,7 +62,7 @@
     line-height: 1.4;
     text-decoration: none;
     text-align: center;
-    color: var(--text-primary);
+    color: var(--text-on-accent);
     background: var(--accent);
     border: 1px solid var(--accent);
     border-radius: 7px;
@@ -74,8 +74,8 @@
 }
 .theater-search button:hover,
 .theater-button:hover {
-    background: color-mix(in srgb, var(--accent) 82%, black);
-    border-color: var(--accent);
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
     box-shadow: 0 4px 16px var(--accent-glow);
     transform: translateY(-1px);
 }
@@ -238,20 +238,8 @@
     line-height: 1.6;
     overflow-wrap: anywhere;
 }
-.theater-info span:first-child::before {
-    content: "◷";
-    flex-shrink: 0;
-    color: var(--text-secondary);
-    font-size: 1rem;
-}
 .theater-info .theater-distance {
     color: var(--success);
-}
-.theater-info .theater-distance::before {
-    content: "⌖";
-    flex-shrink: 0;
-    color: var(--success);
-    font-size: 1rem;
 }
 
 /* View theater button */
@@ -261,11 +249,6 @@
     padding: 9px 14px;
     font-size: 0.8rem;
     font-weight: 700;
-}
-.theater-content > .theater-button::after {
-    content: "→";
-    font-size: 1rem;
-    transition: transform 0.2s ease;
 }
 .theater-content > .theater-button:hover::after {
     transform: translateX(3px);
@@ -283,10 +266,10 @@
     display: grid;
     grid-template-columns: minmax(180px, 34%) minmax(0, 1fr);
     align-items: stretch;
-    border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+    border-color: var(--accent-border);
 }
 #nearest-theater-result .nearest-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    border-color: var(--accent);
 }
 #nearest-theater-result .nearest-card .theater-image {
     height: 100%;

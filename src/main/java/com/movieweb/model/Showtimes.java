@@ -10,6 +10,9 @@ public class Showtimes
     private Timestamp start_at;
     private Timestamp end_at;
     private String status;
+    private Timestamp deleted_at;
+    private String room_name;
+    private String room_type_name;
 
     public Showtimes() {
     }
@@ -48,5 +51,23 @@ public class Showtimes
     }
     public void setStatus(String status) {
         this.status = status;
+    }
+    public void setDeleted_at(Timestamp deleted_at) {
+        this.deleted_at = deleted_at;
+    }
+    public Timestamp getDeleted_at() {
+        return deleted_at;
+    }
+    public String getRoom_name() {
+        return room_name;
+    }
+    public void setRoom_name(String room_name) {
+        this.room_name = room_name;
+    }
+    public String getRoom_type_name() {
+        return room_type_name;
+    }
+    public void setRoom_type_name(String room_type_name) {
+        this.room_type_name = room_type_name;
     }
 }

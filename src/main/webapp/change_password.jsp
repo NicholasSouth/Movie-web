@@ -9,7 +9,6 @@
         response.sendRedirect(request.getContextPath() + "/log_in.jsp");
         return;
     }
-    request.setAttribute("currentPage", "settings");
 %>
 <!DOCTYPE html>
 <html>

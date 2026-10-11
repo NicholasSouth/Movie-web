@@ -38,18 +38,18 @@
 
 /* Buttons */
 .location-button {
-  	background-color: #2C2C2C;
+  	background-color: var(--border);
  	color: var(--text-primary);
 }
 .location-button:hover {
-  	background-color: #3A3A3A;
+  	background-color: var(--border-light);
 }
 .booking-button {
 	background-color: var(--accent);
-	color: var(--text-primary);
+	color: var(--text-on-accent);
 }
 .booking-button:hover {
-  	opacity: 0.85;
+  	background-color: var(--accent-hover);
 }
 
 /* Theater Sections */
@@ -85,7 +85,7 @@
 	transition: border-color 0.2s ease, transform 0.2s ease;
 }
 .room-card:hover {
-	border-color: #2C2C2C;
+	border-color: var(--border);
 	transform: translateY(-2px);
 }
 .room-card h3 {
@@ -122,12 +122,12 @@
 }
 .schedule-week-selector::-webkit-scrollbar-thumb,
 .schedule-table-wrapper::-webkit-scrollbar-thumb {
-    background: #2C2C2C;
+    background: var(--scrollbar-thumb);
     border-radius: 4px;
 }
 .schedule-week-selector::-webkit-scrollbar-thumb:hover,
 .schedule-table-wrapper::-webkit-scrollbar-thumb:hover {
-    background: #444444;
+    background: var(--scrollbar-thumb-hover);
 }
 
 .schedule-day {
@@ -152,15 +152,15 @@
 	    transform 0.2s ease;
 }
 .schedule-day:hover {
-	background-color: #181B20;
-	border-color: #2C2C2C;
+	background-color: var(--surface);
+	border-color: var(--border);
 	color: var(--text-primary);
 	transform: translateY(-1px);
 }
 .schedule-day.selected {
 	background-color: var(--accent);
 	border-color: var(--accent);
-	color: var(--text-primary);
+	color: var(--text-on-accent);
 }
 .schedule-day-name {
 	font-size: 13px;
@@ -188,7 +188,7 @@
 	border-collapse: separate;
 	border-spacing: 0;
 	background-color: var(--background);
-	border: 1px solid #2C2C2C;
+	border: 1px solid var(--border);
 	border-radius: 10px;
 	overflow: hidden;
 }
@@ -196,8 +196,8 @@
 /* Table Header */
 .schedule-table thead th {
 	padding: 15px 12px;
-	background-color: #181B20;
-	border-bottom: 1px solid #2C2C2C;
+	background-color: var(--surface);
+	border-bottom: 1px solid var(--border);
 	color: var(--text-primary);
 	font-size: 14px;
 	font-weight: 600;
@@ -213,8 +213,8 @@
 .schedule-table tbody td {
 	min-width: 150px;
 	padding: 10px;
-	border-right: 1px solid #2C2C2C;
-	border-bottom: 1px solid #2C2C2C;
+	border-right: 1px solid var(--border);
+	border-bottom: 1px solid var(--border);
 	vertical-align: top;
 }
 .schedule-table tbody tr:last-child td {
@@ -243,7 +243,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: #555A63;
+	color: var(--text-secondary);
 	font-size: 13px;
 }
 
@@ -255,7 +255,7 @@
 	min-height: 190px;
 	padding: 8px;
 	box-sizing: border-box;
-	background-color: #181B20;
+	background-color: var(--surface);
 	border: 1px solid transparent;
 	border-radius: 8px;
 	color: var(--text-primary);
@@ -266,8 +266,8 @@
 		transform 0.2s ease;
 }
 .schedule-movie:hover {
-	background-color: #202329;
-	border-color: #3A3A3A;
+	background-color: var(--surface-hover);
+	border-color: var(--border-light);
 	transform: translateY(-2px);
 }
 

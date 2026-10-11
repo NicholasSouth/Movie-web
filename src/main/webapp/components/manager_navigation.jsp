@@ -42,11 +42,11 @@
             <a
                 href="${pageContext.request.contextPath}/manager-showtimes"
                 class="manager-nav-item <%= "showtimes".equals(currentManagerPage) ? "active" : "" %>">
-                Movies & Showtimes
+                Showtimes management
             </a>
             <a
-                href="${pageContext.request.contextPath}/manager-theaters"
-                class="manager-nav-item <%= "theaters".equals(currentManagerPage) ? "active" : "" %>">
+                href="${pageContext.request.contextPath}/manager-rooms"
+                class="manager-nav-item <%= "rooms".equals(currentManagerPage) ? "active" : "" %>">
                 Theater Management
             </a>
             <a

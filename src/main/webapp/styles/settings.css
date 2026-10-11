@@ -42,7 +42,7 @@
     gap: 25px;
     padding: 20px;
     background-color: var(--surface);
-    border: 1px solid #2C2C2C;
+    border: 1px solid var(--border);
     border-radius: 10px;
     box-sizing: border-box;
 }
@@ -77,7 +77,7 @@
     justify-content: center;
     min-width: 120px;
     padding: 10px 16px;
-    border: 1px solid #3A3A3A;
+    border: 1px solid var(--border-light);
     border-radius: 8px;
     background-color: var(--background);
     color: var(--text-primary);
@@ -88,7 +88,7 @@
     transition: background-color 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
 }
 .settings-button:hover {
-    background-color: #22252A;
+    background-color: var(--surface-hover);
     border-color: var(--accent);
     color: var(--text-primary);
 }
@@ -124,8 +124,8 @@
 
 /* Coming Soon */
 .settings-button:disabled {
-    background-color: #22252A;
-    border-color: #3A3A3A;
+    background-color: var(--surface-hover);
+    border-color: var(--border-light);
     color: var(--text-secondary);
     cursor: not-allowed;
     opacity: 0.7;
@@ -136,16 +136,16 @@
     margin-top: 10px;
 }
 .danger-card {
-    border-color: #4A2525;
+    border-color: var(--danger-border);
 }
 .delete-button {
-    border-color: #7A2A2A;
-    color: #FF6B6B;
+    border-color: var(--danger-border);
+    color: var(--danger);
 }
 .delete-button:hover {
-    background-color: #3A1D1D;
-    border-color: #FF4D4D;
-    color: #FF6B6B;
+    background-color: var(--danger-glow);
+    border-color: var(--danger);
+    color: var(--danger);
 }
 
 /* Responsive */

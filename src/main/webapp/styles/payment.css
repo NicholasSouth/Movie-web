@@ -266,19 +266,34 @@ which is the movie emoji */
     line-height: 1.6;
 }
 /* VISA */
-/* visa logo color is hard coded */
+/* The logo keeps the official VISA colors in every theme (--visa-* in main.css):
+   white plate, blue italic wordmark and the gold underline. */
 .VisaLogo {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 5px 9px;
-    border-radius: 5px;
-    background: var(--text-primary);
-    color: #173D8F;
+    padding: 5px 11px 8px;
+    border-radius: 6px;
+    background: var(--visa-white);
+    color: var(--visa-blue);
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
     font-weight: 900;
     font-style: italic;
-    letter-spacing: -0.5px;
+    letter-spacing: 0.5px;
+    line-height: 1;
+    box-shadow: 0 2px 6px var(--boxshadow);
+}
+.VisaLogo::after {
+    content: "";
+    position: absolute;
+    left: 11px;
+    right: 11px;
+    bottom: 3px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--visa-gold);
 }
 .PaymentMethodDescription {
     margin: -7px 0 20px;
@@ -339,18 +354,43 @@ which is the movie emoji */
     align-items: center;
     gap: 10px;
 }
-/* the card chip - the grey rectangle thing is also hard coded */
+/* the card chip: gold plate with the little contact lines */
 .CardChip {
+    position: relative;
     display: block;
-    width: 30px;
-    height: 22px;
-    border: 1px solid #A6A8AB;
+    width: 34px;
+    height: 25px;
+    overflow: hidden;
+    border: 1px solid var(--chip-dark);
     border-radius: 5px;
     background: linear-gradient(
         135deg,
-        #D5D6D8,
-        #777D86
+        var(--chip-light),
+        var(--chip-dark)
     );
+}
+.CardChip::before,
+.CardChip::after {
+    content: "";
+    position: absolute;
+    border: 0 solid var(--chip-dark);
+    opacity: 0.6;
+}
+/* two vertical lines */
+.CardChip::before {
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+}
+/* one horizontal line */
+.CardChip::after {
+    left: 0;
+    right: 0;
+    top: 50%;
+    border-top-width: 1px;
 }
 .CardNumber {
     margin: 16px 0;
@@ -370,7 +410,7 @@ which is the movie emoji */
     padding: 14px 15px;
     border: 1px solid var(--pending);
     border-radius: 10px;
-    background: color-mix(in srgb, var(--pending) 12%, var(--surface));
+    background: var(--pending-glow);
 }
 .DemoPaymentNotice strong {
     color: var(--pending);
@@ -394,7 +434,7 @@ which is the movie emoji */
     border: none;
     border-radius: 9px;
     background: var(--accent);
-    color: var(--text-primary);
+    color: var(--text-on-accent);
     font-size: 15px;
     font-weight: 750;
     text-decoration: none;
@@ -405,7 +445,7 @@ which is the movie emoji */
         opacity 0.18s;
 }
 .PayButton:hover:not(:disabled) {
-    background: var(--accent);
+    background: var(--accent-hover);
     transform: translateY(-1px);
 }
 .PayButton:active:not(:disabled) {
@@ -481,10 +521,12 @@ which is the movie emoji */
 }
 .PaymentNotice.PaymentNoticeError {
     border-color: var(--danger);
+    background: var(--danger-glow);
     color: var(--danger);
 }
 .PaymentNotice.PaymentNoticeSuccess {
     border-color: var(--success);
+    background: var(--success-glow);
     color: var(--success);
 }
 .TransactionCode {
@@ -497,7 +539,7 @@ which is the movie emoji */
     padding: 14px;
     border-radius: 8px;
     background: var(--surface-light);
-    color: (--text-secondary);
+    color: var(--text-secondary);
     font-size: 13px;
     line-height: 1.6;
 }

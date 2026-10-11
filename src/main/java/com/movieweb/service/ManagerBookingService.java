@@ -182,46 +182,52 @@ public class ManagerBookingService {
         }
     }
 
-    private void validateSeatsStillAvailable(
-            Connection conn,
-            int showtime_id,
-            List<Integer> selectedSeatIds)
-            throws SQLException {
+    private void validateSeatsStillAvailable(Connection conn, int showtimeId, List<Integer> selectedSeatIds) 
+            		throws SQLException {
         String sql =
-                "SELECT s.seat_id " +
-                "FROM Seats s WITH (UPDLOCK, HOLDLOCK) " +
-                "INNER JOIN Showtimes st " +
-                "    ON st.room_id = s.room_id " +
-                "WHERE st.showtime_id = ? " +
-                "AND s.seat_id = ? " +
-                "AND s.isActive = 1 " +
-                "AND NOT EXISTS ( " +
-                "    SELECT 1 " +
-                "    FROM Booking_seats bs " +
-                "    INNER JOIN Booking_showtimes b " +
-                "        ON b.booking_id = bs.booking_id " +
-                "    WHERE bs.seat_id = s.seat_id " +
-                "    AND b.showtime_id = st.showtime_id " +
-                "    AND b.delete_at IS NULL " +
-                "    AND ( " +
-                "        b.status = 'CONFIRMED' " +
-                "        OR ( " +
-                "            b.status = 'PENDING' " +
-                "            AND DATEADD(MINUTE, ?, b.book_at) > GETDATE() " +
-                "        ) " +
-                "    ) " +
-                ")";
-        for (Integer seatId : selectedSeatIds) {
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setInt(1, showtime_id);
+            "SELECT s.seat_id " +
+            "FROM Seats s WITH (UPDLOCK, HOLDLOCK) " +
+            "INNER JOIN Showtimes st " +
+            "    ON st.room_id = s.room_id " +
+            "WHERE st.showtime_id = ? " +
+            "AND st.deleted_at IS NULL " +
+            "AND s.seat_id = ? " +
+            "AND s.isActive = 1 " +
+            "AND s.deleted_at IS NULL " +
+            "AND NOT EXISTS (" +
+            "    SELECT 1 " +
+            "    FROM Booking_seats bs " +
+            "    INNER JOIN Booking_showtimes b " +
+            "        ON b.booking_id = bs.booking_id " +
+            "    WHERE bs.seat_id = s.seat_id " +
+            "    AND b.showtime_id = st.showtime_id " +
+            "    AND b.delete_at IS NULL " +
+            "    AND (" +
+            "        b.status = 'CONFIRMED' " +
+            "        OR (" +
+            "            b.status = 'PENDING' " +
+            "            AND DATEADD(MINUTE, 15, b.book_at) > GETDATE()" +
+            "        )" +
+            "    )" +
+            ")";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            for (Integer seatId : selectedSeatIds) {
+                if (seatId == null || seatId <= 0) {
+                    throw new SQLException("Invalid seat selection.");
+                }
+                stmt.setInt(1, showtimeId);
                 stmt.setInt(2, seatId);
-                stmt.setInt(3, HOLD_MINUTES);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (!rs.next()) {
-                        throw new IllegalArgumentException("One of the selected seats is no longer available.");
+                        throw new SQLException(
+                            "Seat " + seatId +
+                            " is unavailable, inactive, deleted, " +
+                            "or already booked. Please select your seats again."
+                        );
                     }
                 }
             }
         }
     }
+
 }

@@ -1,5 +1,7 @@
 package com.movieweb.model;
 
+import java.sql.Timestamp;
+
 public class Seats {
 	private int seat_id;
     private int room_id;
@@ -11,6 +13,7 @@ public class Seats {
     private String seat_type_name;
     private String seat_price_modify;
     private int price;
+    private Timestamp deleted_at;
     //
     public Seats() {
     	
@@ -59,4 +62,10 @@ public class Seats {
     public void setSeat_price_modify(String seat_price_modify) { this.seat_price_modify = seat_price_modify; }
     public int getPrice() { return price; }
     public void setPrice(int price) { this.price = price; }
+    public void setDeleted_at(Timestamp deleted_at) {
+        this.deleted_at = deleted_at;
+    }
+    public Timestamp getDeleted_at() {
+        return deleted_at;
+    }
 }

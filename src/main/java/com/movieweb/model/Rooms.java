@@ -1,5 +1,7 @@
 package com.movieweb.model;
 
+import java.sql.Timestamp;
+
 public class Rooms {
     private int room_id;
     private int theater_id;
@@ -8,6 +10,7 @@ public class Rooms {
     private String room_type_name;
     private boolean isActive;
     private Room_types roomType;
+    private Timestamp deleted_at;
 
     public Rooms() {
     }
@@ -52,5 +55,11 @@ public class Rooms {
     }
     public void setRoomType(Room_types roomType) {
         this.roomType = roomType;
+    }
+    public void setDeleted_at(Timestamp deleted_at) {
+        this.deleted_at = deleted_at;
+    }
+    public Timestamp getDeleted_at() {
+        return deleted_at;
     }
 }

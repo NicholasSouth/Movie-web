@@ -23,13 +23,13 @@
     display: block;
     object-fit: cover;
 }
-/* Default banner, hard coded */
+/* Default banner, shown when the user has no banner image */
 .default-banner {
     width: 100%;
     height: 100%;
     background: linear-gradient(
         135deg,
-        #20242B,
+        var(--surface-light),
         var(--background)
     );
 }
@@ -66,7 +66,7 @@
     align-items: center;
     justify-content: center;
     background-color: var(--accent);
-    color: var(--text-primary);
+    color: var(--text-on-accent);
     font-size: 42px;
     font-weight: bold;
 }
@@ -127,7 +127,7 @@
     height: 18px;
     display: block;
     object-fit: contain;
-    filter: brightness(0) invert(1);
+    filter: var(--icon-filter);
 }
 
 /* profile section contain favourites and bookings */
@@ -185,7 +185,7 @@
     height: 18px;
     display: block;
     object-fit: contain;
-    filter: brightness(0) invert(1);
+    filter: var(--icon-filter);
 }
 #visibilityText {
     display: inline-block;

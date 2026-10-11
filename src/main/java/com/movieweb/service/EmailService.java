@@ -89,6 +89,20 @@ public class EmailService
                         + "you can safely ignore this email.\n\n"
                         + "PhnetPhlyx";
             }
+            else if ("manager_change_password".equals(purpose))
+            {
+                subject = "PhnetPhlyx - Manager Password Change Verification";
+                messageText =
+                        "Hello Manager,\n\n"
+                        + "Your PhnetPhlyx manager password change "
+                        + "verification code is:\n\n"
+                        + code
+                        + "\n\n"
+                        + "This code will expire in 5 minutes.\n\n"
+                        + "If you did not request this code, "
+                        + "you can safely ignore this email.\n\n"
+                        + "PhnetPhlyx";
+            }
             else
             {
                 return false;

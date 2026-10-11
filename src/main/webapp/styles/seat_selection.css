@@ -41,8 +41,11 @@ body {
     letter-spacing: 2px;
     box-shadow: 0 0 20px var(--accent-glow);
 }
-/* Seat Grid */
+/* Seat Grid
+   --seat-size lives here (not on .seat) so the inline grid-template-rows
+   in the JSP, which uses var(--seat-size), can read it. */
 .seats {
+    --seat-size: 48px;
     display: grid;
     gap: 9px;
     width: 100%;
@@ -52,7 +55,6 @@ body {
 }
 /* Seat cell */
 .seat {
-    --seat-size: 48px;
     width: var(--seat-size);
     height: var(--seat-size);
     min-width: var(--seat-size);
@@ -91,45 +93,52 @@ body {
     text-transform: uppercase;
 }
 /* Seat Types
-   Fixed colors because seat types are
-   permanent categories, not theme colors. */
-/* VIP */
+   Each type sets --seat-color; the shared rules below use it for the
+   border, text and a soft tinted background. Colors come from :root
+   (--seat-vip, --seat-discount, --seat-couple) so every theme can tune them. */
 .seat.type-vip {
-    border-color: #F4C95D;
-    color: #F4C95D;
+    --seat-color: var(--seat-vip);
+}
+.seat.type-discount {
+    --seat-color: var(--seat-discount);
+}
+.seat.type-couple {
+    --seat-color: var(--seat-couple);
+}
+.seat.type-vip,
+.seat.type-discount,
+.seat.type-couple {
+    border-color: var(--seat-color);
+    background-color: color-mix(in srgb, var(--seat-color) 10%, transparent);
+    color: var(--seat-color);
+}
+.seat.type-vip:hover,
+.seat.type-discount:hover,
+.seat.type-couple:hover {
+    border-color: var(--seat-color);
+    background-color: color-mix(in srgb, var(--seat-color) 22%, transparent);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--seat-color) 35%, transparent);
 }
 .seat.type-vip .seat-label,
-.seat.type-vip .seat-type {
-    color: #F4C95D;
-}
-/* BAD */
-.seat.type-bad {
-    border-color: #654321;
-    color: #654321;
-}
-.seat.type-bad .seat-label,
-.seat.type-bad .seat-type {
-    color: #654321;
-}
-/* COUPLE */
-.seat.type-couple {
-    border-color: #E88AC7;
-    color: #E88AC7;
-}
+.seat.type-vip .seat-type,
+.seat.type-discount .seat-label,
+.seat.type-discount .seat-type,
 .seat.type-couple .seat-label,
 .seat.type-couple .seat-type {
-    color: #E88AC7;
+    color: var(--seat-color);
 }
-/* Selected Seat */
-.seat.selected {
+/* Selected Seat (must stay below the seat types so it wins over them) */
+.seat.selected,
+.seat.selected:hover {
     background-color: var(--success);
     border-color: var(--success);
-    color: var(--background);
+    color: var(--text-on-success);
     transform: translateY(-2px);
+    box-shadow: 0 0 12px var(--success-border);
 }
 .seat.selected .seat-label,
 .seat.selected .seat-type {
-    color: var(--background);
+    color: var(--text-on-success);
 }
 /* Booked Seat */
 .seat.booked {
@@ -208,6 +217,19 @@ body {
     color: var(--danger);
     font-size: 10px;
     font-weight: bold;
+}
+/* Seat type swatches (add matching legend items in the JSP to use them) */
+.swatch.vip {
+    border-color: var(--seat-vip);
+    background-color: color-mix(in srgb, var(--seat-vip) 10%, transparent);
+}
+.swatch.discount {
+    border-color: var(--seat-discount);
+    background-color: color-mix(in srgb, var(--seat-discount) 10%, transparent);
+}
+.swatch.couple {
+    border-color: var(--seat-couple);
+    background-color: color-mix(in srgb, var(--seat-couple) 10%, transparent);
 }
 /* Summary */
 .summary {
@@ -321,7 +343,7 @@ body {
     background-color: var(--accent);
     border: 1px solid var(--accent);
     border-radius: 7px;
-    color: var(--text-primary);
+    color: var(--text-on-accent);
     font-family: var(--font-family);
     font-size: 12px;
     font-weight: bold;
@@ -333,8 +355,8 @@ body {
         opacity 0.15s ease;
 }
 .confirm-btn:hover:not(:disabled) {
-    background-color: #C70812;
-    border-color: #C70812;
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
     box-shadow: 0 0 12px var(--accent-glow);
 }
 .confirm-btn:active:not(:disabled) {
@@ -388,12 +410,10 @@ body {
         margin-bottom: 30px;
     }
     .seats {
+        --seat-size: 40px;
         gap: 6px;
         overflow-x: auto;
         justify-content: start;
-    }
-    .seat {
-        --seat-size: 40px;
     }
     .summary {
         padding: 17px;

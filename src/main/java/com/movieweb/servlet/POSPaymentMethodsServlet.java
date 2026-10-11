@@ -44,7 +44,7 @@ public class POSPaymentMethodsServlet extends HttpServlet {
         Integer currentTheaterId = (Integer) session.getAttribute("currentTheaterId");
         if (currentTheaterId == null) {
             request.setAttribute("error", "Please select a theater first.");
-            request.getRequestDispatcher("/pos_payment_method.jsp").forward(request, response);
+            request.getRequestDispatcher("/pos_payment_methods.jsp").forward(request, response);
             return;
         }
 

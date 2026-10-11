@@ -59,7 +59,7 @@
 
 			<!-- Fix the link to manager_setting -->
             <!-- Settings -->
-            <a href="${pageContext.request.contextPath}/settings_manager.jsp" class="menu-item">
+            <a href="${pageContext.request.contextPath}/manager_settings.jsp" class="menu-item">
                 <img 
                 	src="${pageContext.request.contextPath}/pictures/assessments/setting.png" 
                 	alt="Settings" 

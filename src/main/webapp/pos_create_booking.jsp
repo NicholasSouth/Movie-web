@@ -7,31 +7,31 @@
 <%@ page import="com.movieweb.model.Theaters" %>
 <%@ page import="com.movieweb.model.Showtimes" %>
 <%
-String contextPath = request.getContextPath();
-List<Movies> movies = (List<Movies>) request.getAttribute("movies");
-List<Theaters> theaters = (List<Theaters>) request.getAttribute("theaters");
-List<Showtimes> showtimes = (List<Showtimes>) request.getAttribute("showtimes");
-Integer selectedMovieId = (Integer) request.getAttribute("selectedMovieId");
-Integer currentTheaterId = (Integer) request.getAttribute("currentTheaterId");
-String selectedDate = (String) request.getAttribute("selectedDate");
-LocalDate today = LocalDate.now();
-LocalDate maxDate = today.plusDays(6);
-if (selectedDate == null || selectedDate.trim().isEmpty()) {
-	selectedDate = today.toString();
-}
-DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-/* Find the manager's currently selected theater.
- * The filter already validated that this theater belongs to the manager.
- */
-Theaters currentTheater = null;
-if (currentTheaterId != null && theaters != null) {
-	for (Theaters theater : theaters) {
-		if (theater.getTheater_id() == currentTheaterId) {
-			currentTheater = theater;
-			break;
+	String contextPath = request.getContextPath();
+	List<Movies> movies = (List<Movies>) request.getAttribute("movies");
+	List<Theaters> theaters = (List<Theaters>) request.getAttribute("theaters");
+	List<Showtimes> showtimes = (List<Showtimes>) request.getAttribute("showtimes");
+	Integer selectedMovieId = (Integer) request.getAttribute("selectedMovieId");
+	Integer currentTheaterId = (Integer) request.getAttribute("currentTheaterId");
+	String selectedDate = (String) request.getAttribute("selectedDate");
+	LocalDate today = LocalDate.now();
+	LocalDate maxDate = today.plusDays(6);
+	if (selectedDate == null || selectedDate.trim().isEmpty()) {
+		selectedDate = today.toString();
+	}
+	DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	/* Find the manager's currently selected theater.
+	 * The filter already validated that this theater belongs to the manager.
+	 */
+	Theaters currentTheater = null;
+	if (currentTheaterId != null && theaters != null) {
+		for (Theaters theater : theaters) {
+			if (theater.getTheater_id() == currentTheaterId) {
+				currentTheater = theater;
+				break;
+			}
 		}
 	}
-}
 %>
 <!DOCTYPE html>
 <html>
@@ -253,8 +253,14 @@ if (currentTheaterId != null && theaters != null) {
 								                    <%= showtimeText %>
 								                </span>							
 								                <span class="showtime-label">
-								                    Available
-								                </span>						
+												    <%= showtime.getRoom_name() != null
+												        ? showtime.getRoom_name()
+												        : "Unknown Room" %>
+												    ·
+												    <%= showtime.getRoom_type_name() != null
+												        ? showtime.getRoom_type_name()
+												        : "Unknown Type" %>
+												</span>					
 								            </span>						
 								        </label>					
 							    <%

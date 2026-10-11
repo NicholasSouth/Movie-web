@@ -14,12 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @WebFilter({
-    "/main_manager.jsp", //for main_manager.jsp
+    "/main_manager.jsp", "/manager-dashboard",//for main_manager.jsp
     "/sales-bookings", //for pos_create_booking.jsp
-    "/manager-showtimes",
-    "/manager-rooms",
+    "/manager-showtimes", //for manager_showtimes.jsp
+    "/manager-rooms", "/manager-seats", //for manager_rooms.jsp and manager_seats.jsp
     "/manager-statistics",
-    "/manager-bookings",
+    "/manager-promotions", //for manager_promotions.jsp
     "/manager-create-booking", //for pos.jsp
     "/manager-seat-selection", //for pos_seat_selection.jsp
     "/manager-payment", //for pos_payment.jsp
@@ -40,6 +40,12 @@ public class ManagerTheaterFilter implements Filter {
         if (currentUser == null
             || !"MANAGER".equalsIgnoreCase(currentUser.getRole())) {
             resp.sendRedirect(req.getContextPath() + "/main.jsp");
+            return;
+        }
+        // Dashboard data must be loaded by ManagerDashboardServlet.
+        if ("/main_manager.jsp".equals(req.getServletPath())
+                && req.getDispatcherType() == DispatcherType.REQUEST) {
+            resp.sendRedirect(req.getContextPath() + "/manager-dashboard");
             return;
         }
         ManagersDAO managersDAO = new ManagersDAO();

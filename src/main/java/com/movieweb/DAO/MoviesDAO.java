@@ -469,4 +469,16 @@ public class MoviesDAO {
                 .replace("_", "\\_")
                 .replace("[", "\\[");
     }
+
+	 // For manager_showtimes: every movie that hasn't passed its available_until date.
+	 public List<Movies> getSchedulableMovies() {
+	     String sql =
+	             "SELECT m.* " +
+	             "FROM Movies m " +
+	             "WHERE " + VISIBLE +
+	             " AND (m.available_until IS NULL " +
+	             "OR m.available_until >= CAST(GETDATE() AS date)) " +
+	             "ORDER BY m.movie_name ASC";
+	     return fetchMovies(sql);
+	 }
 }

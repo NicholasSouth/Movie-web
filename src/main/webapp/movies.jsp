@@ -48,7 +48,6 @@
 		        <form class="movie-filters" action="${pageContext.request.contextPath}/movies" method="get">
 		            <!-- Search -->
 		            <div class="movie-search">
-		                <label class="sr-only" for="movie-search">Search by movie, actor, director, or author</label>
 		                <input
 		                    type="search"
 		                    id="movie-search"
@@ -122,19 +121,7 @@
 		                        <option value="">All Theaters</option>
 		                        <%-- Iterate theaters list if provided by controller --%>
 		                    </select>
-		                </div>
-		                <div class="movie-filter">
-		                    <label for="price">
-		                        Ticket Price
-		                    </label>
-		                    <input
-		                        type="number"
-		                        id="price"
-		                        name="price"
-		                        step="0.01"
-		                        placeholder="Max price"
-		                        value="<%= filter.getMaxPrice() != null ? filter.getMaxPrice() : "" %>">
-		                </div>		                
+		                </div>		      		                
 		                <div class="movie-filter">
 		                    <label for="age-rating">
 							    Age Rating

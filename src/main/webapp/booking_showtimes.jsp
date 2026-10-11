@@ -220,7 +220,15 @@
 										
 										                    <div class="showtime-status">
 										                        <span class="status-dot"></span>
-										                        <span>Scheduled</span>
+										                        <span>
+															        <%= showtime.getRoom_name() != null
+															            ? showtime.getRoom_name()
+															            : "Unknown Room" %>
+															        ·
+															        <%= showtime.getRoom_type_name() != null
+															            ? showtime.getRoom_type_name()
+															            : "Unknown Type" %>
+															    </span>
 										                    </div>
 										
 										                    <form action="<%= contextPath %>/seat_selection" method="get">

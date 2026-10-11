@@ -24,10 +24,6 @@
         response.sendRedirect(request.getContextPath() + "/main.jsp");
         return;
     }
-
-    /* Used by manager_navigation.jsp to highlight the current page. */
-    request.setAttribute("currentManagerPage", "profile");
-
     String fullName = ViewUtils.text(profileUser.getFullName(), profileUser.getUsername());
     String avatarLetter = ViewUtils.hasText(fullName) ? fullName.trim().substring(0, 1).toUpperCase() : "?";
     String contextPath = request.getContextPath();
@@ -120,7 +116,7 @@
 		
 		                <!-- Edit Profile -->
 		                <div class="profile-actions">
-		                    <a href="${pageContext.request.contextPath}/information-change" class="profile-settings-button">
+		                    <a href="${pageContext.request.contextPath}/manager-information-change" class="profile-settings-button">
 		                        <img src="${pageContext.request.contextPath}/pictures/assessments/setting.png" alt="">
 		                        <span>Edit Profile</span>
 		                    </a>

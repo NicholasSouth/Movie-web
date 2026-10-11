@@ -2,11 +2,29 @@
 <%@ page import="com.movieweb.model.Payment_methods" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%!
+	/* Escape text before printing it inside the page or an attribute (the kept form values come from the request). */
+	private static String esc(String text) {
+		if (text == null) {
+			return "";
+		}
+		return text.replace("&", "&amp;")
+				.replace("<", "&lt;")
+				.replace(">", "&gt;")
+				.replace("\"", "&quot;")
+				.replace("'", "&#39;");
+	}
+%>
 <%
 	request.setAttribute("currentManagerPage", "payment-method");
+	/* POSPaymentMethodsServlet sends: error, success, paymentMethods,
+	 * and card_number / expired_date (the values to keep when adding failed).
+	 */
 	String error = (String) request.getAttribute("error");
 	String success = (String) request.getAttribute("success");
 	List<Payment_methods> paymentMethods = (List<Payment_methods>) request.getAttribute("paymentMethods");
+	String keptCardNumber = (String) request.getAttribute("card_number");
+	String keptExpiredDate = (String) request.getAttribute("expired_date");
 	SimpleDateFormat expiryFormat = new SimpleDateFormat("MM/yyyy");
 %>
 <!DOCTYPE html>
@@ -20,13 +38,17 @@
 	</head>
 	<body>
 		<section class="Layout2">
+
 			<!-- Manager Header -->
 			<jsp:include page="/components/header_manager.jsp" />
+
 			<!-- Manager Navigation -->
 			<%@ include file="components/manager_navigation.jsp" %>
+
 			<!-- Main Content -->
 			<main class="ManagerMain">
 				<div class="payment-method-container">
+
 					<!-- Page Header -->
 					<div class="payment-method-header">
 						<div>
@@ -39,33 +61,32 @@
 							</p>
 						</div>
 					</div>
-					
+
 					<!-- Error Message -->
 					<%
 						if (error != null) {
 					%>
 							<div class="error-message">
-								<%= error %>
+								<%= esc(error) %>
 							</div>
 					<%
 						}
 					%>
+
 					<!-- Success Message -->
 					<%
 						if (success != null) {
 					%>
 							<div class="success-message">
-								<%= success %>
+								<%= esc(success) %>
 							</div>
 					<%
 						}
 					%>
-					
+
 					<!-- Saved VISA Cards -->
 					<section class="payment-section">
-						<h3 class="payment-section-title">
-							Theater VISA Cards
-						</h3>
+						<h3 class="payment-section-title">Theater VISA Cards</h3>
 						<%
 							boolean hasPaymentMethods = false;
 							if (paymentMethods != null) {
@@ -77,30 +98,30 @@
 										if (cardNumber != null && cardNumber.length() >= 4) {
 											maskedCard = "•••• •••• •••• " + cardNumber.substring(cardNumber.length() - 4);
 										}
+										String expiryText = paymentMethod.getExpired_date() == null
+												? "--/----"
+												: expiryFormat.format(paymentMethod.getExpired_date());
 						%>
 										<div class="payment-card">
-											<div class="payment-card-information">
-												<div class="payment-card-brand">
-													VISA
+											<!-- Card picture -->
+											<div class="visa-card">
+												<div class="visa-card-top">
+													<span class="visa-chip" aria-hidden="true"></span>
+													<span class="visa-logo">VISA</span>
 												</div>
-												<div class="payment-card-details">
-													<h4>VISA</h4>
-													<p>
-														<%= maskedCard %>
-													</p>
-													<span>
-														Expires
-														<%= expiryFormat.format(paymentMethod.getExpired_date()) %>
-													</span>
+												<div class="visa-card-number"><%= maskedCard %></div>
+												<div class="visa-card-bottom">
+													<span>Saved card</span>
+													<span>Expires <%= expiryText %></span>
 												</div>
 											</div>
+
+											<!-- Deactivate -->
 											<div class="payment-card-action">
 												<form action="${pageContext.request.contextPath}/pos-payment-method" method="post">
 													<input type="hidden" name="action" value="deactivate">
 													<input type="hidden" name="payment_method_id" value="<%= paymentMethod.getPayment_method_id() %>">
-													<button type="submit" class="payment-delete-button">
-														Deactivate
-													</button>
+													<button type="submit" class="payment-delete-button">Deactivate</button>
 												</form>
 											</div>
 										</div>
@@ -111,64 +132,73 @@
 							if (!hasPaymentMethods) {
 						%>
 								<div class="no-payment-method">
-									<p>
-										You haven't added any VISA cards
-										for this theater yet.
-									</p>
+									<p>You haven't added any VISA cards for this theater yet.</p>
 								</div>
 						<%
 							}
 						%>
 					</section>
+
 					<!-- Add VISA Card -->
 					<section class="payment-section">
-						<h3 class="payment-section-title">
-							Add VISA Card
-						</h3>
+						<h3 class="payment-section-title">Add VISA Card</h3>
 						<div class="payment-form-card">
 							<p class="payment-form-description">
-								Add a VISA card to use for POS payments
-								at this theater.
+								Add a VISA card to use for POS payments at this theater.
 							</p>
 							<form class="payment-form" action="${pageContext.request.contextPath}/pos-payment-method" method="post">
 								<input type="hidden" name="action" value="add">
+
 								<!-- Card Number -->
 								<div class="input-group">
-									<label for="card-number">
-										Card Number
-									</label>
-									<input type="text" id="card-number" name="card_number" placeholder="1234 5678 9012 3456" inputmode="numeric" autocomplete="cc-number" maxlength="19" required>
+									<label for="card-number">Card Number</label>
+									<input
+										type="text"
+										id="card-number"
+										name="card_number"
+										value="<%= esc(keptCardNumber) %>"
+										placeholder="1234 5678 9012 3456"
+										inputmode="numeric"
+										autocomplete="cc-number"
+										maxlength="19"
+										required>
 								</div>
+
 								<!-- Expiry Date -->
 								<div class="input-group">
-									<label for="expired-date">
-										Expiry Date
-									</label>
-									<input type="text" id="expired_date" name="expired_date" class="payment-form-input" placeholder="MM/YYYY" maxlength="7" pattern="(0[1-9]|1[0-2])/[0-9]{4}" autocomplete="cc-exp" required>
+									<label for="expired_date">Expiry Date</label>
+									<input
+										type="text"
+										id="expired_date"
+										name="expired_date"
+										class="payment-form-input"
+										value="<%= esc(keptExpiredDate) %>"
+										placeholder="MM/YYYY"
+										maxlength="7"
+										pattern="(0[1-9]|1[0-2])/[0-9]{4}"
+										autocomplete="cc-exp"
+										required>
 								</div>
+
 								<!-- Simulation Notice -->
 								<div class="payment-information">
 									<p>
 										<strong>Payment Information</strong>
 									</p>
 									<p>
-										VISA payments are simulated for this
-										website. No real payment will be processed.
+										VISA payments are simulated for this website. No real payment will be processed.
 									</p>
 								</div>
+
 								<!-- Submit -->
 								<div class="payment-form-actions">
-									<button type="submit" class="payment-submit-button">
-										Add VISA
-									</button>
+									<button type="submit" class="payment-submit-button">Add VISA</button>
 								</div>
 							</form>
 						</div>
 					</section>
 				</div>
 			</main>
-			<!-- Footer -->
-			<%@ include file="components/footer.jsp" %>
 		</section>
 	</body>
 </html>

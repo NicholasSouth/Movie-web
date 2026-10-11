@@ -80,14 +80,20 @@
 		                                }
 		                %>
 						                <div class="payment-card">
-						                    <div class="payment-card-information">
-						                        <div class="payment-card-brand">VISA</div>
-						                        <div class="payment-card-details">
-						                            <h4>VISA</h4>
-						                            <p><%= maskedCard %></p>
+						                    <!-- Card picture -->
+						                    <div class="visa-card">
+						                        <div class="visa-card-top">
+						                            <span class="visa-chip" aria-hidden="true"></span>
+						                            <span class="visa-logo">VISA</span>
+						                        </div>
+						                        <div class="visa-card-number"><%= maskedCard %></div>
+						                        <div class="visa-card-bottom">
+						                            <span>Saved card</span>
 						                            <span>Expires <%= expiryFormat.format(paymentMethod.getExpired_date()) %></span>
 						                        </div>
 						                    </div>
+						
+						                    <!-- Deactivate -->
 						                    <div class="payment-card-action">
 						                        <form action="${pageContext.request.contextPath}/payment-method" method="post">
 						                            <input type="hidden" name="action" value="deactivate">
@@ -136,7 +142,7 @@
 		
 		                        <!-- Expiry Date -->
 		                        <div class="input-group">
-		                            <label for="expired-date">Expiry Date</label>
+		                            <label for="expired_date">Expiry Date</label>
 		                            <input type="text"
 								           id="expired_date"
 								           name="expired_date"

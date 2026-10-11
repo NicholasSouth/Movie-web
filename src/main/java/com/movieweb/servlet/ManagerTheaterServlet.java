@@ -50,14 +50,14 @@ public class ManagerTheaterServlet extends HttpServlet {
 
             /* Manager can only select their assigned theaters. */
             if (!assigned) {
-                response.sendRedirect(request.getContextPath() + "/main_manager.jsp");
+                response.sendRedirect(request.getContextPath() + "/manager-dashboard");
                 return;
             }
             session.setAttribute("currentTheaterId", selectedTheaterId);
-            response.sendRedirect(request.getContextPath() + "/main_manager.jsp");
+            response.sendRedirect(request.getContextPath() + "/manager-dashboard");
         }
         catch (NumberFormatException e) {
-            response.sendRedirect(request.getContextPath() + "/main_manager.jsp");
+            response.sendRedirect(request.getContextPath() + "/manager-dashboard");
         }
     }
 }
