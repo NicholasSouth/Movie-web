@@ -65,6 +65,7 @@
 	    </title>
 	    <link rel="stylesheet" href="<%= contextPath %>/styles/main.css">
 	    <link rel="stylesheet" href="<%= contextPath %>/styles/booking_showtimes.css">
+	    <%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<div class="BookingLayout">

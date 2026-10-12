@@ -37,6 +37,7 @@
 		<title>Refund History | PhnetPhlyx</title>
 		<link rel="stylesheet" href="<%= contextPath %>/styles/main_manager.css">
 		<link rel="stylesheet" href="<%= contextPath %>/styles/pos_refund.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 
 	<body>

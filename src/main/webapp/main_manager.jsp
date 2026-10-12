@@ -81,6 +81,7 @@
 		<title>Manager Dashboard | PhnetPhlyx</title>
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/styles/main_manager.css">
 	 	<link rel="stylesheet" href="${pageContext.request.contextPath}/styles/manager_statistics.css">
+	 	<%@ include file="/components/theme.jsp" %>
 	</head>
 	
 	<body>

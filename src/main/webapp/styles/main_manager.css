@@ -90,7 +90,7 @@ body {
 
 /* Manager Navigation Sidebar */
 .ManagerNavigation {
-    width: 260px;
+	width: 260px;
     background-color: var(--surface);
     border-right: 1px solid var(--border);
     padding: 24px 16px;

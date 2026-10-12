@@ -13,6 +13,7 @@
 		<link 
 			rel="stylesheet"
 			href="${pageContext.request.contextPath}/styles/forget.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<main class="forgot-page">

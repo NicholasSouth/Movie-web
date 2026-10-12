@@ -13,6 +13,7 @@
 		<link 
 			rel="stylesheet" 
 			href="${pageContext.request.contextPath}/styles/main.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<main class="login-page">

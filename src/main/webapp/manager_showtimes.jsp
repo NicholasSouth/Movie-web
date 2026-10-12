@@ -42,6 +42,7 @@
 		<link 
 			rel="stylesheet" 
 			href="${pageContext.request.contextPath}/styles/manager_showtimes.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 
 	<body>

@@ -33,6 +33,7 @@
 	    <title>Checkout | PhnetPhlyx</title>
 	    <link rel="stylesheet" href="<%= request.getContextPath() %>/styles/main.css">
 	    <link rel="stylesheet" href="<%= request.getContextPath() %>/styles/payment.css">
+	    <%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<%@ include file="/components/header.jsp" %>

@@ -11,6 +11,7 @@
 		<link 
 			rel="stylesheet" 
 			href="${pageContext.request.contextPath}/styles/waiting.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<main class="waiting-page">

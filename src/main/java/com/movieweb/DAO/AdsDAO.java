@@ -19,7 +19,8 @@ public class AdsDAO
                      "WHERE isActive = 1 " +
                      "AND deleted_at IS NULL " +
                      "AND (start_at IS NULL OR start_at <= GETDATE()) " +
-                     "AND (end_at IS NULL OR end_at >= GETDATE())";
+                     "AND (end_at IS NULL OR end_at >= GETDATE()) " +
+                     "ORDER BY ad_id DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) 
         {
@@ -27,10 +28,10 @@ public class AdsDAO
             while (rs.next()) 
             {
             	Ads ad = new Ads();
-                ad.setAd_id(rs.getInt("advertisement_id"));
-                ad.setAd_name(rs.getString("advertisement_name"));
-                ad.setImage_path(rs.getString("image_path"));
-                ad.setLink(rs.getString("link"));
+                ad.setAd_id(rs.getInt("ad_id"));
+                ad.setAd_name(rs.getString("ad_name"));
+                ad.setImage_path(rs.getString("ad_image_path"));
+                ad.setLink(rs.getString("ad_link"));
                 ad.setStart_at(rs.getString("start_at"));
                 ad.setEnd_at(rs.getString("end_at"));
                 ad.setActive(rs.getBoolean("isActive"));

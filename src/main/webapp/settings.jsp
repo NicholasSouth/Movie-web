@@ -1,4 +1,12 @@
 <%
+    /* Settings is for logged-in accounts only. Guests are sent to the login page. */
+    if (session.getAttribute("user") == null)
+    {
+        response.sendRedirect(request.getContextPath() + "/log_in.jsp");
+        return;
+    }
+%>
+<%
     String success = (String) request.getAttribute("success");
     if (success != null)
     {
@@ -25,6 +33,7 @@
 	    <link
 	        rel="stylesheet"
 	        href="${pageContext.request.contextPath}/styles/settings.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<section class="Layout1">
@@ -84,7 +93,7 @@
 		                            Choose how PhnetPhlyx looks.
 		                        </p>
 		                    </div>
-		                    <div class="theme-options">
+		                    <div class="theme-options" data-theme-user="<%= ((com.movieweb.model.Users) session.getAttribute("user")).getUserId() %>">
 		                        <label class="theme-option">
 		                            <input
 		                                type="radio"
@@ -168,5 +177,6 @@
 		<script
     		src="<%= request.getContextPath() %>/scripts/delete_account.js">
 		</script>
+		<script src="<%= request.getContextPath() %>/scripts/theme.js"></script>
 	</body>
 </html>

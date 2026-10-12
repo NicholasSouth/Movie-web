@@ -28,6 +28,7 @@
 	    </title>
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/main.css">
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/user_profile.css">
+	    <%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<div class="Layout1">

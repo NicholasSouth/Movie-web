@@ -35,6 +35,7 @@
 		<link
 			rel="stylesheet"
 			href="<%= contextPath %>/styles/pos_seat_selection.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<div class="theater">

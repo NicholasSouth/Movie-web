@@ -20,6 +20,7 @@
 		<title>Settings | PhnetPhlyx Manager</title>
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/styles/main_manager.css">
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/styles/manager_settings.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	
 	<body>
@@ -75,7 +76,7 @@
 								<h4>Theme</h4>
 								<p>Choose how PhnetPhlyx looks.</p>
 							</div>
-							<div class="manager-theme-options">
+							<div class="manager-theme-options" data-theme-user="<%= currentUser.getUserId() %>">
 								<label class="manager-theme-option">
 									<input type="radio" name="theme" value="dark" checked>
 									<span>Dark</span>
@@ -90,5 +91,6 @@
 				</div>
 			</main>
 		</div>
+		<script src="${pageContext.request.contextPath}/scripts/theme.js"></script>
 	</body>
 </html>

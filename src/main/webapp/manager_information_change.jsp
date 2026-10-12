@@ -29,6 +29,7 @@
 	    <link
 	        rel="stylesheet"
 	        href="${pageContext.request.contextPath}/styles/manager_information_change.css">
+	    <%@ include file="/components/theme.jsp" %>
 	</head>
 
 	<body>

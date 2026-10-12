@@ -48,6 +48,7 @@
 		<title>Manage Promotions | PhnetPhlyx</title>
 		<link rel="stylesheet" href="<%= request.getContextPath() %>/styles/main_manager.css">
 		<link rel="stylesheet" href="<%= request.getContextPath() %>/styles/manager_promotions.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 
 	<body>

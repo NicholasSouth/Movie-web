@@ -47,6 +47,7 @@
 		<link
 			rel="stylesheet"
 			href="<%= contextPath %>/styles/pos_create_booking.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<div class="create-booking-page">

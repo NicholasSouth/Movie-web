@@ -21,6 +21,7 @@
 		<title>Change Password | PhnetPhlyx Manager</title>
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/styles/main_manager.css">
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/styles/manager_change_password.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	
 	<body>

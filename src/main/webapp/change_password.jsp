@@ -26,6 +26,7 @@
 	    <link
 	        rel="stylesheet"
 	        href="${pageContext.request.contextPath}/styles/change_password.css">
+	        <%@ include file="/components/theme.jsp" %>
 	</head>
 
 	<body>

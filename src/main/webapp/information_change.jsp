@@ -25,6 +25,7 @@
 	    <link
 	        rel="stylesheet"
 	        href="${pageContext.request.contextPath}/styles/information_change.css">
+	    <%@ include file="/components/theme.jsp" %>
 	</head>
 
 	<body>

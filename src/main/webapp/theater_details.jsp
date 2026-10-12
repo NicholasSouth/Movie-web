@@ -52,6 +52,7 @@
 	    </title>
 	    <link rel="stylesheet" href="<%= contextPath %>/styles/main.css">
 	    <link rel="stylesheet" href="<%= contextPath %>/styles/theater_details.css">
+	    <%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<section class="Layout1">

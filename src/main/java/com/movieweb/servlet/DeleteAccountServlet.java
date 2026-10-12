@@ -44,6 +44,13 @@ public class DeleteAccountServlet extends HttpServlet
             response.sendRedirect(request.getContextPath() + "/log_in.jsp");
             return;
         }
+        // Administrator accounts cannot be deleted (UsersDAO.softDeleteAccount enforces this too).
+        if ("ADMIN".equalsIgnoreCase(currentUser.getRole()))
+        {
+            session.setAttribute("adminProfileFlashError", "Administrator accounts cannot be deleted.");
+            response.sendRedirect(request.getContextPath() + "/admin-profile");
+            return;
+        }
         boolean deleted = deleteAccount.deleteAccount(currentUser);
         if (deleted)
         {

@@ -64,6 +64,7 @@
 		<link 
 			rel="stylesheet" 
 			href="${pageContext.request.contextPath}/styles/manager_rooms.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 
 	<body>

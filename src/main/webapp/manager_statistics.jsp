@@ -65,6 +65,7 @@
 		<link rel="stylesheet" href="<%= contextPath %>/styles/main_manager.css">
 		<link rel="stylesheet" href="<%= contextPath %>/styles/manager_statistics.css">
 		<script defer src="<%= contextPath %>/scripts/manager_statistics.js"></script>
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	
 	<body class="Layout2">

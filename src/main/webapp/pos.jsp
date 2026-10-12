@@ -33,6 +33,7 @@
 		<title>Sales & Bookings</title>
 		<link rel="stylesheet" href="<%= contextPath %>/styles/main_manager.css">
 		<link rel="stylesheet" href="<%= contextPath %>/styles/pos.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 
 	<body>

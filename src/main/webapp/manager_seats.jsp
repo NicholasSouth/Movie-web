@@ -51,6 +51,7 @@
 		<title>Manage Seats | PhnetPhlyx</title>
 		<link rel="stylesheet" href="<%= contextPath %>/styles/main_manager.css">
 		<link rel="stylesheet" href="<%= contextPath %>/styles/manager_seats.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	
 	<body>

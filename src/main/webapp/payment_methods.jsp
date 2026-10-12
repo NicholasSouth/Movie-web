@@ -19,6 +19,7 @@
 	    <title>Payment Methods - PhnetPhlyx</title>
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/main.css">
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/payment_methods.css">
+	    <%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<section class="Layout1">

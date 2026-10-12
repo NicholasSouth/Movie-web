@@ -40,6 +40,7 @@
 	
 	    <!-- Existing profile and theater styles -->
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/manager_profile.css">
+	    <%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<section class="Layout2">
@@ -135,15 +136,20 @@
 		                    </p>
 		                </div>
 		
-		                <%
-		                    if (!theaterLoadError) {
-		                %>
-				                <span class="private-label">
-				                    <%= assignedTheaters.size() %> assigned
-				                </span>
-		                <%
-		                    }
-		                %>
+		                <div class="section-header-actions">
+		                    <%
+		                        if (!theaterLoadError) {
+		                    %>
+					                <span class="private-label">
+					                    <%= assignedTheaters.size() %> assigned
+					                </span>
+		                    <%
+		                        }
+		                    %>
+		                    <a href="${pageContext.request.contextPath}/manager-theater-requests" class="theater-button">
+		                        Request Assign / Remove
+		                    </a>
+		                </div>
 		            </div>
 		
 		            <!-- Theater Loading Error -->
@@ -164,7 +170,6 @@
 		            %>
 		
 		            <!-- Theater Cards -->
-		            <!-- Not done, the button must be linked to Dashboard, putting the theater into the filter -->
 		            <%
 		                if (!assignedTheaters.isEmpty()) {
 		            %>
@@ -221,7 +226,7 @@
 						                                }
 						                            %>
 						                        </div>
-						                        <a href="${pageContext.request.contextPath}/theater-details?id=<%= theater.getTheater_id() %>" class="theater-button">
+						                        <a href="${pageContext.request.contextPath}/manager-theater?theaterId=<%= theater.getTheater_id() %>" class="theater-button">
 						                            View Theater
 						                        </a>
 						                    </div>
@@ -239,8 +244,11 @@
 				                <h3>No theaters assigned yet</h3>
 				                <p>
 				                    Contact the administrator to have a theater assigned
-				                    to your account.
+				                    to your account, or send a request.
 				                </p>
+				                <a href="${pageContext.request.contextPath}/manager-theater-requests" class="theater-button">
+				                    Request a Theater
+				                </a>
 				            </div>
 		            <%
 		                }

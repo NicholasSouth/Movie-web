@@ -16,6 +16,7 @@
 	    <title>PhnetPhlyx - Theaters</title>
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/main.css">
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/theaters.css">
+	    <%@ include file="/components/theme.jsp" %>
 	</head>
 	<body data-context-path="<%= request.getContextPath() %>">
 		<section class="Layout1">

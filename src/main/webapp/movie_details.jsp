@@ -67,6 +67,7 @@
 		<title><%= movie.getMovie_name() %> | PhnetPhlyx</title>
 		<link rel="stylesheet" href="<%= contextPath %>/styles/main.css">
 		<link rel="stylesheet" href="<%= contextPath %>/styles/movie_details.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 
 	<body>

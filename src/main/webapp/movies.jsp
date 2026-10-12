@@ -23,6 +23,7 @@
 	          href="${pageContext.request.contextPath}/styles/main.css">
 	    <link rel="stylesheet"
 	          href="${pageContext.request.contextPath}/styles/movies.css">
+	    <%@ include file="/components/theme.jsp" %>
 	</head>
 
 	<body>

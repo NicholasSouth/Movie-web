@@ -319,6 +319,7 @@ public class UsersDAO
                 "SET isActive = 0, " +
                 "    deleted_at = GETDATE() " +
                 "WHERE user_id = ? " +
+                "AND (role IS NULL OR role <> 'ADMIN') " + // administrator accounts can never be deleted
                 "AND deleted_at IS NULL";
         try (
             Connection connection = DBConnection.getConnection();

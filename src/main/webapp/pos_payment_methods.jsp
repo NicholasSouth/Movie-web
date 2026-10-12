@@ -35,6 +35,7 @@
 		<title>POS Payment Methods - PhnetPhlyx</title>
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/styles/main_manager.css">
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/styles/pos_payment_methods.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<section class="Layout2">

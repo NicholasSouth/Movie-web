@@ -37,6 +37,7 @@
 		<link 
 			rel="stylesheet" 
 			href="<%= request.getContextPath() %>/styles/pos_payment.css">
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 
 	<body>
