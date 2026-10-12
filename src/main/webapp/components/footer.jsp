@@ -27,13 +27,4 @@
             Privacy Policy
         </a>
     </div>
-    <div class="footer-section">
-        <h3>Administration</h3>
-        <a href="${pageContext.request.contextPath}/manager/login.jsp">
-            Theater Manager Login
-        </a>
-        <a href="${pageContext.request.contextPath}/admin/login.jsp">
-            Admin Login
-        </a>
-    </div>
 </footer>

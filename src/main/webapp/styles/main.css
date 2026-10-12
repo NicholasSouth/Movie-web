@@ -115,15 +115,20 @@ body {
     display: flex;
     justify-content: center;
 }
+.search-form {
+    width: 100%;
+    max-width: 800px; /* Increased from 600px to make it wider */
+    margin: 0;
+}
 .search-bar {
     width: 100%;
-    max-width: 600px;
-    padding: 10px 15px;
+    max-width: 800px; /* Increased from 600px */
+    padding: 14px 20px; /* Increased padding for a taller, more prominent box */
     border: 1px solid var(--border);
     border-radius: 8px;
     background-color: var(--background);
     color: var(--text-primary);
-    font-size: 15px;
+    font-size: 16px; /* Increased font size */
     outline: none;
 }
 .search-bar::placeholder {

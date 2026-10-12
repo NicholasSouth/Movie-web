@@ -13,11 +13,19 @@
 
     <!-- Search Bar -->
     <div class="search-container">
-
-        <input
-            type="text"
-            placeholder="Search movies..."
-            class="search-bar">
+        <!-- Same search as the Movies page: sends ?search=... to /movies (press Enter) -->
+        <form
+            class="search-form"
+            action="${pageContext.request.contextPath}/movies"
+            method="get">
+            <input
+                type="search"
+                name="search"
+                maxlength="200"
+                value="<%= com.movieweb.util.ViewUtils.h(request.getParameter("search")) %>"
+                placeholder="Search by movie, actor, director, or author..."
+                class="search-bar">
+        </form>
     </div>
 
     <!-- Menu -->
