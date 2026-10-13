@@ -602,3 +602,23 @@ showing payment method and amount paid */
         letter-spacing: 0.8px;
     }
 }
+
+/* Automatic discounts (weekday / off-hour) already included in the price, shown above the total */
+.AutoDiscountNotice {
+    margin: 0 0 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--success-border);
+    border-radius: 10px;
+    background: var(--success-glow);
+}
+.AutoDiscountNotice strong {
+    color: var(--success);
+    font-size: 13px;
+}
+.AutoDiscountNotice ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+    color: var(--text-primary);
+    font-size: 12px;
+    line-height: 1.7;
+}

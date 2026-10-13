@@ -32,7 +32,7 @@ import com.movieweb.model.Users;
     "/admin-users", "/admin-reports",
     "/admin-statistics", "/admin-promotions", "/admin-refunds",
     "/admin-theater-requests", "/admin-profile",
-    "/admin-ads"
+    "/admin-ads", "/admin-movies", "/admin-genres-tags"
 })
 public class AdminFilter implements Filter {
 

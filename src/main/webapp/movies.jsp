@@ -176,6 +176,19 @@
 		                        value="<%= filter.getMinRating() != null ? filter.getMinRating() : "" %>">
 		                </div>
 		                <div class="movie-filter">
+		                    <label for="price">
+		                        Max Ticket Price (VND)
+		                    </label>
+		                    <input
+		                        type="number"
+		                        id="price"
+		                        name="price"
+		                        min="0"
+		                        step="1000"
+		                        placeholder="Any price"
+		                        value="<%= filter.getMaxPrice() != null ? String.valueOf(filter.getMaxPrice().longValue()) : "" %>">
+		                </div>
+		                <div class="movie-filter">
 		                    <label for="status">
 		                        Availability
 		                    </label>

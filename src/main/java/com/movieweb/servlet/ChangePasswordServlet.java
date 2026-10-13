@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.movieweb.model.Users;
+import com.movieweb.service.OTPValidation;
 import com.movieweb.service.UpdatePassword;
 
 @WebServlet("/change-password")
@@ -17,6 +18,7 @@ public class ChangePasswordServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
     private UpdatePassword updatePassword;
+    private final OTPValidation otp = new OTPValidation();
 
     @Override
     public void init() throws ServletException
@@ -52,6 +54,27 @@ public class ChangePasswordServlet extends HttpServlet
         String currentPassword = request.getParameter("currentPassword");
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
+
+        // Verify the e-mail code (purpose must match SendChangeVerificationServlet)
+        String code = request.getParameter("verification_code");
+        String email = currentUser.getEmail();
+        if (email == null
+                || email.trim().isEmpty()
+                || !otp.verifyCode(
+                        session,
+                        email.trim().toLowerCase(),
+                        "change_password",
+                        code))
+        {
+            request.setAttribute(
+                    "error",
+                    "The verification code is incorrect or has expired. Please request a new code."
+            );
+            request.getRequestDispatcher(
+                    "/change_password.jsp"
+            ).forward(request, response);
+            return;
+        }
 
         // Process password change
         String error = updatePassword.changePassword(

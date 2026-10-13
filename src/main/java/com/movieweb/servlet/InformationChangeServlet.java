@@ -96,14 +96,14 @@ public class InformationChangeServlet extends HttpServlet
         {
             bannerPart = null;
         }
-        boolean updated = informationChangeService.updateInformation(
+        String updateError = informationChangeService.updateInformationOrError(
                         currentUser,
                         fullName,
                         email,
                         phone,
                         avatarPart,
-                        bannerPart);            
-        if (updated)
+                        bannerPart);
+        if (updateError == null)
         {
             session.setAttribute("user", currentUser);
             response.sendRedirect(request.getContextPath() + "/user-profile");
@@ -112,7 +112,7 @@ public class InformationChangeServlet extends HttpServlet
         {
             request.setAttribute(
                     "errorMessage",
-                    "Could not update your information.");
+                    updateError);
             request.getRequestDispatcher(
                     "/information_change.jsp")
                     .forward(

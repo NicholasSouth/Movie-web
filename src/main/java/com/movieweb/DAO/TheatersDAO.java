@@ -11,8 +11,19 @@ import com.movieweb.model.Theaters;
 import com.movieweb.util.DBConnection;
 
 public class TheatersDAO {
+    // Customer pages: only active, non-deleted theaters
     public Theaters getTheaterById(int theater_id) {
-        String sql = "SELECT * FROM Theaters WHERE theater_id = ?";        
+        return findTheaterById(theater_id, true);
+    }
+
+    // Unfiltered lookup (hidden/deleted theaters included) for admin use
+    public Theaters getTheaterByIdIncludingHidden(int theater_id) {
+        return findTheaterById(theater_id, false);
+    }
+
+    private Theaters findTheaterById(int theater_id, boolean publicOnly) {
+        String sql = "SELECT * FROM Theaters WHERE theater_id = ?"
+                + (publicOnly ? " AND isActive = 1 AND deleted_at IS NULL" : "");
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, theater_id);          

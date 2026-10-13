@@ -140,14 +140,24 @@ public class ImageService{
 	    Path destination = Paths.get(directory.getAbsolutePath(), fileName);
 	    try
 	    {
-	        /*Delete any previous image belonging to this user.*/
-	        deleteOldImages(directory, safeUsername);
-	
-	        /*Save the new image.*/
 	        try (InputStream input = imagePart.getInputStream())
 	        {
+	            /*Check the real file signature (magic bytes) before touching anything on disk.*/
+	            byte[] head = new byte[12];
+	            int read = readFully(input, head);
+	            if (!looksLikeImage(head, read, extension))
+	            {
+	                return null;
+	            }
+	
+	            /*Delete any previous image belonging to this user.*/
+	            deleteOldImages(directory, safeUsername);
+	
+	            /*Save the new image.*/
 	            Files.copy(
-	                    input,
+	                    new java.io.SequenceInputStream(
+	                            new java.io.ByteArrayInputStream(head, 0, read),
+	                            input),
 	                    destination,
 	                    java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 	        }
@@ -170,6 +180,41 @@ public class ImageService{
 	        }
 	        return null;
 	    }
+	}
+
+	/*Read up to buffer.length bytes; returns the number of bytes read.*/
+	private int readFully(InputStream input, byte[] buffer) throws IOException
+	{
+	    int total = 0;
+	    while (total < buffer.length)
+	    {
+	        int n = input.read(buffer, total, buffer.length - total);
+	        if (n < 0)
+	        {
+	            break;
+	        }
+	        total += n;
+	    }
+	    return total;
+	}
+
+	/*Magic-byte check: the content must really be a JPEG, PNG or WebP image.*/
+	private boolean looksLikeImage(byte[] b, int read, String extension)
+	{
+	    if (read < 12)
+	    {
+	        return false;
+	    }
+	    if (extension.equals("jpg") || extension.equals("jpeg"))
+	    {
+	        return (b[0] & 0xFF) == 0xFF && (b[1] & 0xFF) == 0xD8 && (b[2] & 0xFF) == 0xFF;
+	    }
+	    if (extension.equals("png"))
+	    {
+	        return (b[0] & 0xFF) == 0x89 && b[1] == 'P' && b[2] == 'N' && b[3] == 'G';
+	    }
+	    return b[0] == 'R' && b[1] == 'I' && b[2] == 'F' && b[3] == 'F'
+	            && b[8] == 'W' && b[9] == 'E' && b[10] == 'B' && b[11] == 'P';
 	}
 
 	/*Get the physical directory inside the deployed web application.*/

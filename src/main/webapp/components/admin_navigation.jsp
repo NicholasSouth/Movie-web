@@ -36,6 +36,22 @@
 
         <div class="admin-nav-section">
             <div class="admin-nav-section-title">
+                MOVIES
+            </div>
+            <a
+                href="${pageContext.request.contextPath}/admin-movies"
+                class="admin-nav-item <%= "movies".equals(currentAdminPage) ? "active" : "" %>">
+                Movies
+            </a>
+            <a
+                href="${pageContext.request.contextPath}/admin-genres-tags"
+                class="admin-nav-item <%= "genres-tags".equals(currentAdminPage) ? "active" : "" %>">
+                Genres &amp; Tags
+            </a>
+        </div>
+
+        <div class="admin-nav-section">
+            <div class="admin-nav-section-title">
                 ACCOUNTS
             </div>
             <a

@@ -1,7 +1,9 @@
 package com.movieweb.service;
 
+import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.movieweb.DAO.RoomsDAO;
@@ -109,21 +111,49 @@ public class PricingService {
     }
 
     private int getWeekdayPercent(Showtimes showtime) {
-        if (showtime == null || showtime.getStart_at() == null) {
+        return showtime == null ? 0 : weekdayPercent(showtime.getStart_at());
+    }
+
+    private int getHourPercent(Showtimes showtime) {
+        return showtime == null ? 0 : offHourPercent(showtime.getStart_at());
+    }
+
+    /* The two automatic time discounts. They depend only on when the showtime starts, so they are applied to
+     * every price (seat map, booking, POS) by getFixedPercent above, with no table or promotion code needed.
+     * weekdayPercent / offHourPercent are the single source of the rules: the price calculation and the notices
+     * shown on the payment pages (autoDiscountNotices) both use them, so the two can never disagree. */
+    public static int weekdayPercent(Timestamp start) {
+        if (start == null) {
             return 0;
         }
-        DayOfWeek day = showtime.getStart_at().toLocalDateTime().getDayOfWeek();
+        DayOfWeek day = start.toLocalDateTime().getDayOfWeek();
         boolean weekday = day != DayOfWeek.SATURDAY && day != DayOfWeek.SUNDAY;
         return weekday ? WEEKDAY_PERCENT : 0;
     }
 
-    private int getHourPercent(Showtimes showtime) {
-        if (showtime == null || showtime.getStart_at() == null) {
+    public static int offHourPercent(Timestamp start) {
+        if (start == null) {
             return 0;
         }
-        LocalTime time = showtime.getStart_at().toLocalDateTime().toLocalTime();
+        LocalTime time = start.toLocalDateTime().toLocalTime();
         boolean offHour = !time.isAfter(EARLY_LIMIT) || !time.isBefore(LATE_LIMIT);
         return offHour ? OFF_HOUR_PERCENT : 0;
+    }
+
+    /* Short messages for the buyer about the automatic discounts that are already included in the price of a
+     * showtime that starts at this time. Empty list when none applies. Shown by payment.jsp and pos_payment.jsp. */
+    public static List<String> autoDiscountNotices(Timestamp start) {
+        List<String> notices = new ArrayList<>();
+        int weekday = weekdayPercent(start);
+        if (weekday != 0) {
+            notices.add("Weekday discount: " + weekday + "% (showtimes from Monday to Friday)");
+        }
+        int offHour = offHourPercent(start);
+        if (offHour != 0) {
+            notices.add("Off-hour discount: " + offHour + "% (showtimes starting at or before "
+                    + EARLY_LIMIT + " or at or after " + LATE_LIMIT + ")");
+        }
+        return notices;
     }
 
     public static int parsePercent(String modify) {

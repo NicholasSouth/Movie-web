@@ -187,7 +187,10 @@ public class MoviesDAO {
 
             // Maximum ticket price filter
             if (filter.getMaxPrice() != null) {
-                q.append(" AND s.price <= ?");
+                q.append(" AND EXISTS (SELECT 1 FROM Showtime_ticket_types stt " +
+                        "WHERE stt.showtime_id = s.showtime_id " +
+                        "AND stt.ticket_type_id = 1 " +
+                        "AND stt.price <= ?)");
                 params.add(filter.getMaxPrice());
             }
             q.append(")");
@@ -202,11 +205,22 @@ public class MoviesDAO {
         return fetchMovies(q.toString(), params);
     }
 
+    // Customer pages: only active, non-deleted movies
     public Movies getMovieById(int movieId) {
+        return findMovieById(movieId, true);
+    }
+
+    // Unfiltered lookup (hidden/deleted movies included) for admin use
+    public Movies getMovieByIdIncludingHidden(int movieId) {
+        return findMovieById(movieId, false);
+    }
+
+    private Movies findMovieById(int movieId, boolean publicOnly) {
         String sql =
                 "SELECT * " +
                 "FROM Movies " +
-                "WHERE movie_id = ?";
+                "WHERE movie_id = ?" +
+                (publicOnly ? " AND isActive = 1 AND deleted_at IS NULL" : "");
         try (
                 Connection conn = DBConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)

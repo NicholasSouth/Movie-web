@@ -33,7 +33,7 @@
 	    <title>Checkout | PhnetPhlyx</title>
 	    <link rel="stylesheet" href="<%= request.getContextPath() %>/styles/main.css">
 	    <link rel="stylesheet" href="<%= request.getContextPath() %>/styles/payment.css">
-	    <%@ include file="/components/theme.jsp" %>
+		<%@ include file="/components/theme.jsp" %>
 	</head>
 	<body>
 		<%@ include file="/components/header.jsp" %>
@@ -221,7 +221,27 @@
 						<%
 						    }
 						%>			
-						<div class="TotalRow">
+						<%
+	/* Automatic discounts (weekday / off-hour) are already inside the price; tell the buyer about them. */
+	java.util.List<String> autoDiscounts = com.movieweb.service.PricingService.autoDiscountNotices(showtimeStart);
+	if (!autoDiscounts.isEmpty()) {
+%>
+	<div class="AutoDiscountNotice">
+		<strong>Automatic discounts included in this price</strong>
+		<ul>
+			<%
+				for (String note : autoDiscounts) {
+			%>
+					<li><%= note %></li>
+			<%
+				}
+			%>
+		</ul>
+	</div>
+<%
+	}
+%>
+<div class="TotalRow">
 						    <span>Total amount</span>
 						    <strong>
 						        <%= currencyFormat.format(bookingPrice == null ? 0 : bookingPrice) %> VND

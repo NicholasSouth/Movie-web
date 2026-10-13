@@ -422,6 +422,7 @@
 								%>
 								<form action="<%= contextPath %>/rating" method="post" class="rating-form">
 									<input type="hidden" name="movieId" value="<%= movie.getMovie_id() %>">
+									<input type="hidden" name="csrfToken" value="<%= csrfToken %>">
 									<label for="rating">
 										<%= userRating != null ? "Change your rating:" : "Give this movie a rating:" %>
 									</label>
@@ -461,6 +462,7 @@
 					%>
 							<form action="<%= contextPath %>/comment" method="post" class="comment-form">
 								<input type="hidden" name="movieId" value="<%= movie.getMovie_id() %>">
+								<input type="hidden" name="csrfToken" value="<%= csrfToken %>">
 								<textarea name="commentText" rows="4" placeholder="Write a comment..." required></textarea>
 								<button type="submit">Post Comment</button>
 							</form>
@@ -520,6 +522,7 @@
 										%>
 												<form action="<%= contextPath %>/report" method="post" class="report-form">
 													<input type="hidden" name="commentId" value="<%= comment.getCommentId() %>">
+												<input type="hidden" name="csrfToken" value="<%= csrfToken %>">
 													<input type="hidden" name="movieId" value="<%= movie.getMovie_id() %>">
 													<button type="submit" class="report-button">Report</button>
 												</form>

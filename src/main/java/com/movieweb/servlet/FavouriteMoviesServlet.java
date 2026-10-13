@@ -37,6 +37,12 @@ public class FavouriteMoviesServlet extends HttpServlet {
         }
         Users user = (Users) session.getAttribute("user");
 
+        // CSRF protection
+        if (!MoviePageServlet.validCsrf(request, request.getParameter("csrfToken"))) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid or missing CSRF token.");
+            return;
+        }
+
         //Read form parameters
         String movieIdParameter = request.getParameter("movieId");
         String action = request.getParameter("action");

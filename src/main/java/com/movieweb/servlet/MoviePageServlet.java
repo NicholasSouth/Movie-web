@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import com.movieweb.model.Movies;
 import com.movieweb.model.Users;
+import com.movieweb.util.ViewUtils;
 
 final class MoviePageServlet {
     private static final String CSRF_KEY = "movieCsrfToken";
@@ -130,9 +131,15 @@ final class MoviePageServlet {
         if (status == 503) {
             resp.setHeader("Retry-After", "30");
         }
-        req.setAttribute("errorStatus", status);
-        req.setAttribute("errorTitle", title);
-        req.setAttribute("errorMessage", msg);
-        req.getRequestDispatcher("/WEB-INF/views/movie-error.jsp").forward(req, resp);
+        String home = req.getContextPath() + "/movies";
+        resp.getWriter().write(
+                "<!DOCTYPE html><html><head><meta charset=\"UTF-8\">"
+                + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+                + "<title>" + ViewUtils.h(title) + " - PhnetPhlyx</title></head>"
+                + "<body style=\"font-family:sans-serif;text-align:center;margin-top:10vh\">"
+                + "<h1>" + status + " - " + ViewUtils.h(title) + "</h1>"
+                + "<p>" + ViewUtils.h(msg) + "</p>"
+                + "<p><a href=\"" + ViewUtils.h(home) + "\">Back to movies</a></p>"
+                + "</body></html>");
     }
 }

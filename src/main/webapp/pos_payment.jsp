@@ -245,7 +245,27 @@
 						<%
 							}
 						%>
-						<!-- Total -->
+						<%
+	/* Automatic discounts (weekday / off-hour) are already inside the price; tell the buyer about them. */
+	java.util.List<String> autoDiscounts = com.movieweb.service.PricingService.autoDiscountNotices(showtimeStart);
+	if (!autoDiscounts.isEmpty()) {
+%>
+	<div class="AutoDiscountNotice">
+		<strong>Automatic discounts included in this price</strong>
+		<ul>
+			<%
+				for (String note : autoDiscounts) {
+			%>
+					<li><%= note %></li>
+			<%
+				}
+			%>
+		</ul>
+	</div>
+<%
+	}
+%>
+<!-- Total -->
 						<div class="TotalRow">
 							<span>
 								Total amount
